@@ -21,9 +21,10 @@ const GenerateLeadFromPromptOutputSchema = z.object({
     z.object({
       companyName: z.string().describe('The name of the company.'),
       contactPerson: z.string().describe('The name of the contact person at the company.'),
-      relevanceScore: z.number().describe('A score indicating how well the lead matches the criteria.'),
+      relevanceScore: z.number().describe('A score indicating how well the lead matches the criteria (0-100).'),
       contactNumber: z.string().optional().describe('The primary contact phone number for the lead. Include if available.'),
       email: z.string().optional().describe('The primary contact email address for the lead. Include if available.'),
+      location: z.string().optional().describe('The physical address or general location (e.g., "San Francisco, CA") of the company. Include if available for mapping purposes.'),
     })
   ).describe('A list of potential leads that match the criteria.'),
 });
@@ -46,9 +47,10 @@ const prompt = ai.definePrompt({
         z.object({
           companyName: z.string().describe('The name of the company.'),
           contactPerson: z.string().describe('The name of the contact person at the company.'),
-          relevanceScore: z.number().describe('A score indicating how well the lead matches the criteria.'),
+          relevanceScore: z.number().describe('A score indicating how well the lead matches the criteria (0-100).'),
           contactNumber: z.string().optional().describe('The primary contact phone number for the lead.'),
           email: z.string().optional().describe('The primary contact email address for the lead.'),
+          location: z.string().optional().describe('The physical address or general location (e.g., "City, State") of the company for mapping.'),
         })
       ).describe('A list of potential leads that match the criteria.'),
     }),
@@ -57,7 +59,7 @@ const prompt = ai.definePrompt({
 
 Criteria: {{{prompt}}}
 
-For each lead, include the company name, a contact person, a relevance score (0-100), and if available, a contact phone number and email address.
+For each lead, include the company name, a contact person, a relevance score (0-100), and if available, a contact phone number, email address, and the company's location (address or city/state). The location is important for mapping.
 
 Output the leads in a JSON format.
 `,
@@ -72,6 +74,12 @@ const generateLeadFromPromptFlow = ai.defineFlow<
   outputSchema: GenerateLeadFromPromptOutputSchema,
 }, async input => {
   const {output} = await prompt(input);
+  // Ensure relevance score is within 0-100 range, default to 0 if invalid
+  if (output?.leads) {
+    output.leads = output.leads.map(lead => ({
+      ...lead,
+      relevanceScore: Math.max(0, Math.min(100, lead.relevanceScore ?? 0)),
+    }));
+  }
   return output!;
 });
-

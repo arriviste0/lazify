@@ -91,3 +91,14 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Add subtle transitions */
+@layer components {
+  .card {
+    @apply transition-all duration-200 ease-in-out;
+  }
+  .card:hover {
+     /* Optional: slightly lift the card on hover */
+    /* @apply transform -translate-y-1; */
+  }
+}

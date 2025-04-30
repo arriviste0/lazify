@@ -40,7 +40,7 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto p-4 md:p-8 min-h-screen">
+    <main className="container mx-auto p-4 md:p-8 min-h-screen bg-background">
       <header className="mb-8 text-center">
         <h1 className="text-4xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
           <Sparkles className="h-8 w-8 text-accent" />
@@ -56,7 +56,7 @@ export default function Home() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mb-6 text-center">Generated Leads</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center text-primary">Generated Leads</h2>
 
         {error && (
           <Alert variant="destructive" className="mb-6 max-w-2xl mx-auto">
@@ -69,13 +69,16 @@ export default function Home() {
         {isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(3)].map((_, index) => (
-              <div key={index} className="flex flex-col space-y-3 p-4 border rounded-lg bg-card">
-                <Skeleton className="h-6 w-3/4 rounded" />
-                <Skeleton className="h-4 w-1/2 rounded" />
-                <Skeleton className="h-4 w-1/4 rounded" />
-                 <Skeleton className="h-4 w-full rounded mt-2" />
-                 <Skeleton className="h-4 w-full rounded" />
-              </div>
+               <Card key={index} className="shadow-md bg-card flex flex-col justify-between p-4 space-y-3">
+                <Skeleton className="h-6 w-3/4 rounded bg-muted" />
+                <Skeleton className="h-4 w-1/2 rounded bg-muted" />
+                 <Skeleton className="h-4 w-full rounded bg-muted mt-2" />
+                 <Skeleton className="h-4 w-full rounded bg-muted" />
+                <div className="flex justify-between items-center pt-2">
+                  <Skeleton className="h-4 w-1/4 rounded bg-muted" />
+                  <Skeleton className="h-6 w-12 rounded-full bg-muted" />
+                </div>
+              </Card>
             ))}
           </div>
         )}
@@ -90,12 +93,13 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {leads.map((lead, index) => (
               <LeadCard
-                key={`${lead.companyName}-${lead.email || index}`} // More robust key
+                key={`${lead.companyName}-${lead.email || index}-${lead.location || ''}`} // More robust key
                 companyName={lead.companyName}
                 contactPerson={lead.contactPerson}
                 relevanceScore={lead.relevanceScore}
                 contactNumber={lead.contactNumber}
                 email={lead.email}
+                location={lead.location}
               />
             ))}
           </div>
@@ -104,3 +108,13 @@ export default function Home() {
     </main>
   );
 }
+
+
+// Added dummy Card component for skeleton loading state
+const Card = ({ className, children }: { className?: string; children: React.ReactNode }) => (
+  <div className={cn("rounded-lg border", className)}>
+    {children}
+  </div>
+);
+
+import { cn } from "@/lib/utils"; // Ensure cn is imported if used in skeleton Card
