@@ -73,6 +73,8 @@ export default function Home() {
                 <Skeleton className="h-6 w-3/4 rounded" />
                 <Skeleton className="h-4 w-1/2 rounded" />
                 <Skeleton className="h-4 w-1/4 rounded" />
+                 <Skeleton className="h-4 w-full rounded mt-2" />
+                 <Skeleton className="h-4 w-full rounded" />
               </div>
             ))}
           </div>
@@ -88,10 +90,12 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {leads.map((lead, index) => (
               <LeadCard
-                key={`${lead.companyName}-${index}`} // Using index as part of key due to potential duplicates
+                key={`${lead.companyName}-${lead.email || index}`} // More robust key
                 companyName={lead.companyName}
                 contactPerson={lead.contactPerson}
                 relevanceScore={lead.relevanceScore}
+                contactNumber={lead.contactNumber}
+                email={lead.email}
               />
             ))}
           </div>

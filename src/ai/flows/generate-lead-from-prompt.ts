@@ -22,6 +22,8 @@ const GenerateLeadFromPromptOutputSchema = z.object({
       companyName: z.string().describe('The name of the company.'),
       contactPerson: z.string().describe('The name of the contact person at the company.'),
       relevanceScore: z.number().describe('A score indicating how well the lead matches the criteria.'),
+      contactNumber: z.string().optional().describe('The primary contact phone number for the lead. Include if available.'),
+      email: z.string().optional().describe('The primary contact email address for the lead. Include if available.'),
     })
   ).describe('A list of potential leads that match the criteria.'),
 });
@@ -45,6 +47,8 @@ const prompt = ai.definePrompt({
           companyName: z.string().describe('The name of the company.'),
           contactPerson: z.string().describe('The name of the contact person at the company.'),
           relevanceScore: z.number().describe('A score indicating how well the lead matches the criteria.'),
+          contactNumber: z.string().optional().describe('The primary contact phone number for the lead.'),
+          email: z.string().optional().describe('The primary contact email address for the lead.'),
         })
       ).describe('A list of potential leads that match the criteria.'),
     }),
@@ -52,6 +56,8 @@ const prompt = ai.definePrompt({
   prompt: `You are an AI agent specializing in generating leads for agencies. Based on the provided criteria, generate a list of potential leads.
 
 Criteria: {{{prompt}}}
+
+For each lead, include the company name, a contact person, a relevance score (0-100), and if available, a contact phone number and email address.
 
 Output the leads in a JSON format.
 `,
@@ -68,3 +74,4 @@ const generateLeadFromPromptFlow = ai.defineFlow<
   const {output} = await prompt(input);
   return output!;
 });
+
