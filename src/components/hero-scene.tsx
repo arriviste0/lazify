@@ -58,7 +58,7 @@ const FloatingParticle = ({ position, size = 0.2, color = '#8b5cf6', speed = 1 }
 
   return (
     <mesh ref={meshRef} position={position} scale={size}> {/* Apply size via scale */}
-       <icosahedronGeometry args={[1, 0]} /> {/* Smoother sphere */}
+       <IcosahedronGeometry args={[1, 0]} /> {/* Smoother sphere */}
        <meshStandardMaterial
          color={color}
          emissive={color}
