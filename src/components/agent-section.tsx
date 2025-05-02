@@ -123,7 +123,8 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
             exit="exit"
             className="grid md:grid-cols-2 gap-8 items-center"
           >
-            <div className="space-y-4">
+             {/* Added text-center md:text-left */}
+            <div className="space-y-4 text-center md:text-left">
               <motion.div variants={contentVariants} custom={0.1}>
                  {/* Apply gradient text based on agent color */}
                 <h3 className={`text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${agents[activeIndex].color}`}>
