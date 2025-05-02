@@ -28,12 +28,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import AgentSection from '@/components/agent-section';
-// Dynamically import HeroScene with ssr: false
-const HeroScene = dynamic(() => import('@/components/hero-scene'), { ssr: false });
+// Removed HeroScene import
 import ServiceCard from '@/components/service-card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { PricingTable } from '@/components/pricing-table'; // Import PricingTable
 import { ContactForm } from '@/components/contact-form'; // Import ContactForm
+import HeroBackground from '@/components/hero-background'; // Import the placeholder background
 
 // Reusable animation variant for fadeInUp effect
 const fadeInUp = {
@@ -344,10 +344,8 @@ export default function Home() {
           className="relative w-full h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden" // Full viewport height minus header
           style={{ y: heroParallaxY }} // Apply parallax
         >
-          {/* 3D Hero Scene - Render conditionally on client */}
-          <div className="absolute inset-0 -z-10">
-            {isClient && <HeroScene />}
-          </div>
+          {/* Placeholder Background - Replace HeroScene */}
+          <HeroBackground />
 
           <div className="container px-4 md:px-6 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
