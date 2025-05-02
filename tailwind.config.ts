@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
-    darkMode: ["class"],
+    darkMode: ["class"], // Keep dark mode enabled via class
     content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,6 +10,7 @@ export default {
   theme: {
   	extend: {
   		colors: {
+            // Use CSS variables defined in globals.css
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -43,6 +44,7 @@ export default {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
+            // Keep chart colors if they might be used later
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',
@@ -50,6 +52,7 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
+             // Keep sidebar colors if sidebar might be used later
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
@@ -67,50 +70,37 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		keyframes: {
+            // Standard accordion animations
   			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
+  				from: { height: '0' },
+  				to: { height: 'var(--radix-accordion-content-height)' }
   			},
   			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
+  				from: { height: 'var(--radix-accordion-content-height)' },
+  				to: { height: '0' }
   			},
-        // Added for floating animation
-        'float': {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-         // Added for subtle background gradient animation
-        'subtle-gradient': {
-           '0%, 100%': { 'background-position': '0% 50%' },
-           '50%': { 'background-position': '100% 50%' },
-         }
+            // Float animation (can be kept or removed if not used)
+            'float': {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+             // Subtle background gradient animation
+            'gradient-subtle': {
+               '0%, 100%': { 'background-position': '0% 50%' },
+               '50%': { 'background-position': '100% 50%' },
+             }
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
-        // Added for floating animation
-        'float': 'float 6s ease-in-out infinite',
-        // Added for subtle background gradient animation
-        'subtle-gradient': 'subtle-gradient 15s ease infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'gradient-subtle': 'gradient-subtle 15s ease infinite',
   		},
-        // Added for animation delay utility
-        animationDelay: {
-         '2000': '2000ms',
-         '4000': '4000ms',
-       },
+        // Removed specific animation delays as they are handled by Framer Motion or inline styles
   	}
   },
   plugins: [
       require("tailwindcss-animate"),
-      require('tailwind-scrollbar')({ nocompatible: true }), // Added scrollbar plugin
+      require('tailwind-scrollbar')({ nocompatible: true }), // Keep scrollbar plugin
     ],
 } satisfies Config;

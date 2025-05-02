@@ -2,86 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: var(--font-geist-sans), system-ui, sans-serif; /* Use Geist Sans variable */
-}
-
 @layer base {
   :root {
-    /* Lazify Light Theme - Futuristic/AeroSense Inspired */
-    --background: 220 20% 98%; /* Very Light Cool Gray */
-    --foreground: 220 15% 20%; /* Dark Cool Gray */
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 220 15% 20%; /* Dark Cool Gray */
-    --popover: 0 0% 100%; /* White */
-    --popover-foreground: 220 15% 20%; /* Dark Cool Gray */
-    --primary: 217 91% 60%; /* Bright Blue */
-    --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 210 40% 96.1%; /* Light Grayish Blue */
-    --secondary-foreground: 240 6% 10%; /* Dark Gray */
-    --muted: 215 25% 90%; /* Lighter Muted Gray */
-    --muted-foreground: 215 20% 50%; /* Muted Gray */
-    --accent: 180 70% 45%; /* Cyan/Teal */
-    --accent-foreground: 0 0% 100%; /* White */
-    --destructive: 0 84.2% 60.2%;
+    /* Elegant Black, White, Cream Theme */
+    --background: 0 0% 9%; /* Near black */
+    --foreground: 0 0% 98%; /* Almost white */
+
+    --card: 0 0% 12%; /* Slightly lighter black for cards */
+    --card-foreground: 0 0% 95%; /* Lighter cream/white */
+
+    --popover: 0 0% 7%; /* Darker popover */
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 40 100% 97%; /* Soft Cream */
+    --primary-foreground: 0 0% 9%; /* Near black text on cream */
+
+    --secondary: 0 0% 15%; /* Dark gray */
+    --secondary-foreground: 0 0% 90%; /* Lighter gray */
+
+    --muted: 0 0% 20%; /* Muted dark gray */
+    --muted-foreground: 0 0% 60%; /* Muted lighter gray */
+
+    --accent: 40 100% 90%; /* Lighter Cream for accents */
+    --accent-foreground: 0 0% 9%; /* Near black text on accent */
+
+    --destructive: 0 70% 50%; /* Adjusted red for dark theme */
     --destructive-foreground: 0 0% 98%;
-    --border: 214 32% 91.4%; /* Light Gray Border */
-    --input: 214 32% 91.4%; /* Light Gray Input */
-    --ring: 217 91% 70%; /* Lighter Blue for ring */
-    --chart-1: 217 91% 60%; /* Bright Blue */
-    --chart-2: 180 70% 45%; /* Cyan/Teal */
-    --chart-3: 260 80% 65%; /* Violet */
-    --chart-4: 30 90% 60%; /* Orange */
-    --chart-5: 120 50% 55%; /* Green */
+
+    --border: 0 0% 20%; /* Muted dark gray border */
+    --input: 0 0% 16%; /* Slightly darker input background */
+    --ring: 40 100% 85%; /* Cream ring */
+
     --radius: 0.75rem; /* Slightly larger radius */
 
-    /* Sidebar adjustments - aligning with the main theme */
-    --sidebar-background: 220 20% 96%; /* Slightly darker light gray */
-    --sidebar-foreground: 220 15% 20%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 180 70% 45%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 214 32% 88%; /* Slightly darker border */
-    --sidebar-ring: 217 91% 70%;
+     /* Chart variables - can be adjusted if charts are used later */
+    --chart-1: hsl(var(--primary));
+    --chart-2: hsl(var(--secondary));
+    --chart-3: 200 80% 70%;
+    --chart-4: 0 70% 65%;
+    --chart-5: 120 50% 60%;
+
+     /* Sidebar variables - adjusted for consistency */
+    --sidebar-background: 0 0% 11%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: hsl(var(--primary));
+    --sidebar-primary-foreground: hsl(var(--primary-foreground));
+    --sidebar-accent: hsl(var(--accent));
+    --sidebar-accent-foreground: hsl(var(--accent-foreground));
+    --sidebar-border: 0 0% 25%;
+    --sidebar-ring: hsl(var(--ring));
   }
 
   .dark {
-    /* Lazify Dark Theme - Futuristic/AeroSense Inspired */
-    --background: 220 20% 5%; /* Very Dark Blue */
-    --foreground: 210 40% 98%; /* Almost White */
-    --card: 220 20% 10%; /* Darker Blue Card */
-    --card-foreground: 210 40% 98%;
-    --popover: 220 20% 5%; /* Very Dark Blue */
-    --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 65%; /* Lighter Bright Blue */
-    --primary-foreground: 220 10% 15%; /* Dark contrast */
-    --secondary: 220 15% 15%; /* Darker Gray */
-    --secondary-foreground: 210 40% 98%;
-    --muted: 220 15% 25%; /* Slightly Lighter Dark Gray */
-    --muted-foreground: 215 20% 65%; /* Lighter Muted Gray */
-    --accent: 180 70% 55%; /* Brighter Cyan/Teal */
-    --accent-foreground: 220 15% 10%; /* Dark contrast */
-    --destructive: 0 62.8% 30.6%;
+    /* Dark theme is the default, but we keep the .dark selector for potential future light mode */
+    --background: 0 0% 9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 40 100% 97%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 40 100% 90%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 15% 20%; /* Dark Border */
-    --input: 220 15% 20%; /* Dark Input */
-    --ring: 217 91% 75%; /* Even Lighter Blue */
-    --chart-1: 217 91% 65%;
-    --chart-2: 180 70% 55%;
-    --chart-3: 260 80% 70%;
-    --chart-4: 30 90% 65%;
+    --border: 0 0% 20%;
+    --input: 0 0% 16%;
+    --ring: 40 100% 85%;
+
+    --chart-1: hsl(var(--primary));
+    --chart-2: hsl(var(--secondary));
+    --chart-3: 200 80% 70%;
+    --chart-4: 0 70% 65%;
     --chart-5: 120 50% 60%;
 
-    /* Sidebar dark adjustments */
-    --sidebar-background: 220 20% 8%; /* Slightly lighter dark bg */
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 65%;
-    --sidebar-primary-foreground: 220 10% 15%;
-    --sidebar-accent: 180 70% 55%;
-    --sidebar-accent-foreground: 220 15% 10%;
-    --sidebar-border: 220 15% 20%;
-    --sidebar-ring: 217 91% 75%;
+    --sidebar-background: 0 0% 11%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: hsl(var(--primary));
+    --sidebar-primary-foreground: hsl(var(--primary-foreground));
+    --sidebar-accent: hsl(var(--accent));
+    --sidebar-accent-foreground: hsl(var(--accent-foreground));
+    --sidebar-border: 0 0% 25%;
+    --sidebar-ring: hsl(var(--ring));
   }
 }
 
@@ -89,68 +96,96 @@ body {
   * {
     @apply border-border;
   }
+  html {
+    @apply scroll-smooth; /* Ensure smooth scrolling */
+  }
   body {
     @apply bg-background text-foreground;
-    /* Add a subtle background gradient */
-    @apply bg-gradient-to-br from-background via-background to-secondary/10;
+    font-family: var(--font-geist-sans), system-ui, sans-serif; /* Ensure Geist Sans is primary */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-geist-sans), system-ui, sans-serif; /* Ensure headings use Geist Sans variable */
-    @apply font-semibold tracking-tight;
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    @apply font-bold tracking-tight; /* Bold headings */
   }
-  h1 { @apply text-4xl md:text-5xl lg:text-6xl; }
-  h2 { @apply text-3xl md:text-4xl; }
+  /* Large, bold headings */
+  h1 { @apply text-4xl md:text-6xl lg:text-7xl; }
+  h2 { @apply text-3xl md:text-4xl lg:text-5xl; }
   h3 { @apply text-2xl md:text-3xl; }
   p { @apply text-base md:text-lg text-muted-foreground; }
 
+  /* Styling for modern sans-serif if Geist isn't enough */
+  /* body { font-family: 'Inter', sans-serif; } */
+  /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap'); */
+
+  code, pre, kbd, samp {
+    font-family: var(--font-geist-mono), monospace;
+  }
 }
 
-/* Add subtle transitions and animations */
 @layer components {
-  .card {
-    @apply transition-all duration-300 ease-in-out;
-    @apply bg-card/80 backdrop-blur-sm border border-border/50; /* Frosted glass effect */
+  .section-padding {
+     @apply py-16 md:py-24 lg:py-32;
   }
-   /* Optional: slightly lift the card on hover */
-  .card:hover {
-     @apply transform -translate-y-1 shadow-xl; /* Enhanced shadow and lift */
+
+  .container-padding {
+     @apply px-4 md:px-6;
   }
-  .btn { /* Ensure buttons have transition */
-     @apply transition-all duration-200 ease-in-out transform active:scale-95;
+
+  /* Modern card styling */
+  .modern-card {
+    @apply bg-card border border-border rounded-lg p-6 transition-all duration-300 ease-in-out;
+    @apply hover:border-primary/50 hover:shadow-[0_0_30px_theme('colors.primary/10')];
   }
-  .animated-metric {
-     /* Placeholder for potential counter animation */
-     @apply transition-all duration-500 ease-out;
+
+  /* CTA button style */
+  .cta-button {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+    @apply px-8 py-3 text-base md:text-lg; /* Larger CTA */
+    @apply shadow-lg hover:shadow-primary/30 transform hover:-translate-y-0.5; /* Subtle lift */
   }
+
+  /* Subtle background animation for hero placeholder */
+   .animated-background-subtle {
+     background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--secondary)), hsl(var(--background)), hsl(var(--muted)));
+     background-size: 400% 400%;
+     animation: gradient-subtle 15s ease infinite;
+   }
+}
+
+@layer utilities {
+   /* Text gradient (if needed, less emphasis on gradients now) */
   .gradient-text {
     @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
   }
 }
 
-/* Specific styles for monospace font usage if needed */
-code, pre, kbd, samp {
-  font-family: var(--font-geist-mono), monospace; /* Use Geist Mono variable for code elements */
-}
-
-/* Animation for floating elements */
+/* Keyframes for animations */
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
   100% { transform: translateY(0px); }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Keyframes for subtle background animation */
-@keyframes subtle-gradient {
+@keyframes gradient-subtle {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-.animated-background {
-    background-size: 200% 200%;
-    animation: subtle-gradient 15s ease infinite;
+/* Scrollbar styling (optional, but adds to the high-end feel) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
 }

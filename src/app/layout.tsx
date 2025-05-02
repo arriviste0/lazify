@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-// Import Geist Sans and Mono fonts directly from the 'geist' package
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from '@/components/theme-provider'; // Assuming ThemeProvider exists
 
 export const metadata: Metadata = {
-  title: 'Lazify | AI Agents That Work While You Rest', // Updated title
-  description: 'Delegate your routine tasks to intelligent AI agents. Lazify provides AI-powered automation solutions for businesses and individuals.', // Updated description
+  title: 'Lazify | AI Automation Agency', // Updated title
+  description: 'High-end AI automation solutions to boost your productivity. Lazify saves you time and effort.', // Updated description
 };
 
 export default function RootLayout({
@@ -16,11 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth"> {/* Added scroll-smooth */}
-      {/* Apply Geist Sans as the primary font and Geist Mono as the monospace font */}
-      <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-        {children}
-        <Toaster />
+    // Use dark theme by default
+    <html lang="en" className={`dark ${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+      <body className="bg-background text-foreground antialiased">
+        {/* Wrap children with ThemeProvider if it exists for potential theme toggling */}
+        {/* <ThemeProvider attribute="class" defaultTheme="dark" enableSystem> */}
+          {children}
+          <Toaster />
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );
