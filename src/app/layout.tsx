@@ -3,11 +3,11 @@ import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from '@/components/theme-provider'; // Assuming ThemeProvider exists
+import { ScrollProgressBar } from '@/components/scroll-progress-bar'; // Import the new component
 
 export const metadata: Metadata = {
-  title: 'Lazify | AI Automation Agency', // Updated title
-  description: 'High-end AI automation solutions to boost your productivity. Lazify saves you time and effort.', // Updated description
+  title: 'Lazify | AI Automation Agency',
+  description: 'High-end AI automation solutions to boost your productivity. Lazify saves you time and effort.',
 };
 
 export default function RootLayout({
@@ -19,11 +19,9 @@ export default function RootLayout({
     // Use dark theme by default
     <html lang="en" className={`dark ${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <body className="bg-background text-foreground antialiased">
-        {/* Wrap children with ThemeProvider if it exists for potential theme toggling */}
-        {/* <ThemeProvider attribute="class" defaultTheme="dark" enableSystem> */}
-          {children}
-          <Toaster />
-        {/* </ThemeProvider> */}
+        <ScrollProgressBar /> {/* Add the scroll progress bar here */}
+        {children}
+        <Toaster />
       </body>
     </html>
   );

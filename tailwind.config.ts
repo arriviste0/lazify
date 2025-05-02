@@ -79,13 +79,18 @@ export default {
   				from: { height: 'var(--radix-accordion-content-height)' },
   				to: { height: '0' }
   			},
-            // Float animation (can be kept or removed if not used)
+            // Float animation
             'float': {
               '0%, 100%': { transform: 'translateY(0px)' },
               '50%': { transform: 'translateY(-10px)' },
             },
              // Subtle background gradient animation
             'gradient-subtle': {
+               '0%, 100%': { 'background-position': '0% 50%' },
+               '50%': { 'background-position': '100% 50%' },
+             },
+             // Flowing gradient animation
+             'gradient-flow': {
                '0%, 100%': { 'background-position': '0% 50%' },
                '50%': { 'background-position': '100% 50%' },
              }
@@ -95,6 +100,7 @@ export default {
   			'accordion-up': 'accordion-up 0.2s ease-out',
             'float': 'float 6s ease-in-out infinite',
             'gradient-subtle': 'gradient-subtle 15s ease infinite',
+            'gradient-flow': 'gradient-flow 8s ease infinite',
   		},
         // Removed specific animation delays as they are handled by Framer Motion or inline styles
   	}

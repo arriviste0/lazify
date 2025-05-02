@@ -4,91 +4,79 @@
 
 @layer base {
   :root {
-    /* Elegant Black, White, Cream Theme */
-    --background: 0 0% 9%; /* Near black */
+    /* Black & Deep Purple Theme */
+    --background: 240 10% 3.9%; /* Near black */
     --foreground: 0 0% 98%; /* Almost white */
 
-    --card: 0 0% 12%; /* Slightly lighter black for cards */
-    --card-foreground: 0 0% 95%; /* Lighter cream/white */
+    --card: 240 5% 8%; /* Slightly lighter black for cards */
+    --card-foreground: 0 0% 95%; /* Lighter gray/white */
 
-    --popover: 0 0% 7%; /* Darker popover */
+    --popover: 240 10% 2%; /* Darker popover */
     --popover-foreground: 0 0% 98%;
 
-    --primary: 40 100% 97%; /* Soft Cream */
-    --primary-foreground: 0 0% 9%; /* Near black text on cream */
+    --primary: 263 70% 55%; /* Deep Purple */
+    --primary-foreground: 0 0% 100%; /* White text on purple */
 
-    --secondary: 0 0% 15%; /* Dark gray */
+    --secondary: 240 4% 12%; /* Dark gray */
     --secondary-foreground: 0 0% 90%; /* Lighter gray */
 
-    --muted: 0 0% 20%; /* Muted dark gray */
+    --muted: 240 4% 18%; /* Muted dark gray */
     --muted-foreground: 0 0% 60%; /* Muted lighter gray */
 
-    --accent: 40 100% 90%; /* Lighter Cream for accents */
-    --accent-foreground: 0 0% 9%; /* Near black text on accent */
+    --accent: 263 70% 65%; /* Lighter Purple for accents */
+    --accent-foreground: 0 0% 100%; /* White text on accent */
 
     --destructive: 0 70% 50%; /* Adjusted red for dark theme */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%; /* Muted dark gray border */
-    --input: 0 0% 16%; /* Slightly darker input background */
-    --ring: 40 100% 85%; /* Cream ring */
+    --border: 240 4% 20%; /* Muted dark gray border */
+    --input: 240 4% 16%; /* Slightly darker input background */
+    --ring: 263 70% 60%; /* Purple ring */
 
     --radius: 0.75rem; /* Slightly larger radius */
 
-     /* Chart variables - can be adjusted if charts are used later */
+     /* Chart variables - kept for potential future use */
     --chart-1: hsl(var(--primary));
     --chart-2: hsl(var(--secondary));
     --chart-3: 200 80% 70%;
     --chart-4: 0 70% 65%;
     --chart-5: 120 50% 60%;
 
-     /* Sidebar variables - adjusted for consistency */
-    --sidebar-background: 0 0% 11%;
+     /* Sidebar variables - kept for potential future use */
+    --sidebar-background: 240 6% 7%;
     --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: hsl(var(--primary));
     --sidebar-primary-foreground: hsl(var(--primary-foreground));
     --sidebar-accent: hsl(var(--accent));
     --sidebar-accent-foreground: hsl(var(--accent-foreground));
-    --sidebar-border: 0 0% 25%;
+    --sidebar-border: 240 4% 25%;
     --sidebar-ring: hsl(var(--ring));
+
+    /* Custom Glow */
+    --glow-color: hsla(var(--primary) / 0.5);
   }
 
   .dark {
-    /* Dark theme is the default, but we keep the .dark selector for potential future light mode */
-    --background: 0 0% 9%;
+     /* Dark theme is the default */
+    --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 12%;
+    --card: 240 5% 8%;
     --card-foreground: 0 0% 95%;
-    --popover: 0 0% 7%;
+    --popover: 240 10% 2%;
     --popover-foreground: 0 0% 98%;
-    --primary: 40 100% 97%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 15%;
+    --primary: 263 70% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4% 12%;
     --secondary-foreground: 0 0% 90%;
-    --muted: 0 0% 20%;
+    --muted: 240 4% 18%;
     --muted-foreground: 0 0% 60%;
-    --accent: 40 100% 90%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 263 70% 65%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 20%;
-    --input: 0 0% 16%;
-    --ring: 40 100% 85%;
-
-    --chart-1: hsl(var(--primary));
-    --chart-2: hsl(var(--secondary));
-    --chart-3: 200 80% 70%;
-    --chart-4: 0 70% 65%;
-    --chart-5: 120 50% 60%;
-
-    --sidebar-background: 0 0% 11%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: hsl(var(--primary));
-    --sidebar-primary-foreground: hsl(var(--primary-foreground));
-    --sidebar-accent: hsl(var(--accent));
-    --sidebar-accent-foreground: hsl(var(--accent-foreground));
-    --sidebar-border: 0 0% 25%;
-    --sidebar-ring: hsl(var(--ring));
+    --border: 240 4% 20%;
+    --input: 240 4% 16%;
+    --ring: 263 70% 60%;
   }
 }
 
@@ -115,10 +103,6 @@
   h3 { @apply text-2xl md:text-3xl; }
   p { @apply text-base md:text-lg text-muted-foreground; }
 
-  /* Styling for modern sans-serif if Geist isn't enough */
-  /* body { font-family: 'Inter', sans-serif; } */
-  /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap'); */
-
   code, pre, kbd, samp {
     font-family: var(--font-geist-mono), monospace;
   }
@@ -139,26 +123,41 @@
     @apply hover:border-primary/50 hover:shadow-[0_0_30px_theme('colors.primary/10')];
   }
 
-  /* CTA button style */
+  /* CTA button style - with glow on hover */
   .cta-button {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
     @apply bg-primary text-primary-foreground hover:bg-primary/90;
     @apply px-8 py-3 text-base md:text-lg; /* Larger CTA */
-    @apply shadow-lg hover:shadow-primary/30 transform hover:-translate-y-0.5; /* Subtle lift */
+    @apply shadow-lg hover:shadow-[0_0_20px_5px_var(--glow-color)] transform hover:scale-105; /* Scale and Purple Glow */
   }
 
-  /* Subtle background animation for hero placeholder */
+  /* Outline button style - with glow on hover */
+  .outline-button-glow {
+     @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+     @apply border border-primary text-primary bg-background/50 backdrop-blur-sm hover:bg-primary/10 hover:text-accent-foreground;
+     @apply px-8 py-3 text-base md:text-lg;
+     @apply shadow-md hover:shadow-[0_0_15px_3px_var(--glow-color)] transform hover:scale-105;
+  }
+
+  /* Subtle background animation for placeholders */
    .animated-background-subtle {
      background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--secondary)), hsl(var(--background)), hsl(var(--muted)));
      background-size: 400% 400%;
      animation: gradient-subtle 15s ease infinite;
    }
+
+   /* Scroll progress bar */
+   .scroll-progress-bar {
+      @apply fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent origin-left z-[100];
+   }
 }
 
 @layer utilities {
-   /* Text gradient (if needed, less emphasis on gradients now) */
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+   /* Animated gradient text */
+  .gradient-text-animated {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-purple-400;
+    background-size: 200% 200%;
+    animation: gradient-flow 8s ease infinite;
   }
 }
 
@@ -175,7 +174,13 @@
   100% { background-position: 0% 50%; }
 }
 
-/* Scrollbar styling (optional, but adds to the high-end feel) */
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
