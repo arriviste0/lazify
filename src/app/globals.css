@@ -8,80 +8,80 @@ body {
 
 @layer base {
   :root {
-    /* Lazify Light Theme */
-    --background: 0 0% 100%; /* White */
-    --foreground: 240 10% 3.9%; /* Almost Black */
+    /* Lazify Light Theme - Futuristic/AeroSense Inspired */
+    --background: 220 20% 98%; /* Very Light Cool Gray */
+    --foreground: 220 15% 20%; /* Dark Cool Gray */
     --card: 0 0% 100%; /* White */
-    --card-foreground: 240 10% 3.9%; /* Almost Black */
+    --card-foreground: 220 15% 20%; /* Dark Cool Gray */
     --popover: 0 0% 100%; /* White */
-    --popover-foreground: 240 10% 3.9%; /* Almost Black */
-    --primary: 221 83% 53%; /* Vibrant Blue */
+    --popover-foreground: 220 15% 20%; /* Dark Cool Gray */
+    --primary: 217 91% 60%; /* Bright Blue */
     --primary-foreground: 0 0% 100%; /* White */
     --secondary: 210 40% 96.1%; /* Light Grayish Blue */
     --secondary-foreground: 240 6% 10%; /* Dark Gray */
-    --muted: 210 40% 92%; /* Slightly darker Grayish Blue */
+    --muted: 215 25% 90%; /* Lighter Muted Gray */
     --muted-foreground: 215 20% 50%; /* Muted Gray */
-    --accent: 173 58% 39%; /* Teal */
+    --accent: 180 70% 45%; /* Cyan/Teal */
     --accent-foreground: 0 0% 100%; /* White */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 214 32% 91.4%; /* Light Gray Border */
     --input: 214 32% 91.4%; /* Light Gray Input */
-    --ring: 221 83% 53%; /* Vibrant Blue for ring */
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --ring: 217 91% 70%; /* Lighter Blue for ring */
+    --chart-1: 217 91% 60%; /* Bright Blue */
+    --chart-2: 180 70% 45%; /* Cyan/Teal */
+    --chart-3: 260 80% 65%; /* Violet */
+    --chart-4: 30 90% 60%; /* Orange */
+    --chart-5: 120 50% 55%; /* Green */
+    --radius: 0.75rem; /* Slightly larger radius */
 
     /* Sidebar adjustments - aligning with the main theme */
-    --sidebar-background: 210 40% 98%; /* Very Light Grayish Blue */
-    --sidebar-foreground: 240 10% 3.9%; /* Almost Black */
-    --sidebar-primary: 221 83% 53%; /* Vibrant Blue */
-    --sidebar-primary-foreground: 0 0% 100%; /* White */
-    --sidebar-accent: 173 58% 39%; /* Teal */
-    --sidebar-accent-foreground: 0 0% 100%; /* White */
-    --sidebar-border: 214 32% 91.4%; /* Light Gray Border */
-    --sidebar-ring: 221 83% 53%; /* Vibrant Blue for ring */
+    --sidebar-background: 220 20% 96%; /* Slightly darker light gray */
+    --sidebar-foreground: 220 15% 20%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 180 70% 45%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 214 32% 88%; /* Slightly darker border */
+    --sidebar-ring: 217 91% 70%;
   }
 
   .dark {
-    /* Lazify Dark Theme */
-    --background: 240 10% 3.9%; /* Almost Black */
-    --foreground: 0 0% 98%; /* Almost White */
-    --card: 240 10% 6%; /* Darker Card */
-    --card-foreground: 0 0% 98%; /* Almost White */
-    --popover: 240 10% 3.9%; /* Almost Black */
-    --popover-foreground: 0 0% 98%; /* Almost White */
-    --primary: 221 83% 65%; /* Lighter Vibrant Blue */
-    --primary-foreground: 240 5% 95%; /* Light Gray for contrast */
-    --secondary: 240 4% 12%; /* Dark Gray */
-    --secondary-foreground: 0 0% 98%; /* Almost White */
-    --muted: 240 4% 18%; /* Slightly Lighter Dark Gray */
-    --muted-foreground: 240 5% 64%; /* Muted Light Gray */
-    --accent: 173 58% 50%; /* Brighter Teal */
-    --accent-foreground: 240 10% 3.9%; /* Almost Black */
+    /* Lazify Dark Theme - Futuristic/AeroSense Inspired */
+    --background: 220 20% 5%; /* Very Dark Blue */
+    --foreground: 210 40% 98%; /* Almost White */
+    --card: 220 20% 10%; /* Darker Blue Card */
+    --card-foreground: 210 40% 98%;
+    --popover: 220 20% 5%; /* Very Dark Blue */
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 65%; /* Lighter Bright Blue */
+    --primary-foreground: 220 10% 15%; /* Dark contrast */
+    --secondary: 220 15% 15%; /* Darker Gray */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 220 15% 25%; /* Slightly Lighter Dark Gray */
+    --muted-foreground: 215 20% 65%; /* Lighter Muted Gray */
+    --accent: 180 70% 55%; /* Brighter Cyan/Teal */
+    --accent-foreground: 220 15% 10%; /* Dark contrast */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 15%; /* Dark Border */
-    --input: 240 4% 15%; /* Dark Input */
-    --ring: 221 83% 65%; /* Lighter Vibrant Blue */
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 220 15% 20%; /* Dark Border */
+    --input: 220 15% 20%; /* Dark Input */
+    --ring: 217 91% 75%; /* Even Lighter Blue */
+    --chart-1: 217 91% 65%;
+    --chart-2: 180 70% 55%;
+    --chart-3: 260 80% 70%;
+    --chart-4: 30 90% 65%;
+    --chart-5: 120 50% 60%;
 
     /* Sidebar dark adjustments */
-    --sidebar-background: 240 10% 5%; /* Slightly darker than main bg */
-    --sidebar-foreground: 0 0% 98%; /* Almost White */
-    --sidebar-primary: 221 83% 65%; /* Lighter Vibrant Blue */
-    --sidebar-primary-foreground: 240 5% 95%; /* Light Gray */
-    --sidebar-accent: 173 58% 50%; /* Brighter Teal */
-    --sidebar-accent-foreground: 240 10% 3.9%; /* Almost Black */
-    --sidebar-border: 240 4% 15%; /* Dark Border */
-    --sidebar-ring: 221 83% 65%; /* Lighter Vibrant Blue */
+    --sidebar-background: 220 20% 8%; /* Slightly lighter dark bg */
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217 91% 65%;
+    --sidebar-primary-foreground: 220 10% 15%;
+    --sidebar-accent: 180 70% 55%;
+    --sidebar-accent-foreground: 220 15% 10%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 217 91% 75%;
   }
 }
 
@@ -91,28 +91,66 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    /* Add a subtle background gradient */
+    @apply bg-gradient-to-br from-background via-background to-secondary/10;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-geist-sans), system-ui, sans-serif; /* Ensure headings use Geist Sans variable */
+    @apply font-semibold tracking-tight;
   }
+  h1 { @apply text-4xl md:text-5xl lg:text-6xl; }
+  h2 { @apply text-3xl md:text-4xl; }
+  h3 { @apply text-2xl md:text-3xl; }
+  p { @apply text-base md:text-lg text-muted-foreground; }
+
 }
 
-/* Add subtle transitions */
+/* Add subtle transitions and animations */
 @layer components {
   .card {
-    @apply transition-all duration-200 ease-in-out;
+    @apply transition-all duration-300 ease-in-out;
+    @apply bg-card/80 backdrop-blur-sm border border-border/50; /* Frosted glass effect */
   }
    /* Optional: slightly lift the card on hover */
   .card:hover {
-     /* @apply transform -translate-y-1; */
-     @apply shadow-lg; /* Enhance shadow on hover */
+     @apply transform -translate-y-1 shadow-xl; /* Enhanced shadow and lift */
   }
   .btn { /* Ensure buttons have transition */
-     @apply transition-colors duration-200;
+     @apply transition-all duration-200 ease-in-out transform active:scale-95;
+  }
+  .animated-metric {
+     /* Placeholder for potential counter animation */
+     @apply transition-all duration-500 ease-out;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
   }
 }
 
 /* Specific styles for monospace font usage if needed */
 code, pre, kbd, samp {
   font-family: var(--font-geist-mono), monospace; /* Use Geist Mono variable for code elements */
+}
+
+/* Animation for floating elements */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Keyframes for subtle background animation */
+@keyframes subtle-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-background {
+    background-size: 200% 200%;
+    animation: subtle-gradient 15s ease infinite;
 }

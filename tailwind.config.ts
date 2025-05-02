@@ -82,13 +82,35 @@ export default {
   				to: {
   					height: '0'
   				}
-  			}
+  			},
+        // Added for floating animation
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+         // Added for subtle background gradient animation
+        'subtle-gradient': {
+           '0%, 100%': { 'background-position': '0% 50%' },
+           '50%': { 'background-position': '100% 50%' },
+         }
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
-  		}
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+        // Added for floating animation
+        'float': 'float 6s ease-in-out infinite',
+        // Added for subtle background gradient animation
+        'subtle-gradient': 'subtle-gradient 15s ease infinite',
+  		},
+        // Added for animation delay utility
+        animationDelay: {
+         '2000': '2000ms',
+         '4000': '4000ms',
+       },
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+      require("tailwindcss-animate"),
+      require('tailwind-scrollbar')({ nocompatible: true }), // Added scrollbar plugin
+    ],
 } satisfies Config;
