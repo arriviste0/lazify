@@ -80,6 +80,7 @@ const ChartDisplay = dynamic(() => Promise.resolve(({ isMobile }: { isMobile: bo
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isClient, setIsClient] = useState(false); // State to track client-side mount
   const isMobile = useIsMobile();
   const sectionRefs = {
     home: useRef(null),
@@ -91,6 +92,11 @@ export default function Home() {
     demo: useRef(null),
     contact: useRef(null),
   };
+
+  useEffect(() => {
+    setIsClient(true); // Set to true once component mounts on the client
+  }, []);
+
 
   // --- Framer Motion Scroll Animations ---
   const { scrollY, scrollYProgress } = useScroll();
@@ -338,9 +344,9 @@ export default function Home() {
           className="relative w-full h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden" // Full viewport height minus header
           style={{ y: heroParallaxY }} // Apply parallax
         >
-          {/* 3D Hero Scene */}
+          {/* 3D Hero Scene - Render conditionally on client */}
           <div className="absolute inset-0 -z-10">
-            <HeroScene />
+            {isClient && <HeroScene />}
           </div>
 
           <div className="container px-4 md:px-6 relative z-10">
@@ -487,7 +493,7 @@ export default function Home() {
                >
                 <div className="w-full h-[400px] relative">
                   <div className="absolute inset-0">
-                     <ChartDisplay isMobile={isMobile} />
+                     {isClient && <ChartDisplay isMobile={isMobile} />}
                   </div>
                 </div>
               </motion.div>
@@ -682,3 +688,4 @@ export default function Home() {
     </div>
   );
 }
+
