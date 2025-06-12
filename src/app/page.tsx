@@ -65,7 +65,7 @@ const ChartDisplay = dynamic(() => Promise.resolve(({ isMobile }: { isMobile: bo
   } else {
     return (
       <Image
-        src="https://picsum.photos/400/400" // Replace with actual placeholder
+        src="https://placehold.co/400x400.png" 
         alt="Productivity chart visualization"
         width={400}
         height={400}
@@ -347,7 +347,7 @@ export default function Home() {
           {/* Placeholder Background - Replace HeroScene */}
           <HeroBackground />
 
-          <div className="container px-4 md:px-6 relative z-10">
+          <div className="container mx-auto px-4 md:px-6 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <motion.h1
                 className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl"
@@ -393,20 +393,20 @@ export default function Home() {
           className="w-full section-padding bg-secondary/20" // Use darker secondary
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container px-4 md:px-6">
-            <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
+          <div className="container mx-auto px-4 md:px-6">
+            <motion.div className="mb-12 md:mb-16 text-center md:text-left" variants={fadeInUp}>
               <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                 Our Services
               </span>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
                 Automate Your World with AI
               </h2>
-              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
+              <p className="max-w-3xl mt-4 text-muted-foreground mx-auto md:mx-0">
                 Lazify offers a suite of intelligent services designed to handle your repetitive tasks and boost creative output.
               </p>
             </motion.div>
             <motion.div
-              className="grid gap-6 md:gap-8 lg:grid-cols-3"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
               variants={staggerContainer}
             >
               {services.map((service, index) => (
@@ -431,7 +431,7 @@ export default function Home() {
           className="w-full section-padding overflow-hidden"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.1 }} variants={fadeInUp}
         >
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto px-4 md:px-6">
             <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
                <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
                 Meet Your Agents
@@ -454,16 +454,16 @@ export default function Home() {
           className="w-full section-padding bg-gradient-to-b from-secondary/20 to-background"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto px-4 md:px-6">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
-              <motion.div variants={fadeInUp}>
+              <motion.div variants={fadeInUp} className="text-center lg:text-left">
                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                   The Lazify Advantage
                 </span>
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
                   Unlock Unprecedented Efficiency
                 </h2>
-                <p className="text-muted-foreground mb-8">
+                <p className="text-muted-foreground mb-8 lg:max-w-md mx-auto lg:mx-0">
                   Lazify isn't just automation; it's intelligent delegation. Experience tangible benefits that transform how you work.
                 </p>
                 <motion.div
@@ -506,7 +506,7 @@ export default function Home() {
           className="w-full section-padding"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto px-4 md:px-6">
              <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
                 <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
                   Pricing Plans
@@ -530,7 +530,7 @@ export default function Home() {
           className="w-full section-padding bg-secondary/10" // Subtle background for FAQ
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container px-4 md:px-6 max-w-3xl mx-auto">
+          <div className="container mx-auto px-4 md:px-6 max-w-3xl">
             <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
                 Frequently Asked Questions
@@ -561,7 +561,7 @@ export default function Home() {
            className="section-padding"
            initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.3 }} variants={fadeInUp}
          >
-          <div className="container container-padding">
+          <div className="container mx-auto container-padding">
             <motion.div
                className="bg-gradient-to-r from-primary/10 via-card to-secondary/10 border border-border rounded-xl p-8 md:p-12 lg:p-16 text-center"
                variants={fadeInUp}
@@ -586,7 +586,7 @@ export default function Home() {
            className="w-full section-padding bg-secondary/20"
            initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
          >
-           <div className="container px-4 md:px-6">
+           <div className="container mx-auto px-4 md:px-6">
              <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Get in Touch</h2>
                <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
@@ -608,11 +608,11 @@ export default function Home() {
          viewport={{ once: true, amount: 0.1 }}
          transition={{ duration: 0.8 }}
        >
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="grid gap-8 md:grid-cols-3 items-start">
             {/* Logo & Info */}
-            <motion.div className="space-y-2" variants={fadeInUp}>
-              <Link href="#home" className="flex items-center gap-2 text-xl font-bold">
+            <motion.div className="space-y-2 text-center md:text-left" variants={fadeInUp}>
+              <Link href="#home" className="flex items-center justify-center md:justify-start gap-2 text-xl font-bold">
                 <BrainCircuit className="h-6 w-6 text-primary" />
                 <span className="gradient-text-animated"> {/* Use animated gradient */}
                   Lazify
@@ -623,16 +623,16 @@ export default function Home() {
               </p>
               <Link
                 href="mailto:contact@lazify.ai"
-                className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors"
+                className="text-sm text-muted-foreground hover:text-primary flex items-center justify-center md:justify-start gap-1 transition-colors"
               >
                 <Mail className="h-4 w-4" /> contact@lazify.ai
               </Link>
             </motion.div>
 
             {/* Quick Links */}
-            <motion.div className="space-y-2" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
+            <motion.div className="space-y-2 text-center md:text-left" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Quick Links</h4>
-              <nav className="flex flex-col gap-1">
+              <nav className="flex flex-col gap-1 items-center md:items-start">
                  {/* Added Privacy & Terms */}
                 {[...navLinks.slice(1, 6), { href: '#', label: 'Privacy Policy' }, { href: '#', label: 'Terms of Service' }].map((link) => (
                   <Link
@@ -654,12 +654,12 @@ export default function Home() {
             </motion.div>
 
             {/* Social Links */}
-            <motion.div className="space-y-4" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
+            <motion.div className="space-y-4 text-center md:text-left" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Connect With Us</h4>
               <p className="text-sm text-muted-foreground">
                  Follow us on social media for the latest updates and insights on AI automation.
                </p>
-              <div className="flex justify-start gap-4 pt-2">
+              <div className="flex justify-center md:justify-start gap-4 pt-2">
                 {[
                   { label: "LinkedIn", icon: Linkedin, href: "#" },
                   { label: "Twitter", icon: Twitter, href: "#" },
@@ -686,4 +686,3 @@ export default function Home() {
     </div>
   );
 }
-
