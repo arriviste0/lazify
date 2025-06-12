@@ -19,30 +19,31 @@ import {
   Menu,
   X,
   ChevronRight,
-  Send, // Added Send icon
+  Send,
+  Users, // For Lead Generation
+  CalendarDays, // For Calendar Scheduling
+  Sparkles, // For Content/Daily Tasks
+  ListChecks, // For Task Management
 } from 'lucide-react';
-import dynamic from 'next/dynamic'; // Import dynamic
+import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import AgentSection from '@/components/agent-section';
-// Removed HeroScene import
 import ServiceCard from '@/components/service-card';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { PricingTable } from '@/components/pricing-table'; // Import PricingTable
-import { ContactForm } from '@/components/contact-form'; // Import ContactForm
-import HeroBackground from '@/components/hero-background'; // Import the placeholder background
+import { PricingTable } from '@/components/pricing-table';
+import { ContactForm } from '@/components/contact-form';
+import HeroBackground from '@/components/hero-background';
 
-// Reusable animation variant for fadeInUp effect
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6, ease: [0.6, -0.05, 0.01, 0.99] },
 };
 
-// Reusable stagger container variant
 const staggerContainer = {
   animate: {
     transition: {
@@ -51,10 +52,7 @@ const staggerContainer = {
   },
 };
 
-// Dynamically import the Chart iframe rendering part
 const ChartDisplay = dynamic(() => Promise.resolve(({ isMobile }: { isMobile: boolean }) => {
-  // Temporarily always show placeholder due to R3F issues.
-  // The 'isMobile' prop is kept for potential future reinstatement of the 3D chart.
   return (
     <Image
       src="https://placehold.co/400x400.png"
@@ -71,36 +69,33 @@ const ChartDisplay = dynamic(() => Promise.resolve(({ isMobile }: { isMobile: bo
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [isClient, setIsClient] = useState(false); // State to track client-side mount
+  const [isClient, setIsClient] = useState(false);
   const isMobile = useIsMobile();
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
     agents: useRef(null),
     whyLazify: useRef(null),
-    pricing: useRef(null), // Added ref for Pricing
+    pricing: useRef(null),
     faq: useRef(null),
     demo: useRef(null),
     contact: useRef(null),
   };
 
   useEffect(() => {
-    setIsClient(true); // Set to true once component mounts on the client
+    setIsClient(true);
   }, []);
 
-
-  // --- Framer Motion Scroll Animations ---
   const { scrollY, scrollYProgress } = useScroll();
-  const heroParallaxY = useTransform(scrollY, [0, 500], [0, -100]); // Parallax for hero background elements
-  const whyLazifyParallaxY = useTransform(scrollYProgress, [0.45, 0.65], ['-50px', '50px']); // Adjusted parallax range
+  const heroParallaxY = useTransform(scrollY, [0, 500], [0, -100]);
+  const whyLazifyParallaxY = useTransform(scrollYProgress, [0.45, 0.65], ['-50px', '50px']);
 
-  // Intersection observer remains the same
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -20% 0px', // Adjust margin to trigger slightly earlier/later
-      threshold: 0.2, // Lowered threshold slightly
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: 0.2,
     };
 
     Object.entries(sectionRefs).forEach(([id, ref]) => {
@@ -116,14 +111,14 @@ export default function Home() {
       observers.push(observer);
     });
     return () => observers.forEach((observer) => observer.disconnect());
-  }, []); // Empty dependency array is correct here
+  }, []);
 
   const navLinks = [
     { href: '#home', label: 'Home', ref: sectionRefs.home },
     { href: '#services', label: 'Services', ref: sectionRefs.services },
     { href: '#agents', label: 'Agents', ref: sectionRefs.agents },
     { href: '#why-lazify', label: 'Why Us', ref: sectionRefs.whyLazify },
-    { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing }, // Added Pricing link
+    { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
     { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
     { href: '#demo', label: 'Demo', ref: sectionRefs.demo },
     { href: '#contact', label: 'Contact', ref: sectionRefs.contact },
@@ -135,54 +130,59 @@ export default function Home() {
       description: 'Schedule meetings, manage your inbox, and create insightful reports automatically.',
       icon: Clock,
       imageHint: 'robot arm organizing calendar icons',
-      color: 'from-purple-600 to-indigo-600', // Updated color
+      color: 'from-purple-600 to-indigo-600',
     },
     {
       title: 'AI Content Generation',
       description: 'Generate high-quality blog posts, social media captions, and email newsletters effortlessly.',
       icon: FileText,
       imageHint: 'glowing pen writing on digital paper',
-      color: 'from-fuchsia-600 to-pink-600', // Updated color
+      color: 'from-fuchsia-600 to-pink-600',
     },
     {
       title: 'Custom AI Agents',
       description: 'Specialized AI assistants designed for healthcare, e-commerce, finance, and more.',
       icon: Cog,
       imageHint: 'blueprint with glowing circuit lines',
-      color: 'from-violet-600 to-purple-600', // Updated color
+      color: 'from-violet-600 to-purple-600',
     },
   ];
 
   const agents = [
-     {
-      name: "InboxBot",
-      description: "Filters emails, drafts replies, and manages your schedule.",
-      hint: "robot sorting mail envelopes 3d isometric purple",
-      color: "from-purple-600 to-indigo-600",
+    {
+      name: "LeadSpark AI",
+      description: "Automatically identifies and qualifies potential leads from various sources, enriching your sales pipeline.",
+      hint: "robot sifting data leads 3d isometric", // Updated hint
+      color: "from-green-500 to-emerald-500",
+      icon: Users,
     },
     {
-      name: "BlogGenie",
-      description: "Researches topics and writes engaging blog articles.",
-      hint: "magic lamp emitting blog post icons 3d isometric purple",
-      color: "from-fuchsia-600 to-pink-600",
+      name: "InboxZero AI",
+      description: "Intelligently sorts emails, drafts contextual replies, and prioritizes your inbox so you focus on what matters.",
+      hint: "robot organizing email inbox zero 3d isometric", // Updated hint
+      color: "from-blue-500 to-sky-500",
+      icon: Mail,
     },
     {
-      name: "ShopHelper",
-      description: "Analyzes sales data and optimizes product listings.",
-      hint: "robot analyzing shopping cart data 3d isometric purple",
-      color: "from-violet-600 to-purple-600",
+      name: "ScheduleSync AI",
+      description: "Effortlessly coordinates meetings, finds optimal times, and manages your calendar invites across platforms.",
+      hint: "robot scheduling calendar appointments 3d isometric", // Updated hint
+      color: "from-amber-500 to-yellow-500",
+      icon: CalendarDays,
     },
     {
-      name: "ReportWizard",
-      description: "Compiles data from various sources into clear reports.",
-      hint: "wizard hat creating charts graphs 3d isometric purple",
-      color: "from-indigo-500 to-blue-500",
-    },
-    {
-      name: "SocialSpark",
-      description: "Creates and schedules engaging social media posts.",
-      hint: "megaphone generating social media icons 3d isometric purple",
+      name: "ContentCraft AI",
+      description: "Your AI partner for brainstorming, drafting, and refining content for blogs, social media, and reports.",
+      hint: "robot writing digital scroll 3d isometric", // Updated hint
       color: "from-rose-500 to-red-500",
+      icon: Sparkles,
+    },
+    {
+      name: "TaskMaster AI",
+      description: "Manages your to-do lists, sets reminders, and helps organize your daily personal and professional tasks.",
+      hint: "robot juggling checklist tasks 3d isometric", // Updated hint
+      color: "from-teal-500 to-cyan-500",
+      icon: ListChecks,
     },
   ];
 
@@ -215,7 +215,6 @@ export default function Home() {
     },
   ];
 
-   // Headline animation variants
   const headlineWord = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
@@ -223,7 +222,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Navigation Bar */}
        <motion.header
          className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50"
          initial={{ y: -100 }}
@@ -238,12 +236,11 @@ export default function Home() {
             >
               <BrainCircuit className="h-6 w-6 text-primary" />
             </motion.div>
-            <span className="gradient-text-animated"> {/* Apply animated gradient */}
+            <span className="gradient-text-animated">
               Lazify
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             {navLinks.map((link) => (
               <Link
@@ -264,7 +261,6 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-4">
-             {/* Use cta-button style */}
             <Button
               className="hidden md:inline-flex cta-button"
               size="sm"
@@ -273,7 +269,6 @@ export default function Home() {
               <Link href="#demo">Try Our App</Link>
             </Button>
 
-            {/* Mobile Navigation Trigger */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild className="md:hidden">
                 <Button variant="ghost" size="icon" className="text-foreground hover:text-primary">
@@ -328,25 +323,22 @@ export default function Home() {
       </motion.header>
 
       <main className="flex-grow">
-        {/* Hero Section */}
         <motion.section
           id="home"
           ref={sectionRefs.home}
-          className="relative w-full h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden" // Full viewport height minus header
-          style={{ y: heroParallaxY }} // Apply parallax
+          className="relative w-full h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden"
+          style={{ y: heroParallaxY }}
         >
-          {/* Placeholder Background - Replace HeroScene */}
           <HeroBackground />
 
-          <div className="container mx-auto px-4 md:px-6 relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
+          <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
+            <div className="max-w-3xl mx-auto">
               <motion.h1
                 className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl"
                 variants={staggerContainer}
                 initial="initial"
                 animate="animate"
               >
-                 {/* Animate words */}
                 {"AI Agents That Work While You Rest".split(" ").map((word, i) => (
                   <motion.span key={i} variants={headlineWord} className="inline-block mr-2 md:mr-4">
                     {word}
@@ -365,7 +357,7 @@ export default function Home() {
                 variants={fadeInUp} initial="initial" animate="animate" transition={{ delay: 0.7, ...fadeInUp.transition }}
               >
                 <Button size="lg" className="cta-button" asChild>
-                    <Link href="#demo"> {/* Changed link to demo section */}
+                    <Link href="#demo">
                       Get Your AI Agent Now <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                 </Button>
@@ -377,7 +369,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Services Section */}
         <motion.section
           id="services"
           ref={sectionRefs.services}
@@ -415,7 +406,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Agents Gallery Section */}
         <motion.section
           id="agents"
           ref={sectionRefs.agents}
@@ -427,18 +417,17 @@ export default function Home() {
                <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
                 Meet Your Agents
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center">
                 Your Dedicated AI Workforce
               </h2>
-              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
+              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground text-center">
                 Explore some of our specialized AI agents ready to take on specific tasks.
               </p>
             </motion.div>
-            <AgentSection agents={agents} /> {/* AgentSection already has internal animations */}
+            <AgentSection agents={agents} />
           </div>
         </motion.section>
 
-        {/* Why Lazify Section */}
         <motion.section
           id="why-lazify"
           ref={sectionRefs.whyLazify}
@@ -474,7 +463,6 @@ export default function Home() {
                   ))}
                 </motion.div>
               </motion.div>
-               {/* Apply parallax to the chart container */}
                <motion.div
                  className="flex items-center justify-center"
                  style={{ y: whyLazifyParallaxY }}
@@ -490,7 +478,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-         {/* Pricing Section */}
         <motion.section
           id="pricing"
           ref={sectionRefs.pricing}
@@ -514,15 +501,14 @@ export default function Home() {
         </motion.section>
 
 
-        {/* FAQ Section */}
         <motion.section
           id="faq"
           ref={sectionRefs.faq}
-          className="w-full section-padding bg-secondary/10" // Subtle background for FAQ
+          className="w-full section-padding bg-secondary/10"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-            <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
+          <div className="container mx-auto px-4 md:px-6 max-w-3xl text-center">
+            <motion.div className="mb-12 md:mb-16" variants={fadeInUp}>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground text-center">
                 Frequently Asked Questions
               </h2>
@@ -535,7 +521,7 @@ export default function Home() {
                     <AccordionTrigger className="py-4 text-lg font-medium text-left hover:text-primary transition-colors [&[data-state=open]>svg]:text-primary">
                       {faq.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-base text-muted-foreground pt-2 pb-4">
+                    <AccordionContent className="text-base text-muted-foreground pt-2 pb-4 text-left">
                       {faq.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -545,7 +531,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-         {/* Demo CTA Section */}
         <motion.section
            id="demo"
            ref={sectionRefs.demo}
@@ -562,7 +547,7 @@ export default function Home() {
                 Experience the power of AI automation firsthand. No commitment required. See how Lazify can save you time and boost your efficiency.
               </p>
                <Button className="cta-button" size="lg" asChild>
-                   <Link href="#contact"> {/* Link to contact form for demo request */}
+                   <Link href="#contact">
                      Request Your Free Demo <CheckCircle className="ml-2 h-5 w-5" />
                    </Link>
                </Button>
@@ -570,15 +555,14 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Contact Section */}
          <motion.section
            id="contact"
            ref={sectionRefs.contact}
            className="w-full section-padding bg-secondary/20"
            initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
          >
-           <div className="container mx-auto px-4 md:px-6">
-             <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
+           <div className="container mx-auto px-4 md:px-6 text-center">
+             <motion.div className="mb-12 md:mb-16" variants={fadeInUp}>
                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground text-center">Get in Touch</h2>
                <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-center">
                  Have a question, need a custom solution, or want to request your demo? Reach out to us!
@@ -591,21 +575,19 @@ export default function Home() {
          </motion.section>
       </main>
 
-      {/* Footer */}
       <motion.footer
-         className="w-full py-12 md:py-16 bg-secondary/30 border-t border-border/50" // Darker secondary, less prominent border
+         className="w-full py-12 md:py-16 bg-secondary/30 border-t border-border/50"
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1 }}
          viewport={{ once: true, amount: 0.1 }}
          transition={{ duration: 0.8 }}
        >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid gap-8 md:grid-cols-3 items-start">
-            {/* Logo & Info */}
-            <motion.div className="space-y-2 text-center md:text-left" variants={fadeInUp}>
+          <div className="grid gap-8 md:grid-cols-3 items-start text-center md:text-left">
+            <motion.div className="space-y-2" variants={fadeInUp}>
               <Link href="#home" className="flex items-center justify-center md:justify-start gap-2 text-xl font-bold">
                 <BrainCircuit className="h-6 w-6 text-primary" />
-                <span className="gradient-text-animated"> {/* Use animated gradient */}
+                <span className="gradient-text-animated">
                   Lazify
                 </span>
               </Link>
@@ -620,11 +602,9 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            {/* Quick Links */}
-            <motion.div className="space-y-2 text-center md:text-left" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
+            <motion.div className="space-y-2" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Quick Links</h4>
               <nav className="flex flex-col gap-1 items-center md:items-start">
-                 {/* Added Privacy & Terms */}
                 {[...navLinks.slice(1, 6), { href: '#', label: 'Privacy Policy' }, { href: '#', label: 'Terms of Service' }].map((link) => (
                   <Link
                     key={link.label}
@@ -644,8 +624,7 @@ export default function Home() {
               </nav>
             </motion.div>
 
-            {/* Social Links */}
-            <motion.div className="space-y-4 text-center md:text-left" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
+            <motion.div className="space-y-4" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Connect With Us</h4>
               <p className="text-sm text-muted-foreground">
                  Follow us on social media for the latest updates and insights on AI automation.
