@@ -53,27 +53,18 @@ const staggerContainer = {
 
 // Dynamically import the Chart iframe rendering part
 const ChartDisplay = dynamic(() => Promise.resolve(({ isMobile }: { isMobile: boolean }) => {
-  if (!isMobile) {
-    return (
-      <iframe
-        src="/chart-scene"
-        className="w-full h-full border-0 rounded-lg shadow-xl bg-transparent"
-        title="3D Chart Visualization"
-        loading="lazy"
-      />
-    );
-  } else {
-    return (
-      <Image
-        src="https://placehold.co/400x400.png" 
-        alt="Productivity chart visualization"
-        width={400}
-        height={400}
-        className="w-full h-full object-contain rounded-lg"
-        data-ai-hint="abstract 3d chart purple"
-      />
-    );
-  }
+  // Temporarily always show placeholder due to R3F issues.
+  // The 'isMobile' prop is kept for potential future reinstatement of the 3D chart.
+  return (
+    <Image
+      src="https://placehold.co/400x400.png"
+      alt="Productivity chart visualization"
+      width={400}
+      height={400}
+      className="w-full h-full object-contain rounded-lg"
+      data-ai-hint="abstract 3d chart purple"
+    />
+  );
 }), { ssr: false, loading: () => <div className="w-full h-full flex items-center justify-center"><p>Loading chart...</p></div> });
 
 
@@ -390,7 +381,7 @@ export default function Home() {
         <motion.section
           id="services"
           ref={sectionRefs.services}
-          className="w-full section-padding bg-secondary/20" // Use darker secondary
+          className="w-full section-padding bg-secondary/20"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
@@ -398,10 +389,10 @@ export default function Home() {
               <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                 Our Services
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center md:text-left">
                 Automate Your World with AI
               </h2>
-              <p className="max-w-3xl mt-4 text-muted-foreground mx-auto md:mx-0">
+              <p className="max-w-3xl mt-4 text-muted-foreground mx-auto md:mx-0 text-center md:text-left">
                 Lazify offers a suite of intelligent services designed to handle your repetitive tasks and boost creative output.
               </p>
             </motion.div>
@@ -460,10 +451,10 @@ export default function Home() {
                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                   The Lazify Advantage
                 </span>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4 text-center lg:text-left">
                   Unlock Unprecedented Efficiency
                 </h2>
-                <p className="text-muted-foreground mb-8 lg:max-w-md mx-auto lg:mx-0">
+                <p className="text-muted-foreground mb-8 lg:max-w-md mx-auto lg:mx-0 text-center lg:text-left">
                   Lazify isn't just automation; it's intelligent delegation. Experience tangible benefits that transform how you work.
                 </p>
                 <motion.div
@@ -511,10 +502,10 @@ export default function Home() {
                 <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
                   Pricing Plans
                 </span>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center">
                   Choose Your Automation Level
                 </h2>
-                <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
+                <p className="max-w-3xl mx-auto mt-4 text-muted-foreground text-center">
                   Simple, transparent pricing to fit your needs, whether you're an individual or a large enterprise.
                 </p>
              </motion.div>
@@ -532,10 +523,10 @@ export default function Home() {
         >
           <div className="container mx-auto px-4 md:px-6 max-w-3xl">
             <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground text-center">
                 Frequently Asked Questions
               </h2>
-              <p className="mt-4 text-muted-foreground">Have questions? We've got answers.</p>
+              <p className="mt-4 text-muted-foreground text-center">Have questions? We've got answers.</p>
             </motion.div>
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (
@@ -566,8 +557,8 @@ export default function Home() {
                className="bg-gradient-to-r from-primary/10 via-card to-secondary/10 border border-border rounded-xl p-8 md:p-12 lg:p-16 text-center"
                variants={fadeInUp}
              >
-               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Try Lazify Free for 1 Day</h2>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
+               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary text-center">Try Lazify Free for 1 Day</h2>
+              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto text-center">
                 Experience the power of AI automation firsthand. No commitment required. See how Lazify can save you time and boost your efficiency.
               </p>
                <Button className="cta-button" size="lg" asChild>
@@ -588,8 +579,8 @@ export default function Home() {
          >
            <div className="container mx-auto px-4 md:px-6">
              <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
-               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Get in Touch</h2>
-               <p className="max-w-2xl mx-auto mt-4 text-muted-foreground">
+               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground text-center">Get in Touch</h2>
+               <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-center">
                  Have a question, need a custom solution, or want to request your demo? Reach out to us!
                </p>
              </motion.div>
