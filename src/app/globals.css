@@ -120,7 +120,7 @@
   /* Modern card styling */
   .modern-card {
     @apply bg-card border border-border rounded-lg p-6 transition-all duration-300 ease-in-out;
-    @apply hover:border-primary/50 hover:shadow-[0_0_30px_theme('colors.primary/10')];
+    @apply hover:border-primary/50 hover:shadow-[0_0_30px_hsl(var(--primary)/0.1)];
   }
 
   /* CTA button style - with glow on hover */
