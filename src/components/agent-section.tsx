@@ -1,3 +1,4 @@
+
 "use client";
 
 import type React from "react";
@@ -5,7 +6,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight, ArrowLeft, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -15,6 +16,8 @@ interface Agent {
   description: string;
   hint: string;
   color: string; // Gradient class string e.g., "from-purple-600 to-indigo-600"
+  icon: LucideIcon;
+  slug: string; // Added slug for linking
 }
 
 interface AgentSectionProps {
@@ -123,10 +126,8 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
             exit="exit"
             className="grid md:grid-cols-2 gap-8 items-center"
           >
-             {/* Added text-center md:text-left */}
             <div className="space-y-4 text-center md:text-left">
               <motion.div variants={contentVariants} custom={0.1}>
-                 {/* Apply gradient text based on agent color */}
                 <h3 className={`text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${agents[activeIndex].color}`}>
                   {agents[activeIndex].name}
                 </h3>
@@ -135,12 +136,12 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
                 {agents[activeIndex].description}
               </motion.p>
               <motion.div variants={contentVariants} custom={0.3}>
-                 {/* Apply CTA button style */}
                 <Button
-                  className={`cta-button bg-gradient-to-r ${agents[activeIndex].color}`} // Apply gradient here too
+                  className={`cta-button bg-gradient-to-r ${agents[activeIndex].color}`}
                   asChild
+                  suppressHydrationWarning
                 >
-                  <Link href="#demo">
+                  <Link href={`/agents/${agents[activeIndex].slug}`}>
                     Try {agents[activeIndex].name} <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -151,19 +152,18 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
                 variants={imageVariants}
                 className="relative w-full max-w-[300px] aspect-square"
               >
-                {/* Subtle gradient glow behind image */}
                 <div
                   className={`absolute inset-0 rounded-full bg-gradient-to-br ${agents[activeIndex].color} opacity-30 blur-2xl -z-10 animate-pulse`}
                   style={{ animationDuration: '4s' }}
                 ></div>
                  <Image
-                  src={`https://picsum.photos/300/300?random=${activeIndex}`} // Use random picsum for variety
+                  src={`https://placehold.co/300x300.png?text=${encodeURIComponent(agents[activeIndex].name)}`}
                   alt={`${agents[activeIndex].name} visualization`}
                   width={300}
                   height={300}
                   className="object-contain rounded-xl shadow-lg"
                   data-ai-hint={agents[activeIndex].hint}
-                  key={activeIndex} // Force re-render on change
+                  key={activeIndex} 
                  />
               </motion.div>
             </div>
@@ -178,6 +178,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
             onClick={prevAgent}
             className="rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 text-foreground hover:text-primary transition-colors"
             aria-label="Previous agent"
+            suppressHydrationWarning
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
@@ -189,6 +190,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
             onClick={nextAgent}
             className="rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 text-foreground hover:text-primary transition-colors"
             aria-label="Next agent"
+            suppressHydrationWarning
           >
             <ArrowRight className="h-5 w-5" />
           </Button>
@@ -209,20 +211,20 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
             whileHover="hover"
             whileTap="tap"
             onClick={() => handleThumbnailClick(index)}
-            className="cursor-pointer snap-center flex-shrink-0" // Added flex-shrink-0
+            className="cursor-pointer snap-center flex-shrink-0" 
           >
              <Card
                className={`w-24 h-28 md:w-32 md:h-36 flex flex-col items-center justify-center p-2 transition-all duration-300 modern-card ${index === activeIndex ? "border-primary shadow-primary/20" : "border-border hover:border-primary/50"}`}
             >
               <div className="relative w-12 h-12 md:w-16 md:h-16 mb-2">
                  <Image
-                  src={`https://picsum.photos/64/64?random=${index}`} // Random picsum
+                  src={`https://placehold.co/64x64.png?text=${encodeURIComponent(agent.name.split(" ")[0])}`}
                   alt={agent.name}
                   width={64}
                   height={64}
                   className="object-contain rounded-md"
                   data-ai-hint={agent.hint}
-                  key={index} // Force re-render
+                  key={index} 
                  />
               </div>
               <p className="text-xs md:text-sm font-medium truncate w-full text-center text-foreground group-hover:text-primary transition-colors">
