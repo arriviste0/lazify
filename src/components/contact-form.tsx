@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast'; // Assuming useToast hook exists
+import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
 
@@ -59,7 +59,7 @@ export function ContactForm() {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Your Name" {...field} className="bg-card border-border focus:ring-primary" />
+                  <Input placeholder="Your Name" {...field} className="bg-input border-border focus:ring-primary" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -72,7 +72,7 @@ export function ContactForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="your.email@example.com" {...field} className="bg-card border-border focus:ring-primary" />
+                  <Input type="email" placeholder="your.email@example.com" {...field} className="bg-input border-border focus:ring-primary" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -88,7 +88,7 @@ export function ContactForm() {
                   <Textarea
                     placeholder="How can we help you automate?"
                     {...field}
-                    className="min-h-[120px] bg-card border-border focus:ring-primary"
+                    className="min-h-[120px] bg-input border-border focus:ring-primary"
                   />
                 </FormControl>
                 <FormMessage />
@@ -96,7 +96,7 @@ export function ContactForm() {
             )}
           />
            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="pt-2">
-            <Button type="submit" className="w-full cta-button" disabled={form.formState.isSubmitting}>
+            <Button type="submit" className="w-full cta-button" disabled={form.formState.isSubmitting} suppressHydrationWarning>
                {form.formState.isSubmitting ? (
                  'Sending...'
                ) : (

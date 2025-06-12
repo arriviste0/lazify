@@ -20,10 +20,10 @@ import {
   X,
   ChevronRight,
   Send,
-  Users, // For Lead Generation
-  CalendarDays, // For Calendar Scheduling
-  Sparkles, // For Content/Daily Tasks
-  ListChecks, // For Task Management
+  Users, // For LeadSpark AI
+  CalendarDays, // For ScheduleSync AI
+  Sparkles, // For ContentCraft AI
+  ListChecks, // For TaskMaster AI
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -37,6 +37,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { PricingTable } from '@/components/pricing-table';
 import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
+
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -52,7 +53,8 @@ const staggerContainer = {
   },
 };
 
-const ChartDisplay = dynamic(() => Promise.resolve(({ isMobile }: { isMobile: boolean }) => {
+// ChartDisplay now always shows the placeholder image.
+const ChartDisplay = () => {
   return (
     <Image
       src="https://placehold.co/400x400.png"
@@ -63,14 +65,14 @@ const ChartDisplay = dynamic(() => Promise.resolve(({ isMobile }: { isMobile: bo
       data-ai-hint="abstract 3d chart purple"
     />
   );
-}), { ssr: false, loading: () => <div className="w-full h-full flex items-center justify-center"><p>Loading chart...</p></div> });
+};
 
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isClient, setIsClient] = useState(false);
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile(); // This hook might still be useful for other components
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
@@ -151,40 +153,41 @@ export default function Home() {
   const agents = [
     {
       name: "LeadSpark AI",
-      description: "Automatically identifies and qualifies potential leads from various sources, enriching your sales pipeline.",
-      hint: "robot sifting data leads 3d isometric", // Updated hint
+      description: "Automatically identifies and qualifies potential leads from various sources, enriching your sales pipeline. Your tireless digital prospector.",
+      hint: "robot sifting glowing data leads 3d isometric",
       color: "from-green-500 to-emerald-500",
       icon: Users,
     },
     {
       name: "InboxZero AI",
-      description: "Intelligently sorts emails, drafts contextual replies, and prioritizes your inbox so you focus on what matters.",
-      hint: "robot organizing email inbox zero 3d isometric", // Updated hint
+      description: "Intelligently sorts emails, drafts contextual replies, and prioritizes your inbox so you focus on what truly matters. Achieve inbox zen.",
+      hint: "robot organizing email inbox zero 3d isometric",
       color: "from-blue-500 to-sky-500",
       icon: Mail,
     },
     {
       name: "ScheduleSync AI",
-      description: "Effortlessly coordinates meetings, finds optimal times, and manages your calendar invites across platforms.",
-      hint: "robot scheduling calendar appointments 3d isometric", // Updated hint
+      description: "Effortlessly coordinates meetings, finds optimal times, and manages your calendar invites across platforms. Never double-book again.",
+      hint: "robot managing digital calendar appointments 3d isometric",
       color: "from-amber-500 to-yellow-500",
       icon: CalendarDays,
     },
     {
       name: "ContentCraft AI",
-      description: "Your AI partner for brainstorming, drafting, and refining content for blogs, social media, and reports.",
-      hint: "robot writing digital scroll 3d isometric", // Updated hint
+      description: "Your AI partner for brainstorming, drafting, and refining engaging content for blogs, social media, and marketing materials.",
+      hint: "robot writing on glowing digital scroll 3d isometric",
       color: "from-rose-500 to-red-500",
       icon: Sparkles,
     },
     {
       name: "TaskMaster AI",
-      description: "Manages your to-do lists, sets reminders, and helps organize your daily personal and professional tasks.",
-      hint: "robot juggling checklist tasks 3d isometric", // Updated hint
+      description: "Organizes your to-do lists, sets smart reminders, and helps you manage daily personal and professional tasks with ease.",
+      hint: "robot juggling checklist tasks gears 3d isometric",
       color: "from-teal-500 to-cyan-500",
       icon: ListChecks,
     },
   ];
+
 
   const metrics = [
     { value: '10+', label: 'Hours Saved/Week', icon: Clock },
@@ -326,12 +329,12 @@ export default function Home() {
         <motion.section
           id="home"
           ref={sectionRefs.home}
-          className="relative w-full h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden"
+          className="relative w-full h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden text-center"
           style={{ y: heroParallaxY }}
         >
           <HeroBackground />
 
-          <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
+          <div className="container mx-auto px-4 md:px-6 relative z-10">
             <div className="max-w-3xl mx-auto">
               <motion.h1
                 className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl"
@@ -376,14 +379,14 @@ export default function Home() {
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
-            <motion.div className="mb-12 md:mb-16 text-center md:text-left" variants={fadeInUp}>
+             <motion.div className="mb-12 md:mb-16 text-center md:text-left" variants={fadeInUp}>
               <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                 Our Services
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center md:text-left">
+               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center md:text-left">
                 Automate Your World with AI
               </h2>
-              <p className="max-w-3xl mt-4 text-muted-foreground mx-auto md:mx-0 text-center md:text-left">
+               <p className="max-w-3xl mt-4 text-muted-foreground mx-auto md:mx-0 text-center md:text-left">
                 Lazify offers a suite of intelligent services designed to handle your repetitive tasks and boost creative output.
               </p>
             </motion.div>
@@ -409,7 +412,7 @@ export default function Home() {
         <motion.section
           id="agents"
           ref={sectionRefs.agents}
-          className="w-full section-padding overflow-hidden"
+          className="w-full section-padding overflow-hidden text-center"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.1 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
@@ -417,10 +420,10 @@ export default function Home() {
                <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
                 Meet Your Agents
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
                 Your Dedicated AI Workforce
               </h2>
-              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground text-center">
+              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
                 Explore some of our specialized AI agents ready to take on specific tasks.
               </p>
             </motion.div>
@@ -431,19 +434,19 @@ export default function Home() {
         <motion.section
           id="why-lazify"
           ref={sectionRefs.whyLazify}
-          className="w-full section-padding bg-gradient-to-b from-secondary/20 to-background"
+          className="w-full section-padding bg-gradient-to-b from-secondary/20 to-background text-center md:text-left"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
-              <motion.div variants={fadeInUp} className="text-center lg:text-left">
+              <motion.div variants={fadeInUp}>
                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                   The Lazify Advantage
                 </span>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4 text-center lg:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
                   Unlock Unprecedented Efficiency
                 </h2>
-                <p className="text-muted-foreground mb-8 lg:max-w-md mx-auto lg:mx-0 text-center lg:text-left">
+                <p className="text-muted-foreground mb-8 lg:max-w-md mx-auto lg:mx-0">
                   Lazify isn't just automation; it's intelligent delegation. Experience tangible benefits that transform how you work.
                 </p>
                 <motion.div
@@ -470,7 +473,7 @@ export default function Home() {
                >
                 <div className="w-full h-[400px] relative">
                   <div className="absolute inset-0">
-                     {isClient && <ChartDisplay isMobile={isMobile} />}
+                     {isClient && <ChartDisplay />}
                   </div>
                 </div>
               </motion.div>
@@ -481,7 +484,7 @@ export default function Home() {
         <motion.section
           id="pricing"
           ref={sectionRefs.pricing}
-          className="w-full section-padding"
+          className="w-full section-padding text-center"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
@@ -489,10 +492,10 @@ export default function Home() {
                 <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
                   Pricing Plans
                 </span>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
                   Choose Your Automation Level
                 </h2>
-                <p className="max-w-3xl mx-auto mt-4 text-muted-foreground text-center">
+                <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
                   Simple, transparent pricing to fit your needs, whether you're an individual or a large enterprise.
                 </p>
              </motion.div>
@@ -504,24 +507,24 @@ export default function Home() {
         <motion.section
           id="faq"
           ref={sectionRefs.faq}
-          className="w-full section-padding bg-secondary/10"
+          className="w-full section-padding bg-secondary/10 text-center"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-4 md:px-6 max-w-3xl text-center">
+          <div className="container mx-auto px-4 md:px-6 max-w-3xl">
             <motion.div className="mb-12 md:mb-16" variants={fadeInUp}>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground text-center">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
                 Frequently Asked Questions
               </h2>
-              <p className="mt-4 text-muted-foreground text-center">Have questions? We've got answers.</p>
+              <p className="mt-4 text-muted-foreground">Have questions? We've got answers.</p>
             </motion.div>
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion type="single" collapsible className="w-full text-left">
               {faqs.map((faq, index) => (
                 <motion.div key={index} variants={fadeInUp}>
                   <AccordionItem value={`item-${index}`} className="border-b border-primary/10 last:border-b-0">
-                    <AccordionTrigger className="py-4 text-lg font-medium text-left hover:text-primary transition-colors [&[data-state=open]>svg]:text-primary">
+                    <AccordionTrigger className="py-4 text-lg font-medium hover:text-primary transition-colors [&[data-state=open]>svg]:text-primary">
                       {faq.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-base text-muted-foreground pt-2 pb-4 text-left">
+                    <AccordionContent className="text-base text-muted-foreground pt-2 pb-4">
                       {faq.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -534,16 +537,16 @@ export default function Home() {
         <motion.section
            id="demo"
            ref={sectionRefs.demo}
-           className="section-padding"
+           className="section-padding text-center"
            initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.3 }} variants={fadeInUp}
          >
           <div className="container mx-auto container-padding">
             <motion.div
-               className="bg-gradient-to-r from-primary/10 via-card to-secondary/10 border border-border rounded-xl p-8 md:p-12 lg:p-16 text-center"
+               className="bg-gradient-to-r from-primary/10 via-card to-secondary/10 border border-border rounded-xl p-8 md:p-12 lg:p-16"
                variants={fadeInUp}
              >
-               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary text-center">Try Lazify Free for 1 Day</h2>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto text-center">
+               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Try Lazify Free for 1 Day</h2>
+              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
                 Experience the power of AI automation firsthand. No commitment required. See how Lazify can save you time and boost your efficiency.
               </p>
                <Button className="cta-button" size="lg" asChild>
@@ -561,29 +564,32 @@ export default function Home() {
            className="w-full section-padding bg-secondary/20"
            initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
          >
-           <div className="container mx-auto px-4 md:px-6 text-center">
-             <motion.div className="mb-12 md:mb-16" variants={fadeInUp}>
-               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground text-center">Get in Touch</h2>
-               <p className="max-w-2xl mx-auto mt-4 text-muted-foreground text-center">
-                 Have a question, need a custom solution, or want to request your demo? Reach out to us!
-               </p>
-             </motion.div>
-             <div className="max-w-xl mx-auto">
+           <div className="container mx-auto px-4 md:px-6">
+             <motion.div
+               className="max-w-2xl mx-auto bg-card p-8 md:p-12 rounded-xl shadow-2xl border border-border/50"
+               variants={fadeInUp}
+             >
+               <div className="text-center mb-8 md:mb-10">
+                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-primary">Get in Touch</h2>
+                 <p className="mt-4 text-lg text-muted-foreground">
+                   Have a question, need a custom solution, or want to request your demo? Reach out to us!
+                 </p>
+               </div>
                <ContactForm />
-             </div>
+             </motion.div>
            </div>
          </motion.section>
       </main>
 
       <motion.footer
-         className="w-full py-12 md:py-16 bg-secondary/30 border-t border-border/50"
+         className="w-full py-12 md:py-16 bg-secondary/30 border-t border-border/50 text-center md:text-left"
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1 }}
          viewport={{ once: true, amount: 0.1 }}
          transition={{ duration: 0.8 }}
        >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid gap-8 md:grid-cols-3 items-start text-center md:text-left">
+          <div className="grid gap-8 md:grid-cols-3 items-start">
             <motion.div className="space-y-2" variants={fadeInUp}>
               <Link href="#home" className="flex items-center justify-center md:justify-start gap-2 text-xl font-bold">
                 <BrainCircuit className="h-6 w-6 text-primary" />
