@@ -17,7 +17,7 @@ interface Agent {
   hint: string;
   color: string; // Gradient class string e.g., "from-purple-600 to-indigo-600"
   icon: LucideIcon;
-  slug: string; // Added slug for linking
+  slug: string;
 }
 
 interface AgentSectionProps {
@@ -106,9 +106,6 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
     setActiveIndex((prev) => (prev - 1 + agents.length) % agents.length);
   };
 
-  // This function is kept in case we want to re-introduce click-to-set-active functionality
-  // for the thumbnails in a different way, or for accessibility focus management.
-  // For now, direct navigation via Link is primary for thumbnails.
   const handleThumbnailClick = (index: number) => {
     setDirection(index > activeIndex ? 1 : (index < activeIndex ? -1 : 0));
     setActiveIndex(index);
@@ -121,7 +118,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
        <div className="relative overflow-hidden rounded-xl bg-card/70 backdrop-blur-lg p-6 mb-8 min-h-[400px] border border-border/50 shadow-xl">
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
-            key={agents[activeIndex].slug} // Use slug for key
+            key={agents[activeIndex].slug} 
             custom={direction}
             variants={frameVariants}
             initial="hidden"
@@ -166,7 +163,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
                   height={300}
                   className="object-contain rounded-xl shadow-lg"
                   data-ai-hint={agents[activeIndex].hint}
-                  key={agents[activeIndex].slug} 
+                  key={`${agents[activeIndex].slug}-image`} 
                  />
               </motion.div>
             </div>
@@ -207,14 +204,13 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
       >
         {agents.map((agent, index) => (
           <motion.div
-            key={agent.slug} // Use agent.slug as key
+            key={agent.slug} 
             variants={smallCardVariants}
             initial="inactive"
-            animate={index === activeIndex ? 'active' : 'inactive'} // Highlights based on main display
+            animate={index === activeIndex ? 'active' : 'inactive'}
             whileHover="hover"
             whileTap="tap"
             className="cursor-pointer snap-center flex-shrink-0"
-            // onClick removed to allow Link to handle navigation
           >
             <Link href={`/agents/${agent.slug}`} passHref legacyBehavior={false} aria-label={`Demo ${agent.name}`}>
               <Card
@@ -228,7 +224,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
                     height={64}
                     className="object-contain rounded-md"
                     data-ai-hint={agent.hint}
-                    key={agent.slug} // Use agent.slug as key
+                    key={`${agent.slug}-thumb-image`} 
                   />
                 </div>
                 <p className="text-xs md:text-sm font-medium truncate w-full text-center text-foreground group-hover:text-primary transition-colors">
