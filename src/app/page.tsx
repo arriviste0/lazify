@@ -73,7 +73,7 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isClient, setIsClient] = useState(false);
-  const isMobile = useIsMobile(); // This hook might still be useful for other components
+  const isMobile = useIsMobile();
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
@@ -91,14 +91,19 @@ export default function Home() {
 
   const { scrollY, scrollYProgress } = useScroll();
   const heroParallaxY = useTransform(scrollY, [0, 500], [0, -100]);
-  const whyLazifyParallaxY = useTransform(scrollYProgress, [0.45, 0.65], ['-50px', '50px']);
+  const whyLazifyContainerParallaxY = useTransform(scrollYProgress, [0.35, 0.65], ['-50px', '50px']); // Adjusted range
+
+  // New transforms for the chart image itself within the "Why Lazify" section
+  const chartImageParallaxY = useTransform(scrollYProgress, [0.4, 0.55, 0.7], ['30px', '-30px', '30px']);
+  const chartImageScale = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0.9, 1.1, 0.9]);
+
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -20% 0px',
-      threshold: 0.2,
+      rootMargin: '-20% 0px -20% 0px', // Adjust rootMargin if needed for accuracy
+      threshold: 0.2, // Trigger when 20% of the element is visible
     };
 
     Object.entries(sectionRefs).forEach(([id, ref]) => {
@@ -474,13 +479,21 @@ export default function Home() {
               </motion.div>
                <motion.div
                  className="flex items-center justify-center"
-                 style={{ y: whyLazifyParallaxY }}
+                 style={{ y: whyLazifyContainerParallaxY }} // Parallax for the container
                  variants={fadeInUp}
                >
                 <div className="w-full h-[400px] relative">
-                  <div className="absolute inset-0">
-                     {isClient && <ChartDisplay />}
-                  </div>
+                  {isClient && (
+                    <motion.div
+                      className="w-full h-full"
+                      style={{
+                        y: chartImageParallaxY, // Parallax for the image itself
+                        scale: chartImageScale,   // Scale effect for the image
+                      }}
+                    >
+                      <ChartDisplay />
+                    </motion.div>
+                  )}
                 </div>
               </motion.div>
             </div>
@@ -517,7 +530,7 @@ export default function Home() {
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-            <motion.div className="mb-12 md:mb-16" variants={fadeInUp}>
+            <motion.div className="mb-12 md:mb-16 text-center" variants={fadeInUp}>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
                 Frequently Asked Questions
               </h2>
@@ -548,7 +561,7 @@ export default function Home() {
          >
           <div className="container mx-auto container-padding">
             <motion.div
-               className="bg-gradient-to-r from-primary/10 via-card to-secondary/10 border border-border rounded-xl p-8 md:p-12 lg:p-16"
+               className="bg-gradient-to-r from-primary/10 via-card to-secondary/10 border border-border rounded-xl p-8 md:p-12 lg:p-16 text-center"
                variants={fadeInUp}
              >
                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Try Lazify Free for 1 Day</h2>
@@ -595,8 +608,8 @@ export default function Home() {
          transition={{ duration: 0.8 }}
        >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid gap-8 md:grid-cols-3 items-center md:items-start">
-            <motion.div className="space-y-2 md:col-span-1 text-center md:text-left" variants={fadeInUp}>
+          <div className="grid gap-8 md:grid-cols-3 items-center md:items-start text-center md:text-left">
+            <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp}>
               <Link href="#home" className="flex items-center justify-center md:justify-start gap-2 text-xl font-bold">
                 <BrainCircuit className="h-6 w-6 text-primary" />
                 <span className="gradient-text-animated">
@@ -614,7 +627,7 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            <motion.div className="space-y-2 md:col-span-1 text-center md:text-left" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
+            <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Quick Links</h4>
               <nav className="flex flex-col gap-1 items-center md:items-start">
                 {[...navLinks.slice(1, 6), { href: '#', label: 'Privacy Policy' }, { href: '#', label: 'Terms of Service' }].map((link) => (
@@ -636,7 +649,7 @@ export default function Home() {
               </nav>
             </motion.div>
 
-            <motion.div className="space-y-4 md:col-span-1 text-center md:text-left" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
+            <motion.div className="space-y-4 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Connect With Us</h4>
               <p className="text-sm text-muted-foreground">
                  Follow us on social media for the latest updates and insights on AI automation.
@@ -668,4 +681,3 @@ export default function Home() {
     </div>
   );
 }
-
