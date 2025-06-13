@@ -164,6 +164,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
                   className="object-contain rounded-xl shadow-lg"
                   data-ai-hint={agents[activeIndex].hint}
                   key={`${agents[activeIndex].slug}-image`} 
+                  suppressHydrationWarning
                  />
               </motion.div>
             </div>
@@ -211,6 +212,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
             whileHover="hover"
             whileTap="tap"
             className="cursor-pointer snap-center flex-shrink-0"
+            onClick={() => handleThumbnailClick(index)} // Keep this to update activeIndex for featured view
           >
             <Link href={`/agents/${agent.slug}`} passHref legacyBehavior={false} aria-label={`Demo ${agent.name}`}>
               <Card
@@ -225,6 +227,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
                     className="object-contain rounded-md"
                     data-ai-hint={agent.hint}
                     key={`${agent.slug}-thumb-image`} 
+                    suppressHydrationWarning
                   />
                 </div>
                 <p className="text-xs md:text-sm font-medium truncate w-full text-center text-foreground group-hover:text-primary transition-colors">
@@ -240,3 +243,4 @@ const AgentSection: React.FC<AgentSectionProps> = ({ agents }) => {
 };
 
 export default AgentSection;
+

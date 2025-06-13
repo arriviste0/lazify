@@ -63,6 +63,7 @@ const ChartDisplay = () => {
       height={400}
       className="w-full h-full object-contain rounded-lg"
       data-ai-hint="abstract 3d chart purple"
+      suppressHydrationWarning
     />
   );
 };
@@ -157,6 +158,7 @@ export default function Home() {
       hint: "robot sifting glowing data leads 3d isometric",
       color: "from-green-500 to-emerald-500",
       icon: Users,
+      slug: "leadspark-ai",
     },
     {
       name: "InboxZero AI",
@@ -164,6 +166,7 @@ export default function Home() {
       hint: "robot organizing email inbox zero 3d isometric",
       color: "from-blue-500 to-sky-500",
       icon: Mail,
+      slug: "inboxzero-ai",
     },
     {
       name: "ScheduleSync AI",
@@ -171,6 +174,7 @@ export default function Home() {
       hint: "robot managing digital calendar appointments 3d isometric",
       color: "from-amber-500 to-yellow-500",
       icon: CalendarDays,
+      slug: "schedulesync-ai",
     },
     {
       name: "ContentCraft AI",
@@ -178,6 +182,7 @@ export default function Home() {
       hint: "robot writing on glowing digital scroll 3d isometric",
       color: "from-rose-500 to-red-500",
       icon: Sparkles,
+      slug: "contentcraft-ai",
     },
     {
       name: "TaskMaster AI",
@@ -185,6 +190,7 @@ export default function Home() {
       hint: "robot juggling checklist tasks gears 3d isometric",
       color: "from-teal-500 to-cyan-500",
       icon: ListChecks,
+      slug: "taskmaster-ai",
     },
   ];
 
@@ -224,7 +230,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-background text-foreground overflow-x-hidden items-center">
        <motion.header
          className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50"
          initial={{ y: -100 }}
@@ -325,7 +331,7 @@ export default function Home() {
         </div>
       </motion.header>
 
-      <main className="flex-grow">
+      <main className="flex-grow w-full">
         <motion.section
           id="home"
           ref={sectionRefs.home}
@@ -386,7 +392,7 @@ export default function Home() {
                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center md:text-left">
                 Automate Your World with AI
               </h2>
-               <p className="max-w-3xl mt-4 text-muted-foreground mx-auto md:mx-0 text-center md:text-left">
+               <p className="max-w-3xl mt-4 text-muted-foreground text-center md:text-left mx-auto md:mx-0">
                 Lazify offers a suite of intelligent services designed to handle your repetitive tasks and boost creative output.
               </p>
             </motion.div>
@@ -537,7 +543,7 @@ export default function Home() {
         <motion.section
            id="demo"
            ref={sectionRefs.demo}
-           className="section-padding text-center"
+           className="section-padding text-center w-full"
            initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.3 }} variants={fadeInUp}
          >
           <div className="container mx-auto container-padding">
@@ -582,15 +588,15 @@ export default function Home() {
       </main>
 
       <motion.footer
-         className="w-full py-12 md:py-16 bg-secondary/30 border-t border-border/50 text-center md:text-left"
+         className="w-full py-12 md:py-16 bg-secondary/30 border-t border-border/50 text-center"
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1 }}
          viewport={{ once: true, amount: 0.1 }}
          transition={{ duration: 0.8 }}
        >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid gap-8 md:grid-cols-3 items-start">
-            <motion.div className="space-y-2" variants={fadeInUp}>
+          <div className="grid gap-8 md:grid-cols-3 items-center md:items-start">
+            <motion.div className="space-y-2 md:col-span-1 text-center md:text-left" variants={fadeInUp}>
               <Link href="#home" className="flex items-center justify-center md:justify-start gap-2 text-xl font-bold">
                 <BrainCircuit className="h-6 w-6 text-primary" />
                 <span className="gradient-text-animated">
@@ -608,7 +614,7 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            <motion.div className="space-y-2" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
+            <motion.div className="space-y-2 md:col-span-1 text-center md:text-left" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Quick Links</h4>
               <nav className="flex flex-col gap-1 items-center md:items-start">
                 {[...navLinks.slice(1, 6), { href: '#', label: 'Privacy Policy' }, { href: '#', label: 'Terms of Service' }].map((link) => (
@@ -630,7 +636,7 @@ export default function Home() {
               </nav>
             </motion.div>
 
-            <motion.div className="space-y-4" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
+            <motion.div className="space-y-4 md:col-span-1 text-center md:text-left" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Connect With Us</h4>
               <p className="text-sm text-muted-foreground">
                  Follow us on social media for the latest updates and insights on AI automation.
@@ -662,3 +668,4 @@ export default function Home() {
     </div>
   );
 }
+
