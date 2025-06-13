@@ -7,19 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Users, ArrowLeft, Loader2 } from 'lucide-react';
-import type { DemoLeadSparkInput, DemoLeadSparkOutput } from '@/ai/flows/demo-leadspark-flow';
-import { demoLeadSpark } from '@/ai/flows/demo-leadspark-flow';
-
-async function handleDemoAction(input: DemoLeadSparkInput): Promise<DemoLeadSparkOutput | { error: string }> {
-  'use server';
-  try {
-    const result = await demoLeadSpark(input);
-    return result;
-  } catch (e: any) {
-    console.error("Error in demoLeadSpark server action:", e);
-    return { error: e.message || "An unexpected error occurred." };
-  }
-}
+import type { DemoLeadSparkInput } from '@/ai/flows/demo-leadspark-flow';
+import { handleLeadSparkDemoAction } from './actions';
 
 export default function LeadSparkDemoPage() {
   const [inputValue, setInputValue] = useState('');
@@ -33,7 +22,7 @@ export default function LeadSparkDemoPage() {
     setResult(null);
 
     startTransition(async () => {
-      const response = await handleDemoAction({ customerProfile: inputValue });
+      const response = await handleLeadSparkDemoAction({ customerProfile: inputValue });
       if ('error' in response) {
         setError(response.error);
       } else {

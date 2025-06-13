@@ -7,19 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { CalendarDays, ArrowLeft, Loader2 } from 'lucide-react';
-import type { DemoScheduleSyncInput, DemoScheduleSyncOutput } from '@/ai/flows/demo-schedulesync-flow';
-import { demoScheduleSync } from '@/ai/flows/demo-schedulesync-flow';
-
-async function handleDemoAction(input: DemoScheduleSyncInput): Promise<DemoScheduleSyncOutput | { error: string }> {
-  'use server';
-  try {
-    const result = await demoScheduleSync(input);
-    return result;
-  } catch (e: any) {
-    console.error("Error in demoScheduleSync server action:", e);
-    return { error: e.message || "An unexpected error occurred." };
-  }
-}
+import type { DemoScheduleSyncInput } from '@/ai/flows/demo-schedulesync-flow';
+import { handleScheduleSyncDemoAction } from './actions';
 
 export default function ScheduleSyncDemoPage() {
   const [inputValue, setInputValue] = useState('');
@@ -33,7 +22,7 @@ export default function ScheduleSyncDemoPage() {
     setResult(null);
 
     startTransition(async () => {
-      const response = await handleDemoAction({ meetingDetails: inputValue });
+      const response = await handleScheduleSyncDemoAction({ meetingDetails: inputValue });
       if ('error' in response) {
         setError(response.error);
       } else {

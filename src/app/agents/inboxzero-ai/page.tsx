@@ -7,19 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Mail, ArrowLeft, Loader2 } from 'lucide-react';
-import type { DemoInboxZeroInput, DemoInboxZeroOutput } from '@/ai/flows/demo-inboxzero-flow';
-import { demoInboxZero } from '@/ai/flows/demo-inboxzero-flow';
-
-async function handleDemoAction(input: DemoInboxZeroInput): Promise<DemoInboxZeroOutput | { error: string }> {
-  'use server';
-  try {
-    const result = await demoInboxZero(input);
-    return result;
-  } catch (e: any) {
-    console.error("Error in demoInboxZero server action:", e);
-    return { error: e.message || "An unexpected error occurred." };
-  }
-}
+import type { DemoInboxZeroInput } from '@/ai/flows/demo-inboxzero-flow';
+import { handleInboxZeroDemoAction } from './actions';
 
 export default function InboxZeroDemoPage() {
   const [inputValue, setInputValue] = useState('');
@@ -33,7 +22,7 @@ export default function InboxZeroDemoPage() {
     setResult(null);
 
     startTransition(async () => {
-      const response = await handleDemoAction({ emailContent: inputValue });
+      const response = await handleInboxZeroDemoAction({ emailContent: inputValue });
       if ('error' in response) {
         setError(response.error);
       } else {

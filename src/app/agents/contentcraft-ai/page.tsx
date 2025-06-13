@@ -7,19 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Sparkles, ArrowLeft, Loader2 } from 'lucide-react';
-import type { DemoContentCraftInput, DemoContentCraftOutput } from '@/ai/flows/demo-contentcraft-flow';
-import { demoContentCraft } from '@/ai/flows/demo-contentcraft-flow';
-
-async function handleDemoAction(input: DemoContentCraftInput): Promise<DemoContentCraftOutput | { error: string }> {
-  'use server';
-  try {
-    const result = await demoContentCraft(input);
-    return result;
-  } catch (e: any) {
-    console.error("Error in demoContentCraft server action:", e);
-    return { error: e.message || "An unexpected error occurred." };
-  }
-}
+import type { DemoContentCraftInput } from '@/ai/flows/demo-contentcraft-flow';
+import { handleContentCraftDemoAction } from './actions';
 
 export default function ContentCraftDemoPage() {
   const [inputValue, setInputValue] = useState('');
@@ -33,7 +22,7 @@ export default function ContentCraftDemoPage() {
     setResult(null);
 
     startTransition(async () => {
-      const response = await handleDemoAction({ contentTopic: inputValue });
+      const response = await handleContentCraftDemoAction({ contentTopic: inputValue });
       if ('error' in response) {
         setError(response.error);
       } else {

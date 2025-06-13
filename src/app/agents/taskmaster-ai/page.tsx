@@ -7,19 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ListChecks, ArrowLeft, Loader2 } from 'lucide-react';
-import type { DemoTaskMasterInput, DemoTaskMasterOutput } from '@/ai/flows/demo-taskmaster-flow';
-import { demoTaskMaster } from '@/ai/flows/demo-taskmaster-flow';
-
-async function handleDemoAction(input: DemoTaskMasterInput): Promise<DemoTaskMasterOutput | { error: string }> {
-  'use server';
-  try {
-    const result = await demoTaskMaster(input);
-    return result;
-  } catch (e: any) {
-    console.error("Error in demoTaskMaster server action:", e);
-    return { error: e.message || "An unexpected error occurred." };
-  }
-}
+import type { DemoTaskMasterInput } from '@/ai/flows/demo-taskmaster-flow';
+import { handleTaskMasterDemoAction } from './actions';
 
 export default function TaskMasterDemoPage() {
   const [inputValue, setInputValue] = useState('');
@@ -33,7 +22,7 @@ export default function TaskMasterDemoPage() {
     setResult(null);
 
     startTransition(async () => {
-      const response = await handleDemoAction({ taskDescription: inputValue });
+      const response = await handleTaskMasterDemoAction({ taskDescription: inputValue });
       if ('error' in response) {
         setError(response.error);
       } else {
