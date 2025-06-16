@@ -25,7 +25,7 @@ import {
   Sparkles,
   ListChecks,
   Globe,
-  FolderKanban, // Added for AI Workflow
+  FolderKanban, // Added for AI Workflow (though not directly used in current section, kept for context if needed)
   IndianRupee,  // Added for AI Workflow
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -82,9 +82,9 @@ export default function Home() {
     services: useRef(null),
     agents: useRef(null),
     whyLazify: useRef(null),
-    aiWorkflow: useRef(null), // Added for AI Workflow section
     pricing: useRef(null),
     faq: useRef(null),
+    aiWorkflow: useRef(null), // Ref for AI Workflow section
     demo: useRef(null),
     contact: useRef(null),
   };
@@ -129,9 +129,9 @@ export default function Home() {
     { href: '#services', label: 'Services', ref: sectionRefs.services },
     { href: '#agents', label: 'Agents', ref: sectionRefs.agents },
     { href: '#why-lazify', label: 'Why Us', ref: sectionRefs.whyLazify },
-    { href: '#ai-workflow', label: 'AI Workflow', ref: sectionRefs.aiWorkflow }, // Added AI Workflow
     { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
     { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
+    { href: '#ai-workflow', label: 'AI Workflow', ref: sectionRefs.aiWorkflow },
     { href: '#demo', label: 'Demo', ref: sectionRefs.demo },
     { href: '#contact', label: 'Contact', ref: sectionRefs.contact },
   ];
@@ -413,7 +413,7 @@ export default function Home() {
               </p>
             </motion.div>
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
               variants={staggerContainer}
             >
               {services.map((service, index) => (
@@ -512,6 +512,58 @@ export default function Home() {
         </motion.section>
 
         <motion.section
+          id="pricing"
+          ref={sectionRefs.pricing}
+          className="w-full section-padding text-center"
+          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
+        >
+          <div className="container mx-auto px-4 md:px-6">
+             <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
+                <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
+                  Pricing Plans
+                </span>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+                  Choose Your Automation Level
+                </h2>
+                <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
+                  Simple, transparent pricing to fit your needs, whether you're an individual or a large enterprise.
+                </p>
+             </motion.div>
+             <PricingTable />
+          </div>
+        </motion.section>
+
+        <motion.section
+          id="faq"
+          ref={sectionRefs.faq}
+          className="w-full section-padding bg-secondary/10 text-center"
+          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
+        >
+          <div className="container mx-auto px-4 md:px-6 max-w-3xl">
+            <motion.div className="mb-12 md:mb-16 text-center" variants={fadeInUp}>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+                Frequently Asked Questions
+              </h2>
+              <p className="mt-4 text-muted-foreground">Have questions? We've got answers.</p>
+            </motion.div>
+            <Accordion type="single" collapsible className="w-full text-left">
+              {faqs.map((faq, index) => (
+                <motion.div key={index} variants={fadeInUp}>
+                  <AccordionItem value={`item-${index}`} className="border-b border-primary/10 last:border-b-0">
+                    <AccordionTrigger className="py-4 text-lg font-medium hover:text-primary transition-colors [&[data-state=open]>svg]:text-primary" suppressHydrationWarning>
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-base text-muted-foreground pt-2 pb-4">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                </motion.div>
+              ))}
+            </Accordion>
+          </div>
+        </motion.section>
+
+        <motion.section
           id="ai-workflow"
           ref={sectionRefs.aiWorkflow}
           className="w-full section-padding bg-secondary/20"
@@ -558,59 +610,6 @@ export default function Home() {
         </motion.section>
 
         <motion.section
-          id="pricing"
-          ref={sectionRefs.pricing}
-          className="w-full section-padding text-center"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
-        >
-          <div className="container mx-auto px-4 md:px-6">
-             <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
-                <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
-                  Pricing Plans
-                </span>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
-                  Choose Your Automation Level
-                </h2>
-                <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                  Simple, transparent pricing to fit your needs, whether you're an individual or a large enterprise.
-                </p>
-             </motion.div>
-             <PricingTable />
-          </div>
-        </motion.section>
-
-
-        <motion.section
-          id="faq"
-          ref={sectionRefs.faq}
-          className="w-full section-padding bg-secondary/10 text-center"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
-        >
-          <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-            <motion.div className="mb-12 md:mb-16 text-center" variants={fadeInUp}>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-                Frequently Asked Questions
-              </h2>
-              <p className="mt-4 text-muted-foreground">Have questions? We've got answers.</p>
-            </motion.div>
-            <Accordion type="single" collapsible className="w-full text-left">
-              {faqs.map((faq, index) => (
-                <motion.div key={index} variants={fadeInUp}>
-                  <AccordionItem value={`item-${index}`} className="border-b border-primary/10 last:border-b-0">
-                    <AccordionTrigger className="py-4 text-lg font-medium hover:text-primary transition-colors [&[data-state=open]>svg]:text-primary">
-                      {faq.q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-base text-muted-foreground pt-2 pb-4">
-                      {faq.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                </motion.div>
-              ))}
-            </Accordion>
-          </div>
-        </motion.section>
-
-        <motion.section
            id="demo"
            ref={sectionRefs.demo}
            className="section-padding text-center w-full"
@@ -637,12 +636,12 @@ export default function Home() {
          <motion.section
            id="contact"
            ref={sectionRefs.contact}
-           className="w-full section-padding bg-secondary/20"
+           className="w-full section-padding bg-card"
            initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
          >
            <div className="container mx-auto px-4 md:px-6">
              <motion.div
-               className="max-w-2xl mx-auto bg-card p-8 md:p-12 rounded-xl shadow-2xl border border-border/50"
+               className="max-w-2xl mx-auto bg-secondary/20 p-8 md:p-12 rounded-xl shadow-2xl border border-border/50"
                variants={fadeInUp}
              >
                <div className="text-center mb-8 md:mb-10">
@@ -738,3 +737,4 @@ export default function Home() {
     </div>
   );
 }
+
