@@ -20,11 +20,13 @@ import {
   X,
   ChevronRight,
   Send,
-  Users, // For LeadSpark AI
-  CalendarDays, // For ScheduleSync AI
-  Sparkles, // For ContentCraft AI
-  ListChecks, // For TaskMaster AI
-  Globe, // For AI-Powered Web Solutions
+  Users,
+  CalendarDays,
+  Sparkles,
+  ListChecks,
+  Globe,
+  FolderKanban, // Added for AI Workflow
+  IndianRupee,  // Added for AI Workflow
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -80,6 +82,7 @@ export default function Home() {
     services: useRef(null),
     agents: useRef(null),
     whyLazify: useRef(null),
+    aiWorkflow: useRef(null), // Added for AI Workflow section
     pricing: useRef(null),
     faq: useRef(null),
     demo: useRef(null),
@@ -94,7 +97,6 @@ export default function Home() {
   const heroParallaxY = useTransform(scrollY, [0, 500], [0, -100]);
   const whyLazifyContainerParallaxY = useTransform(scrollYProgress, [0.35, 0.65], ['-50px', '50px']);
 
-  // New transforms for the chart image itself within the "Why Lazify" section
   const chartImageParallaxY = useTransform(scrollYProgress, [0.4, 0.55, 0.7], ['30px', '-30px', '30px']);
   const chartImageScale = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0.9, 1.1, 0.9]);
 
@@ -127,6 +129,7 @@ export default function Home() {
     { href: '#services', label: 'Services', ref: sectionRefs.services },
     { href: '#agents', label: 'Agents', ref: sectionRefs.agents },
     { href: '#why-lazify', label: 'Why Us', ref: sectionRefs.whyLazify },
+    { href: '#ai-workflow', label: 'AI Workflow', ref: sectionRefs.aiWorkflow }, // Added AI Workflow
     { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
     { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
     { href: '#demo', label: 'Demo', ref: sectionRefs.demo },
@@ -402,15 +405,15 @@ export default function Home() {
               <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                 Our Services
               </span>
-               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-center md:text-left">
+               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
                 Automate Your World with AI
               </h2>
-               <p className="max-w-3xl mt-4 text-muted-foreground text-center md:text-left mx-auto md:mx-0">
+               <p className="max-w-3xl mt-4 text-muted-foreground">
                 Lazify offers a suite of intelligent services designed to handle your repetitive tasks and boost creative output.
               </p>
             </motion.div>
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8"
               variants={staggerContainer}
             >
               {services.map((service, index) => (
@@ -503,6 +506,52 @@ export default function Home() {
                     </motion.div>
                   )}
                 </div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          id="ai-workflow"
+          ref={sectionRefs.aiWorkflow}
+          className="w-full section-padding bg-secondary/20"
+          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
+        >
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="grid lg:grid-cols-2 gap-10 md:gap-12 items-center">
+              <motion.div className="order-2 lg:order-1" variants={fadeInUp}>
+                <span className="inline-block rounded-full bg-teal-500/10 px-4 py-1 text-sm font-medium text-teal-400 mb-3">
+                  Exclusive Offer
+                </span>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-4">
+                  Unlock Powerful AI Workflows
+                </h2>
+                <p className="text-muted-foreground mb-6 max-w-lg">
+                  Get access to our curated **AI Workflow Folder**, packed with ready-to-use templates, prompts, and guides to supercharge your productivity. Streamline complex tasks and automate your processes for just ₹9!
+                </p>
+                <p className="text-2xl font-bold text-teal-400 mb-8">
+                  Special Price: <IndianRupee className="inline-block h-6 w-6 relative -top-0.5" />9
+                </p>
+                <Button size="lg" className="cta-button bg-teal-500 hover:bg-teal-600 text-background" asChild>
+                  <Link href="/workflow-payment">
+                    Get Workflow for <IndianRupee className="inline-block h-5 w-5 mx-1" />9 <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </motion.div>
+              <motion.div
+                className="order-1 lg:order-2 flex justify-center items-center"
+                variants={fadeInUp}
+                transition={{ delay: 0.2, ...fadeInUp.transition }}
+              >
+                <Image
+                  src="https://placehold.co/500x350.png"
+                  alt="AI Workflow Folder"
+                  width={500}
+                  height={350}
+                  className="rounded-xl shadow-2xl border-2 border-teal-500/30"
+                  data-ai-hint="ai workflow folder product screen"
+                  suppressHydrationWarning
+                />
               </motion.div>
             </div>
           </div>
