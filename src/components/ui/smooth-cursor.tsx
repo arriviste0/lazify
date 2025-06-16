@@ -18,6 +18,7 @@ const defaultSpringConfig: SpringConfig = {
   restDelta: 0.001,
 };
 
+// Updated DefaultCursorSVG to render an arrow
 const DefaultCursorSVG = () => (
   <svg
     width="24"
@@ -25,10 +26,23 @@ const DefaultCursorSVG = () => (
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    style={{ transform: 'translate(-12px, -12px)' }} // Center the SVG on the cursor point
+    style={{ transform: 'translate(-2px, -2px) rotate(-45deg)' }} // Adjust transform for arrow pointing
   >
-    <circle cx="12" cy="12" r="6" fill="hsl(var(--primary))" opacity="0.8" />
-    <circle cx="12" cy="12" r="10" stroke="hsl(var(--primary))" strokeWidth="1" opacity="0.5"/>
+    <path
+      d="M4 12L20 12L14 6M14 18L20 12" // Simple line arrow
+      stroke="hsl(var(--primary))"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="hsl(var(--primary))"
+    />
+     <path
+      d="M4.777 13.266L4.045 4.067L13.243 12.533L4.777 13.266Z"
+      fill="hsl(var(--primary))"
+      stroke="hsl(var(--primary))"
+      strokeWidth="1"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -48,7 +62,9 @@ export const SmoothCursor: React.FC<SmoothCursorProps> = ({
 
   const cursorX = useSpring(0, finalSpringConfig as SpringOptions);
   const cursorY = useSpring(0, finalSpringConfig as SpringOptions);
-  const cursorRotate = useSpring(0, { damping: 20, stiffness: 200, mass: 0.5 });
+  // Rotation logic is kept but the arrow SVG itself is now pre-rotated for a typical cursor appearance
+  const cursorRotate = useSpring(0, { damping: 30, stiffness: 300, mass: 0.7 });
+
 
   const lastMousePosition = useRef({ x: 0, y: 0 });
 
@@ -61,14 +77,14 @@ export const SmoothCursor: React.FC<SmoothCursorProps> = ({
       cursorX.set(clientX);
       cursorY.set(clientY);
 
+      // Keep rotation logic if desired, or remove/simplify if the arrow should always point one way
       const deltaX = clientX - lastMousePosition.current.x;
       const deltaY = clientY - lastMousePosition.current.y;
       lastMousePosition.current = { x: clientX, y: clientY };
 
       if (Math.abs(deltaX) > 0.1 || Math.abs(deltaY) > 0.1) {
         const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-        // Add a small offset to rotation to make it feel more natural
-        cursorRotate.set(angle + 90);
+        cursorRotate.set(angle + 90); // Offset angle for typical cursor orientation
       }
     };
 
@@ -104,14 +120,21 @@ export const SmoothCursor: React.FC<SmoothCursorProps> = ({
         top: 0,
         x: cursorX,
         y: cursorY,
-        rotate: cursorRotate,
+        rotate: cursorRotate, // Apply dynamic rotation
         pointerEvents: 'none',
         zIndex: 9999,
         opacity: isPointerVisible ? 1 : 0,
         transition: 'opacity 0.2s ease-out',
       }}
     >
-      {cursor}
+      {/*
+        The SVG itself is designed to point upwards.
+        The motion.div's rotate style (driven by cursorRotate) handles the dynamic direction.
+        The SVG's internal transform is to correct its own default orientation if needed.
+      */}
+      {React.cloneElement(cursor, {
+         style: { transform: 'translate(-3px, -3px)' } // Centering for the new arrow SVG
+      })}
     </motion.div>
   );
 };
