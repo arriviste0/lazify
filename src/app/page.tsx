@@ -32,6 +32,7 @@ import {
   MessageSquare, // Added for AiWorkflowVisualization
   Settings, // Added for AiWorkflowVisualization
   ExternalLink, // Added for AiWorkflowVisualization
+  Folder, // Added for AiWorkflowVisualization
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -91,7 +92,6 @@ export default function Home() {
     pricing: useRef(null),
     faq: useRef(null),
     aiWorkflow: useRef(null),
-    demo: useRef(null),
     contact: useRef(null),
   };
 
@@ -138,7 +138,6 @@ export default function Home() {
     { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
     { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
     { href: '#ai-workflow', label: 'AI Workflow', ref: sectionRefs.aiWorkflow },
-    { href: '#demo', label: 'Demo', ref: sectionRefs.demo },
     { href: '#contact', label: 'Contact', ref: sectionRefs.contact },
   ];
 
@@ -297,7 +296,7 @@ export default function Home() {
               size="sm"
               asChild
             >
-              <Link href="#demo">Try Our App</Link>
+              <Link href="#contact">Request Demo</Link>
             </Button>
 
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -342,8 +341,8 @@ export default function Home() {
                     </motion.div>
                   ))}
                   <Button className="mt-6 w-full cta-button" size="lg" asChild>
-                      <Link href="#demo" onClick={() => setIsMobileMenuOpen(false)}>
-                        Try Our App
+                      <Link href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+                        Request Demo
                       </Link>
                   </Button>
                 </nav>
@@ -388,7 +387,7 @@ export default function Home() {
                 variants={fadeInUp} initial="initial" animate="animate" transition={{ delay: 0.7, ...fadeInUp.transition }}
               >
                 <Button size="lg" className="cta-button" asChild>
-                    <Link href="#demo">
+                    <Link href="#contact">
                       Get Your AI Agent Now <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                 </Button>
@@ -604,30 +603,6 @@ export default function Home() {
                 <AiWorkflowVisualization />
               </motion.div>
             </div>
-          </div>
-        </motion.section>
-
-        <motion.section
-           id="demo"
-           ref={sectionRefs.demo}
-           className="section-padding text-center w-full"
-           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.3 }} variants={fadeInUp}
-         >
-          <div className="container mx-auto container-padding">
-            <motion.div
-               className="bg-gradient-to-r from-primary/10 via-card to-secondary/10 border border-border rounded-xl p-8 md:p-12 lg:p-16 text-center"
-               variants={fadeInUp}
-             >
-               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Try Lazify Free for 1 Day</h2>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
-                Experience the power of AI automation firsthand. No commitment required. See how Lazify can save you time and boost your efficiency.
-              </p>
-               <Button className="cta-button" size="lg" asChild>
-                   <Link href="#contact">
-                     Request Your Free Demo <CheckCircle className="ml-2 h-5 w-5" />
-                   </Link>
-               </Button>
-            </motion.div>
           </div>
         </motion.section>
 
