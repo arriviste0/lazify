@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useSpring, type SpringOptions } from 'framer-motion';
+import { BrainCircuit } from 'lucide-react'; // Import BrainCircuit
 
 interface SpringConfig {
   damping: number;
@@ -18,32 +19,11 @@ const defaultSpringConfig: SpringConfig = {
   restDelta: 0.001,
 };
 
-// Updated DefaultCursorSVG to render an arrow
+// Updated DefaultCursorSVG to render the BrainCircuit icon
 const DefaultCursorSVG = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ transform: 'translate(-2px, -2px) rotate(-45deg)' }} // Adjust transform for arrow pointing
-  >
-    <path
-      d="M4 12L20 12L14 6M14 18L20 12" // Simple line arrow
-      stroke="hsl(var(--primary))"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="hsl(var(--primary))"
-    />
-     <path
-      d="M4.777 13.266L4.045 4.067L13.243 12.533L4.777 13.266Z"
-      fill="hsl(var(--primary))"
-      stroke="hsl(var(--primary))"
-      strokeWidth="1"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <BrainCircuit
+    className="h-6 w-6 text-primary" // 24x24 pixels
+  />
 );
 
 interface SmoothCursorProps {
@@ -62,9 +42,7 @@ export const SmoothCursor: React.FC<SmoothCursorProps> = ({
 
   const cursorX = useSpring(0, finalSpringConfig as SpringOptions);
   const cursorY = useSpring(0, finalSpringConfig as SpringOptions);
-  // Rotation logic is kept but the arrow SVG itself is now pre-rotated for a typical cursor appearance
   const cursorRotate = useSpring(0, { damping: 30, stiffness: 300, mass: 0.7 });
-
 
   const lastMousePosition = useRef({ x: 0, y: 0 });
 
@@ -77,14 +55,13 @@ export const SmoothCursor: React.FC<SmoothCursorProps> = ({
       cursorX.set(clientX);
       cursorY.set(clientY);
 
-      // Keep rotation logic if desired, or remove/simplify if the arrow should always point one way
       const deltaX = clientX - lastMousePosition.current.x;
       const deltaY = clientY - lastMousePosition.current.y;
       lastMousePosition.current = { x: clientX, y: clientY };
 
       if (Math.abs(deltaX) > 0.1 || Math.abs(deltaY) > 0.1) {
         const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-        cursorRotate.set(angle + 90); // Offset angle for typical cursor orientation
+        cursorRotate.set(angle + 90);
       }
     };
 
@@ -120,20 +97,16 @@ export const SmoothCursor: React.FC<SmoothCursorProps> = ({
         top: 0,
         x: cursorX,
         y: cursorY,
-        rotate: cursorRotate, // Apply dynamic rotation
+        rotate: cursorRotate,
         pointerEvents: 'none',
         zIndex: 9999,
         opacity: isPointerVisible ? 1 : 0,
         transition: 'opacity 0.2s ease-out',
       }}
     >
-      {/*
-        The SVG itself is designed to point upwards.
-        The motion.div's rotate style (driven by cursorRotate) handles the dynamic direction.
-        The SVG's internal transform is to correct its own default orientation if needed.
-      */}
       {React.cloneElement(cursor, {
-         style: { transform: 'translate(-3px, -3px)' } // Centering for the new arrow SVG
+         // Adjust transform to center the 24x24 BrainCircuit icon
+         style: { transform: 'translate(-12px, -12px)' }
       })}
     </motion.div>
   );
