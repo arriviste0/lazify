@@ -74,30 +74,7 @@ const AiWorkflowVisualization = () => {
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
     >
-      {/* Central Icon */}
-      <motion.div
-        style={{ position: 'absolute', ...positions.center }}
-        variants={itemVariants}
-      >
-        <IconContainer className="h-20 w-20 border-2 border-primary shadow-xl shadow-primary/30">
-          <Bot className="h-10 w-10 text-primary" />
-        </IconContainer>
-      </motion.div>
-
-      {/* Surrounding Icons */}
-      {icons.map((item) => (
-        <motion.div
-          key={item.id}
-          style={{ position: 'absolute', ...item.pos }}
-          variants={itemVariants}
-        >
-          <IconContainer aria-label={item.name}>
-            <item.IconComponent className={iconSize} />
-          </IconContainer>
-        </motion.div>
-      ))}
-
-      {/* SVG for Beams */}
+      {/* SVG for Beams - Rendered first to be behind icons */}
       <svg
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
         viewBox="0 0 100 100"
@@ -114,32 +91,30 @@ const AiWorkflowVisualization = () => {
         {icons.map((item, index) => {
           const startX = item.outerIconPos.x;
           const startY = item.outerIconPos.y;
-          const endX = 50; // Center of the SVG viewBox
-          const endY = 50; // Center of the SVG viewBox
+          const endX = 50; // Center of the SVG viewBox (central icon)
+          const endY = 50; // Center of the SVG viewBox (central icon)
 
-          // Adjusted control point calculation for varied curves ending at the center
           const midX = (startX + endX) / 2;
           const midY = (startY + endY) / 2;
           const dx = endX - startX;
           const dy = endY - startY;
-          const spreadFactor = 0.3; // Controls how much the curve deviates
+          const spreadFactor = 0.3; 
 
-          // Perpendicular offsets for control points
           let offsetX = dy * spreadFactor;
           let offsetY = -dx * spreadFactor;
 
-          // Vary offset direction based on index to avoid all curves bending the same way
           if (index % 3 === 1) {
-            offsetX = -offsetX * 0.7; // Different magnitude/direction
+            offsetX = -offsetX * 0.7; 
             offsetY = -offsetY * 0.7;
           } else if (index % 3 === 2) {
-             offsetX *= 0.5; // Shorter curve
+             offsetX *= 0.5; 
              offsetY *= 0.5;
           }
           
           const controlX = midX + offsetX;
           const controlY = midY + offsetY;
           
+          // Path starts from outer icon and ends at the center (50,50)
           const pathD = `M ${startX} ${startY} Q ${controlX} ${controlY}, ${endX} ${endY}`;
 
           return (
@@ -157,7 +132,7 @@ const AiWorkflowVisualization = () => {
                 stroke="url(#beamGradient)"
                 strokeWidth="0.7"
                 fill="none"
-                strokeLinecap="butt" // Changed from "round" to "butt"
+                strokeLinecap="butt" // Sharp end for the beam
                 initial={{ pathLength: 0, pathOffset: 0.5, opacity: 0 }} 
                 animate={{ pathLength: 1, pathOffset: -0.5, opacity: [0, 1, 1, 0] }} 
                 transition={{
@@ -174,8 +149,32 @@ const AiWorkflowVisualization = () => {
           );
         })}
       </svg>
+
+      {/* Central Icon - Rendered after SVG to be on top */}
+      <motion.div
+        style={{ position: 'absolute', ...positions.center }}
+        variants={itemVariants}
+      >
+        <IconContainer className="h-20 w-20 border-2 border-primary shadow-xl shadow-primary/30">
+          <Bot className="h-10 w-10 text-primary" />
+        </IconContainer>
+      </motion.div>
+
+      {/* Surrounding Icons - Rendered after SVG to be on top */}
+      {icons.map((item) => (
+        <motion.div
+          key={item.id}
+          style={{ position: 'absolute', ...item.pos }}
+          variants={itemVariants}
+        >
+          <IconContainer aria-label={item.name}>
+            <item.IconComponent className={iconSize} />
+          </IconContainer>
+        </motion.div>
+      ))}
     </motion.div>
   );
 };
 
 export default AiWorkflowVisualization;
+
