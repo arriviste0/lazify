@@ -3,7 +3,7 @@
 
 import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Bot, FileText, MessageSquare, Users, Settings, ExternalLink, Folder } from 'lucide-react';
+import { Folder, Bot, FileText, MessageSquare, Users, Settings, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const IconContainer = forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>(({ className, children, ...props }, ref) => (
@@ -112,15 +112,33 @@ const AiWorkflowVisualization = () => {
         </defs>
 
         {icons.map((item, index) => {
-          // Path from outer icon (item.outerIconPos) to center (50,50)
           const startX = item.outerIconPos.x;
           const startY = item.outerIconPos.y;
-          const endX = 50;
-          const endY = 50;
+          const endX = 50; // Center of the SVG viewBox
+          const endY = 50; // Center of the SVG viewBox
 
-          // Control point calculation remains similar, adjust based on new start/end
-          const controlX = (startX + endX) / 2 + (startX < endX ? -10 : 10) * (index % 2 === 0 ? 1 : -0.5);
-          const controlY = (startY + endY) / 2 + (startY < endY ? -10 : 10) * (index % 2 === 0 ? -0.5 : 1);
+          // Adjusted control point calculation for varied curves ending at the center
+          const midX = (startX + endX) / 2;
+          const midY = (startY + endY) / 2;
+          const dx = endX - startX;
+          const dy = endY - startY;
+          const spreadFactor = 0.3; // Controls how much the curve deviates
+
+          // Perpendicular offsets for control points
+          let offsetX = dy * spreadFactor;
+          let offsetY = -dx * spreadFactor;
+
+          // Vary offset direction based on index to avoid all curves bending the same way
+          if (index % 3 === 1) {
+            offsetX = -offsetX * 0.7; // Different magnitude/direction
+            offsetY = -offsetY * 0.7;
+          } else if (index % 3 === 2) {
+             offsetX *= 0.5; // Shorter curve
+             offsetY *= 0.5;
+          }
+          
+          const controlX = midX + offsetX;
+          const controlY = midY + offsetY;
           
           const pathD = `M ${startX} ${startY} Q ${controlX} ${controlY}, ${endX} ${endY}`;
 
@@ -139,9 +157,9 @@ const AiWorkflowVisualization = () => {
                 stroke="url(#beamGradient)"
                 strokeWidth="0.7"
                 fill="none"
-                strokeLinecap="round"
-                initial={{ pathLength: 0, pathOffset: 0.5, opacity: 0 }} // Beam starts invisible at its "end" (center of gradient)
-                animate={{ pathLength: 1, pathOffset: -0.5, opacity: [0, 1, 1, 0] }} // Beam becomes visible, gradient moves from start to end
+                strokeLinecap="butt" // Changed from "round" to "butt"
+                initial={{ pathLength: 0, pathOffset: 0.5, opacity: 0 }} 
+                animate={{ pathLength: 1, pathOffset: -0.5, opacity: [0, 1, 1, 0] }} 
                 transition={{
                   duration: beamDuration,
                   delay: 0.5 + index * beamStagger,
@@ -161,4 +179,3 @@ const AiWorkflowVisualization = () => {
 };
 
 export default AiWorkflowVisualization;
-
