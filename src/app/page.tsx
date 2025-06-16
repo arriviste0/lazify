@@ -27,6 +27,11 @@ import {
   Globe,
   FolderKanban,
   IndianRupee,
+  Bot, // Added for AiWorkflowVisualization
+  Zap, // Added for AiWorkflowVisualization
+  MessageSquare, // Added for AiWorkflowVisualization
+  Settings, // Added for AiWorkflowVisualization
+  ExternalLink, // Added for AiWorkflowVisualization
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -40,6 +45,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { PricingTable } from '@/components/pricing-table';
 import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
+import AiWorkflowVisualization from '@/components/ai-workflow-visualization'; // Import new component
 
 
 const fadeInUp = {
@@ -591,19 +597,11 @@ export default function Home() {
                 </Button>
               </motion.div>
               <motion.div
-                className="order-1 lg:order-2 flex justify-center items-center"
+                className="order-1 lg:order-2 flex justify-center items-center min-h-[350px] md:min-h-[450px]"
                 variants={fadeInUp}
                 transition={{ delay: 0.2, ...fadeInUp.transition }}
               >
-                <Image
-                  src="https://placehold.co/500x350.png"
-                  alt="AI Workflow Folder"
-                  width={500}
-                  height={350}
-                  className="rounded-xl shadow-2xl border-2 border-primary/30"
-                  data-ai-hint="ai workflow folder product screen purple"
-                  suppressHydrationWarning
-                />
+                <AiWorkflowVisualization />
               </motion.div>
             </div>
           </div>
