@@ -22,8 +22,8 @@ IconContainer.displayName = "IconContainer";
 
 const AiWorkflowVisualization = () => {
   const iconSize = "h-7 w-7 text-primary";
-  const beamDuration = 2.5; // Adjusted beam animation duration
-  const beamStagger = 0.2; // Stagger delay between beams
+  const beamDuration = 2.5;
+  const beamStagger = 0.2;
 
   const positions = {
     center: { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' },
@@ -35,13 +35,14 @@ const AiWorkflowVisualization = () => {
     bottomRight: { top: '90%', left: '90%', transform: 'translate(-100%, -100%)' },
   };
 
+  // outerIconPos are the coordinates for the surrounding icons in the 100x100 SVG viewBox
   const icons = [
-    { id: 'gdrive', IconComponent: Folder, pos: positions.topLeft, name: "Google Drive", pathEnd: { x: 18, y: 18 } },
-    { id: 'notion', IconComponent: FileText, pos: positions.midLeft, name: "Notion", pathEnd: { x: 8, y: 50 } },
-    { id: 'whatsapp', IconComponent: MessageSquare, pos: positions.bottomLeft, name: "WhatsApp", pathEnd: { x: 18, y: 82 } },
-    { id: 'gdocs', IconComponent: Users, pos: positions.topRight, name: "Google Docs", pathEnd: { x: 82, y: 18 } },
-    { id: 'zapier', IconComponent: Settings, pos: positions.midRight, name: "Zapier", pathEnd: { x: 92, y: 50 } },
-    { id: 'messenger', IconComponent: ExternalLink, pos: positions.bottomRight, name: "Messenger", pathEnd: { x: 82, y: 82 } },
+    { id: 'gdrive', IconComponent: Folder, pos: positions.topLeft, name: "Google Drive", outerIconPos: { x: 18, y: 18 } },
+    { id: 'notion', IconComponent: FileText, pos: positions.midLeft, name: "Notion", outerIconPos: { x: 8, y: 50 } },
+    { id: 'whatsapp', IconComponent: MessageSquare, pos: positions.bottomLeft, name: "WhatsApp", outerIconPos: { x: 18, y: 82 } },
+    { id: 'gdocs', IconComponent: Users, pos: positions.topRight, name: "Google Docs", outerIconPos: { x: 82, y: 18 } },
+    { id: 'zapier', IconComponent: Settings, pos: positions.midRight, name: "Zapier", outerIconPos: { x: 92, y: 50 } },
+    { id: 'messenger', IconComponent: ExternalLink, pos: positions.bottomRight, name: "Messenger", outerIconPos: { x: 82, y: 82 } },
   ];
 
   const containerVariants = {
@@ -70,7 +71,7 @@ const AiWorkflowVisualization = () => {
       className="relative w-full h-[350px] md:h-[450px] flex items-center justify-center"
       variants={containerVariants}
       initial="hidden"
-      whileInView="visible" // Ensures animation plays when section scrolls into view
+      whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
     >
       {/* Central Icon */}
@@ -111,10 +112,17 @@ const AiWorkflowVisualization = () => {
         </defs>
 
         {icons.map((item, index) => {
-          // Simple quadratic curve. Control point is halfway between start and end, offset slightly for curve.
-          const controlX = (50 + item.pathEnd.x) / 2 + (50 < item.pathEnd.x ? -10 : 10) * (index % 2 === 0 ? 1 : -0.5);
-          const controlY = (50 + item.pathEnd.y) / 2 + (50 < item.pathEnd.y ? -10 : 10) * (index % 2 === 0 ? -0.5 : 1);
-          const pathD = `M 50 50 Q ${controlX} ${controlY}, ${item.pathEnd.x} ${item.pathEnd.y}`;
+          // Path from outer icon (item.outerIconPos) to center (50,50)
+          const startX = item.outerIconPos.x;
+          const startY = item.outerIconPos.y;
+          const endX = 50;
+          const endY = 50;
+
+          // Control point calculation remains similar, adjust based on new start/end
+          const controlX = (startX + endX) / 2 + (startX < endX ? -10 : 10) * (index % 2 === 0 ? 1 : -0.5);
+          const controlY = (startY + endY) / 2 + (startY < endY ? -10 : 10) * (index % 2 === 0 ? -0.5 : 1);
+          
+          const pathD = `M ${startX} ${startY} Q ${controlX} ${controlY}, ${endX} ${endY}`;
 
           return (
             <g key={`beam-${item.id}`}>
@@ -124,22 +132,22 @@ const AiWorkflowVisualization = () => {
                 strokeOpacity={0.2}
                 strokeWidth="0.3"
                 fill="none"
-                variants={itemVariants} // Apply itemVariants for staggered appearance of tracks
+                variants={itemVariants}
               />
               <motion.path
                 d={pathD}
                 stroke="url(#beamGradient)"
-                strokeWidth="0.7" // Make beam slightly thicker
+                strokeWidth="0.7"
                 fill="none"
                 strokeLinecap="round"
-                initial={{ pathLength: 0, pathOffset: 0.5, opacity: 0 }}
-                animate={{ pathLength: 1, pathOffset: -0.5, opacity: [0, 1, 1, 0] }}
+                initial={{ pathLength: 0, pathOffset: 0.5, opacity: 0 }} // Beam starts invisible at its "end" (center of gradient)
+                animate={{ pathLength: 1, pathOffset: -0.5, opacity: [0, 1, 1, 0] }} // Beam becomes visible, gradient moves from start to end
                 transition={{
                   duration: beamDuration,
-                  delay: 0.5 + index * beamStagger, // Staggered delay
+                  delay: 0.5 + index * beamStagger,
                   repeat: Infinity,
                   repeatType: 'loop',
-                  repeatDelay: icons.length * beamStagger, // Ensure loop restarts after all beams have fired once
+                  repeatDelay: icons.length * beamStagger,
                   ease: 'linear',
                   opacity: { times: [0, 0.1, 0.9, 1], duration: beamDuration }
                 }}
@@ -153,3 +161,4 @@ const AiWorkflowVisualization = () => {
 };
 
 export default AiWorkflowVisualization;
+
