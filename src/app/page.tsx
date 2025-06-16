@@ -25,8 +25,8 @@ import {
   Sparkles,
   ListChecks,
   Globe,
-  FolderKanban, // Added for AI Workflow (though not directly used in current section, kept for context if needed)
-  IndianRupee,  // Added for AI Workflow
+  FolderKanban,
+  IndianRupee,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -84,7 +84,7 @@ export default function Home() {
     whyLazify: useRef(null),
     pricing: useRef(null),
     faq: useRef(null),
-    aiWorkflow: useRef(null), // Ref for AI Workflow section
+    aiWorkflow: useRef(null),
     demo: useRef(null),
     contact: useRef(null),
   };
@@ -572,7 +572,7 @@ export default function Home() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid lg:grid-cols-2 gap-10 md:gap-12 items-center">
               <motion.div className="order-2 lg:order-1" variants={fadeInUp}>
-                <span className="inline-block rounded-full bg-teal-500/10 px-4 py-1 text-sm font-medium text-teal-400 mb-3">
+                <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-3">
                   Exclusive Offer
                 </span>
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-4">
@@ -581,10 +581,10 @@ export default function Home() {
                 <p className="text-muted-foreground mb-6 max-w-lg">
                   Get access to our curated **AI Workflow Folder**, packed with ready-to-use templates, prompts, and guides to supercharge your productivity. Streamline complex tasks and automate your processes for just ₹9!
                 </p>
-                <p className="text-2xl font-bold text-teal-400 mb-8">
+                <p className="text-2xl font-bold text-primary mb-8">
                   Special Price: <IndianRupee className="inline-block h-6 w-6 relative -top-0.5" />9
                 </p>
-                <Button size="lg" className="cta-button bg-teal-500 hover:bg-teal-600 text-background" asChild>
+                <Button size="lg" className="cta-button bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
                   <Link href="/workflow-payment">
                     Get Workflow for <IndianRupee className="inline-block h-5 w-5 mx-1" />9 <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -600,8 +600,8 @@ export default function Home() {
                   alt="AI Workflow Folder"
                   width={500}
                   height={350}
-                  className="rounded-xl shadow-2xl border-2 border-teal-500/30"
-                  data-ai-hint="ai workflow folder product screen"
+                  className="rounded-xl shadow-2xl border-2 border-primary/30"
+                  data-ai-hint="ai workflow folder product screen purple"
                   suppressHydrationWarning
                 />
               </motion.div>
