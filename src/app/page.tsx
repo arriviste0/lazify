@@ -24,6 +24,7 @@ import {
   CalendarDays, // For ScheduleSync AI
   Sparkles, // For ContentCraft AI
   ListChecks, // For TaskMaster AI
+  Globe, // For AI-Powered Web Solutions
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -91,7 +92,7 @@ export default function Home() {
 
   const { scrollY, scrollYProgress } = useScroll();
   const heroParallaxY = useTransform(scrollY, [0, 500], [0, -100]);
-  const whyLazifyContainerParallaxY = useTransform(scrollYProgress, [0.35, 0.65], ['-50px', '50px']); // Adjusted range
+  const whyLazifyContainerParallaxY = useTransform(scrollYProgress, [0.35, 0.65], ['-50px', '50px']);
 
   // New transforms for the chart image itself within the "Why Lazify" section
   const chartImageParallaxY = useTransform(scrollYProgress, [0.4, 0.55, 0.7], ['30px', '-30px', '30px']);
@@ -102,8 +103,8 @@ export default function Home() {
     const observers: IntersectionObserver[] = [];
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -20% 0px', // Adjust rootMargin if needed for accuracy
-      threshold: 0.2, // Trigger when 20% of the element is visible
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: 0.2,
     };
 
     Object.entries(sectionRefs).forEach(([id, ref]) => {
@@ -153,6 +154,13 @@ export default function Home() {
       icon: Cog,
       imageHint: 'blueprint with glowing circuit lines',
       color: 'from-violet-600 to-purple-600',
+    },
+    {
+      title: 'AI-Powered Web Solutions',
+      description: 'Craft intelligent websites and impactful digital marketing strategies, enhanced by AI insights and automation.',
+      icon: Globe,
+      imageHint: 'ai website globe digital marketing',
+      color: 'from-sky-600 to-cyan-600',
     },
   ];
 
@@ -479,7 +487,7 @@ export default function Home() {
               </motion.div>
                <motion.div
                  className="flex items-center justify-center"
-                 style={{ y: whyLazifyContainerParallaxY }} // Parallax for the container
+                 style={{ y: whyLazifyContainerParallaxY }}
                  variants={fadeInUp}
                >
                 <div className="w-full h-[400px] relative">
@@ -487,8 +495,8 @@ export default function Home() {
                     <motion.div
                       className="w-full h-full"
                       style={{
-                        y: chartImageParallaxY, // Parallax for the image itself
-                        scale: chartImageScale,   // Scale effect for the image
+                        y: chartImageParallaxY,
+                        scale: chartImageScale,
                       }}
                     >
                       <ChartDisplay />
