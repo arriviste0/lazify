@@ -27,11 +27,11 @@ import {
   Globe,
   FolderKanban,
   IndianRupee,
-  Bot, 
-  Zap, 
-  MessageSquare, 
-  Settings, 
-  ExternalLink, 
+  Bot,
+  Zap,
+  MessageSquare,
+  Settings,
+  ExternalLink,
   Folder,
   type LucideIcon,
   Inbox,
@@ -51,8 +51,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { PricingTable } from '@/components/pricing-table';
 import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
-import AiWorkflowVisualization from '@/components/ai-workflow-visualization'; 
-import AgentCoverflowSlider from '@/components/agent-coverflow-slider';
+import AiWorkflowVisualization from '@/components/ai-workflow-visualization';
 import type { AgentInfo } from '@/types/agent';
 
 
@@ -85,114 +84,6 @@ const ChartDisplay = () => {
   );
 };
 
-const newAgentsData: AgentInfo[] = [
-  {
-    name: "InboxZero Email Agent",
-    icon: "📥", // Changed from 📨
-    lucideIcon: Inbox,
-    cardDescription: "Cleans your inbox, flags priority emails, archives spam.",
-    slug: "inboxzero-ai",
-    themeColor: "blue-500", // Specific Tailwind color
-    coverImageHint: "email organization digital inbox",
-    functionality: [
-      "Connects to Gmail/Outlook via n8n",
-      "Uses OpenAI for email summarization",
-      "Auto-routes based on label/priority",
-    ],
-    demoButtonText: "View InboxZero Demo",
-  },
-  {
-    name: "LeadSpark LeadGen Agent",
-    icon: "🧲",
-    lucideIcon: Pocket, 
-    cardDescription: "Captures and qualifies leads from LinkedIn, email, or web forms.",
-    slug: "leadspark-ai",
-    themeColor: "green-500", // Specific Tailwind color
-    coverImageHint: "lead generation magnet crm",
-    functionality: [
-      "Scrapes or receives webhook form data",
-      "Filters cold/warm leads",
-      "Adds to CRM or Google Sheet",
-    ],
-    demoButtonText: "View LeadSpark Demo",
-  },
-  {
-    name: "ContentCraft Writer Agent",
-    icon: "✍️",
-    lucideIcon: Edit3,
-    cardDescription: "Auto-generates blogs, social posts, product descriptions.",
-    slug: "contentcraft-ai",
-    themeColor: "rose-500", // Specific Tailwind color
-    coverImageHint: "ai writing content creation",
-     functionality: [
-      "Takes input prompt",
-      "Uses OpenAI API for long-form writing",
-      "Option to export to Notion or CMS",
-    ],
-    demoButtonText: "View ContentCraft Demo",
-  },
-  {
-    name: "ScheduleSync Calendar Agent",
-    icon: "📅",
-    lucideIcon: CalendarDays,
-    cardDescription: "Syncs with Google Calendar, auto-blocks time, and sends reminders.",
-    slug: "schedulesync-ai",
-    themeColor: "amber-500", // Specific Tailwind color
-    coverImageHint: "calendar scheduling automation",
-    functionality: [
-      "Fetches events",
-      "AI finds free slots",
-      "Sends email or Slack reminders",
-    ],
-    demoButtonText: "View ScheduleSync Demo",
-  },
-  {
-    name: "TaskMaster Todo Agent",
-    icon: "✅",
-    lucideIcon: ListChecks,
-    cardDescription: "Tracks tasks, auto-sorts by priority, and nudges for deadlines.",
-    slug: "taskmaster-ai",
-    themeColor: "teal-500", // Specific Tailwind color
-    coverImageHint: "task management checklist productivity",
-    functionality: [
-      "Todoist/Notion integration",
-      "OpenAI-based prioritization",
-      "Daily summary email",
-    ],
-    demoButtonText: "View TaskMaster Demo",
-  },
-  {
-    name: "FinanceTracker Budget Agent",
-    icon: "💰",
-    lucideIcon: DollarSign,
-    cardDescription: "Tracks expenses, categorizes transactions, and recommends savings.",
-    slug: "financetracker-ai",
-    themeColor: "lime-500", // Specific Tailwind color
-    coverImageHint: "finance budget expense tracking chart",
-    functionality: [
-      "Bank webhook ingestion (manual or automated)",
-      "Auto-tags: Food, Bills, Travel",
-      "Graph/chart integration",
-    ],
-    demoButtonText: "View FinanceTracker Demo",
-  },
-  {
-    name: "ShopSmart Ecommerce Agent",
-    icon: "🛍️",
-    lucideIcon: ShoppingCart,
-    cardDescription: "Recommends products, handles FAQs, and boosts conversion for e-commerce.",
-    slug: "shopsmart-ai",
-    themeColor: "fuchsia-500", // Specific Tailwind color
-    coverImageHint: "ecommerce shopping product recommendation",
-    functionality: [
-      "Product API or CSV sync",
-      "GPT-based Q&A chat agent",
-      "Checkout funnel analytics",
-    ],
-    demoButtonText: "View ShopSmart Demo",
-  },
-];
-
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -202,7 +93,7 @@ export default function Home() {
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
-    agents: useRef(null),
+    // agents: useRef(null), // Removed
     whyLazify: useRef(null),
     pricing: useRef(null),
     faq: useRef(null),
@@ -248,7 +139,7 @@ export default function Home() {
   const navLinks = [
     { href: '#home', label: 'Home', ref: sectionRefs.home },
     { href: '#services', label: 'Services', ref: sectionRefs.services },
-    { href: '#agents', label: 'Agents', ref: sectionRefs.agents },
+    // { href: '#agents', label: 'Agents', ref: sectionRefs.agents }, // Removed
     { href: '#why-lazify', label: 'Why Us', ref: sectionRefs.whyLazify },
     { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
     { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
@@ -508,27 +399,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <motion.section
-          id="agents"
-          ref={sectionRefs.agents}
-          className="w-full section-padding overflow-hidden text-center bg-gradient-to-b from-primary/5 via-background to-primary/10"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.1 }} variants={fadeInUp}
-        >
-          <div className="container mx-auto px-4 md:px-6">
-            <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
-               <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
-                Meet Your Agents
-              </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
-                Your Dedicated AI Workforce
-              </h2>
-              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                Explore our specialized AI agents, ready to transform how you work. Drag to discover.
-              </p>
-            </motion.div>
-            <AgentCoverflowSlider agents={newAgentsData} />
-          </div>
-        </motion.section>
 
         <motion.section
           id="why-lazify"
@@ -731,7 +601,7 @@ export default function Home() {
             <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
               <h4 className="font-semibold text-foreground">Quick Links</h4>
               <nav className="flex flex-col gap-1 items-center md:items-start">
-                {[...navLinks.slice(1, 6), { href: '#', label: 'Privacy Policy' }, { href: '#', label: 'Terms of Service' }].map((link) => (
+                {[...navLinks.slice(1, 5), { href: '#', label: 'Privacy Policy' }, { href: '#', label: 'Terms of Service' }].map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
@@ -782,3 +652,4 @@ export default function Home() {
     </div>
   );
 }
+

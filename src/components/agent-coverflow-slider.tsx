@@ -12,44 +12,31 @@ import { cn } from "@/lib/utils";
 
 interface AgentCardItemProps {
   agent: AgentInfo;
-  scrollXProgress: MotionValue<number>; // This will be the progress of the parent scroll container
-  index: number; // Index of the card
-  totalCards: number; // Total number of cards
-  cardWidthPx: number; // Width of a single card
+  scrollXProgress: MotionValue<number>;
+  index: number;
+  totalCards: number;
+  cardWidthPx: number;
 }
 
 const AgentCardItem: React.FC<AgentCardItemProps> = ({ agent, scrollXProgress, index, totalCards, cardWidthPx }) => {
-  // Calculate a progress value specific to this card's position in the viewport
-  // It's 0 when card is to the left, 0.5 when centered, 1 when to the right
-  const cardSpecificProgress = useTransform(scrollXProgress, (latestX) => {
-    const cardStart = index / totalCards;
-    const cardEnd = (index + 1) / totalCards;
-    // A simplified way to map global scroll to local card visibility, might need refinement
-    // This needs to map the scroll container's progress to this card's "centeredness"
-    // For now, let's keep the original simpler transform based on overall scrollXProgress,
-    // as a per-card progress derived from overall scrollX is complex to get right for coverflow.
-    // The key is that all cards react to the same scrollXProgress but their transforms differ based on their base position.
-    return latestX; // Using the global scroll progress for transformations
+  const cardCenter = (index + 0.5) / totalCards;
+  const distanceFromCenter = useTransform(scrollXProgress, (latestX) => Math.abs(latestX - cardCenter));
+
+  const rotateY = useTransform(scrollXProgress, (latestX) => {
+    const relativeProgress = (latestX - cardCenter) * totalCards * 2.5; // Increase multiplier for more rotation
+    return relativeProgress * -30; // Max rotation 30 degrees
   });
 
-  // Transforms based on the global scroll progress, giving the coverflow effect
-  const rotateY = useTransform(cardSpecificProgress, [index / totalCards - 0.5 / totalCards, index / totalCards, index / totalCards + 0.5 / totalCards], [30, 0, -30]);
-  const scale = useTransform(cardSpecificProgress, [index / totalCards - 0.5 / totalCards, index / totalCards, index / totalCards + 0.5 / totalCards], [0.9, 1, 0.9]);
-  const opacity = useTransform(cardSpecificProgress, [index / totalCards - 0.5 / totalCards, index / totalCards, index / totalCards + 0.5 / totalCards], [0.75, 1, 0.75]);
-  const y = useTransform(cardSpecificProgress, [index / totalCards - 0.5 / totalCards, index / totalCards, index / totalCards + 0.5 / totalCards], [20, 0, 20]);
-  const z = useTransform(cardSpecificProgress, [index / totalCards - 0.5 / totalCards, index / totalCards, index / totalCards + 0.5 / totalCards], [-50, 0, -50]);
-  // The x transform from previous implementation might conflict if not carefully managed with scroll snapping.
-  // For a snap-based slider, direct X manipulation might not be needed if spacing is handled by layout.
-  // However, for coverflow where cards overlap, it can be useful.
-  // Let's remove direct 'x' transform here and rely on layout and scroll for positioning.
+  const scale = useTransform(distanceFromCenter, [0, 0.5 / totalCards, 1 / totalCards], [1, 0.9, 0.85]);
+  const opacity = useTransform(distanceFromCenter, [0, 0.5 / totalCards, 1 / totalCards], [1, 0.85, 0.7]);
+  const y = useTransform(distanceFromCenter, [0, 0.5 / totalCards, 1 / totalCards], [0, 15, 25]);
+  const z = useTransform(distanceFromCenter, [0, 0.5 / totalCards, 1 / totalCards], [0, -30, -60]); // Push side cards back
 
   const IconComponent = agent.lucideIcon;
 
   // Constructing theme-specific classes safely for Tailwind JIT
   const iconBoxBgClass = `bg-${agent.themeColor}`;
   const ctaButtonBgClass = `bg-${agent.themeColor}`;
-  // Basic hover for CTA: darken slightly or use opacity.
-  // Tailwind doesn't directly support bg-color/90. Using opacity or specific hover class.
   const ctaButtonHoverBgClass = `hover:opacity-90`;
 
 
@@ -60,7 +47,7 @@ const AgentCardItem: React.FC<AgentCardItemProps> = ({ agent, scrollXProgress, i
         scale,
         opacity,
         y,
-        zIndex: useTransform(scale, [0.9, 1], [1, 10]), // Center card has higher z-index
+        z,
         transformStyle: 'preserve-3d',
       }}
       className="w-72 h-[400px] rounded-xl shadow-2xl overflow-hidden relative cursor-pointer bg-card border border-card-foreground/10 group"
@@ -73,7 +60,7 @@ const AgentCardItem: React.FC<AgentCardItemProps> = ({ agent, scrollXProgress, i
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           data-ai-hint={agent.coverImageHint}
-          priority={index < 3} // Prioritize loading for first few cards
+          priority={index < 3}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
@@ -106,10 +93,9 @@ const AgentCoverflowSlider: React.FC<{ agents: AgentInfo[] }> = ({ agents }) => 
   const cardWidthPx = 288; // w-72
   const gapPx = 16; // space-x-4
 
-  // scrollXProgress will track the scroll position of the containerRef
   const { scrollXProgress } = useScroll({ container: containerRef });
 
-  const [currentIndex, setCurrentIndex] = useState(0); // Keep track of centered card
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const scrollToCard = useCallback((index: number) => {
     if (containerRef.current) {
@@ -128,13 +114,12 @@ const AgentCoverflowSlider: React.FC<{ agents: AgentInfo[] }> = ({ agents }) => 
     const newIndex = Math.min(agents.length - 1, currentIndex + 1);
     scrollToCard(newIndex);
   };
-  
+
    useEffect(() => {
     if (containerRef.current && agents.length > 0) {
       const initialIndex = Math.floor(agents.length / 2);
       const containerWidth = containerRef.current.offsetWidth;
       if (containerWidth > 0) {
-         // Adjusted to account for centering the card itself, not its left edge.
         const initialScrollLeft = initialIndex * (cardWidthPx + gapPx) - (containerWidth / 2 - cardWidthPx / 2) + (gapPx / 2);
         containerRef.current.scrollLeft = initialScrollLeft;
         setCurrentIndex(initialIndex);
@@ -150,7 +135,6 @@ const AgentCoverflowSlider: React.FC<{ agents: AgentInfo[] }> = ({ agents }) => 
         className="w-full flex overflow-x-scroll snap-x snap-mandatory py-8 px-4 hide-native-scrollbar items-center relative"
         style={{ WebkitOverflowScrolling: 'touch' }}
         onScroll={(e) => {
-            // Update current index based on scroll for arrow disabling
             const scrollLeft = e.currentTarget.scrollLeft;
             const containerWidth = e.currentTarget.offsetWidth;
             const newIdx = Math.round((scrollLeft + containerWidth / 2 - cardWidthPx / 2 - gapPx / 2) / (cardWidthPx + gapPx));
@@ -159,19 +143,18 @@ const AgentCoverflowSlider: React.FC<{ agents: AgentInfo[] }> = ({ agents }) => 
             }
         }}
       >
-        {/* Track for the cards with padding to allow first/last cards to center */}
         <motion.div
-            className="flex items-center space-x-4" // gap handled by space-x-4
+            className="flex items-center space-x-4"
             style={{
-             paddingLeft: `calc(50vw - ${cardWidthPx / 2}px)`, // Center first item
-             paddingRight: `calc(50vw - ${cardWidthPx / 2}px)`, // Center last item
+             paddingLeft: `calc(50vw - ${cardWidthPx / 2}px)`,
+             paddingRight: `calc(50vw - ${cardWidthPx / 2}px)`,
             }}
         >
           {agents.map((agent, index) => (
-            <div key={agent.slug} className="snap-center flex-shrink-0"> {/* Ensure snapping */}
+            <div key={agent.slug} className="snap-center flex-shrink-0">
               <AgentCardItem
                 agent={agent}
-                scrollXProgress={scrollXProgress} // Pass the container's scroll progress
+                scrollXProgress={scrollXProgress}
                 index={index}
                 totalCards={agents.length}
                 cardWidthPx={cardWidthPx}
@@ -221,7 +204,6 @@ const AgentCoverflowSlider: React.FC<{ agents: AgentInfo[] }> = ({ agents }) => 
           </>
         )}
       </AnimatePresence>
-      {/* Dots indicator - Optional */}
       {agents.length > 1 && (
         <div className="flex justify-center space-x-2 mt-4">
           {agents.map((_, idx) => (
@@ -243,7 +225,6 @@ const AgentCoverflowSlider: React.FC<{ agents: AgentInfo[] }> = ({ agents }) => 
 
 export default AgentCoverflowSlider;
 
-// Helper to hide native scrollbar
 const styles = `
   .hide-native-scrollbar {
     scrollbar-width: none; /* Firefox */
