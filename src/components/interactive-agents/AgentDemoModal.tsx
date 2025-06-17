@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-// Demo Component Imports (Placeholders for now)
+// Demo Component Imports
 import InboxZeroDemo from "./demos/InboxZeroDemo";
 import LeadSparkDemo from "./demos/LeadSparkDemo";
 import ContentCraftDemo from "./demos/ContentCraftDemo";
@@ -47,6 +47,11 @@ const AgentDemoModal: React.FC<AgentDemoModalProps> = ({ isOpen, onClose, agent 
     }
   };
 
+  const handleFooterButtonClick = () => {
+    onClose();
+    // Navigation to #contact is handled by the Link component
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] bg-amber-50 text-neutral-800 max-h-[90vh] flex flex-col">
@@ -68,10 +73,10 @@ const AgentDemoModal: React.FC<AgentDemoModalProps> = ({ isOpen, onClose, agent 
 
         <DialogFooter className="pt-6 border-t border-amber-200 sm:justify-start gap-3 flex-col sm:flex-row">
           <Button variant="outline" className="border-primary text-primary hover:bg-primary/10 hover:text-primary" asChild>
-            <Link href="#contact">Request Custom Agent</Link>
+            <Link href="#contact" onClick={handleFooterButtonClick}>Request Custom Agent</Link>
           </Button>
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
-             <Link href="#contact">Book a Free Demo Call</Link>
+             <Link href="#contact" onClick={handleFooterButtonClick}>Book a Free Demo Call</Link>
           </Button>
         </DialogFooter>
       </DialogContent>
