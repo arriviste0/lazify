@@ -1,32 +1,28 @@
 
 "use client";
 
-import React, { useRef, useState, useMemo, useCallback } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import React, { useRef, useState, useMemo, useCallback, useEffect } from "react";
+import { motion, useScroll, useTransform, AnimatePresence, type MotionValue } from "framer-motion";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
 import type { AgentInfo } from '@/types/agent';
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card"; // Keep Card import if used by modern-card internally or for structure
 
-interface AgentCoverflowSliderProps {
-  agents: AgentInfo[];
+interface AgentCardItemProps {
+  agent: AgentInfo;
+  scrollXProgress: MotionValue<number>;
 }
 
-const AgentCardItem: React.FC<{ agent: AgentInfo; scrollXProgress: any }> = ({ agent, scrollXProgress }) => {
+const AgentCardItem: React.FC<AgentCardItemProps> = ({ agent, scrollXProgress }) => {
   const cardWidthPx = 224; // w-56
 
-  // Use scrollXProgress (0 to 1) to interpolate transforms
-  const rotateY = useTransform(scrollXProgress, [0, 0.5, 1], [45, 0, -45]); // Degrees
+  const rotateY = useTransform(scrollXProgress, [0, 0.5, 1], [45, 0, -45]);
   const scale = useTransform(scrollXProgress, [0, 0.5, 1], [0.85, 1, 0.85]);
   const opacity = useTransform(scrollXProgress, [0, 0.5, 1], [0.85, 1, 0.85]);
   const x = useTransform(scrollXProgress, [0, 0.5, 1], [-cardWidthPx * 0.1, 0, cardWidthPx * 0.1]);
-  const y = useTransform(scrollXProgress, [0, 0.5, 1], [15, 0, 15]); // Added y-offset
+  const y = useTransform(scrollXProgress, [0, 0.5, 1], [15, 0, 15]);
 
-  const cardBgColor = `bg-${agent.themeColor}`; // e.g., bg-blue-500. Ensure themeColor is a valid Tailwind color class.
-                                           // If themeColor is just 'blue', you'd need to adjust this.
-                                           // Assuming themeColor is like 'blue-500' from previous update.
-
+  const cardBgColor = `bg-${agent.themeColor}`;
   const IconComponent = agent.lucideIcon;
 
   return (
@@ -36,17 +32,17 @@ const AgentCardItem: React.FC<{ agent: AgentInfo; scrollXProgress: any }> = ({ a
         scale,
         opacity,
         x,
-        y, // Apply y-offset
+        y,
         transformStyle: 'preserve-3d',
       }}
       className={`w-56 h-72 rounded-xl shadow-xl flex flex-col items-center justify-center ${cardBgColor} relative overflow-hidden modern-card p-0`}
-      whileHover={{ scale: 1.03, transition: { duration: 0.2 } }} // Refined hover
+      whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
     >
       <Link href={`/agents/${agent.slug}`} className="w-full h-full flex flex-col items-center justify-center p-4" legacyBehavior={false}>
         {IconComponent ? (
           <IconComponent className="h-20 w-20 text-white opacity-90 mb-3" strokeWidth={1.5} />
         ) : (
-          <span className="text-6xl mb-3 opacity-90">{agent.icon}</span>
+          <span className="text-6xl mb-3 opacity-90">{typeof agent.icon === 'string' ? agent.icon : ''}</span>
         )}
          <span className="text-center text-sm font-medium text-white opacity-80 mt-auto line-clamp-2">
            {agent.name}
@@ -57,15 +53,12 @@ const AgentCardItem: React.FC<{ agent: AgentInfo; scrollXProgress: any }> = ({ a
 };
 
 
-const AgentCoverflowSlider: React.FC<AgentCoverflowSliderProps> = ({ agents }) => {
+const AgentCoverflowSlider: React.FC<{ agents: AgentInfo[] }> = ({ agents }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null); // Ref for the draggable track
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  const cardWidthPx = 224; // w-56
-  const gapPx = 16; // Corresponds to mx-1 on each side (8px) -> 16px total gap
-                  // If mx-1 means 4px, then gapPx is 8px. Let's assume mx-1 = 0.25rem = 4px. So gap = 8px.
-                  // Let's use a more explicit gap, e.g. 1rem = 16px if cards are spaced by mx-2.
-                  // Original mx-1 on wrapper, let's assume it contributes 0.25rem * 2 = 0.5rem = 8px gap effectively.
+  const cardWidthPx = 224;
+  const gapPx = 16;
 
   const totalTrackWidth = useMemo(() => {
     return agents.length * cardWidthPx + (agents.length - 1) * gapPx;
@@ -75,9 +68,6 @@ const AgentCoverflowSlider: React.FC<AgentCoverflowSliderProps> = ({ agents }) =
 
   const { scrollXProgress } = useScroll({
     container: containerRef,
-    // Assuming the target is the track itself for progress calculation if needed
-    // target: trackRef, 
-    // offset: ['start start', 'end end'] // If you want progress based on track scroll
   });
   
   const scrollToCard = useCallback((index: number) => {
@@ -103,11 +93,15 @@ const AgentCoverflowSlider: React.FC<AgentCoverflowSliderProps> = ({ agents }) =
    useEffect(() => {
     if (containerRef.current && agents.length > 0) {
       const initialIndex = Math.floor(agents.length / 2);
-      const initialScrollLeft = initialIndex * (cardWidthPx + gapPx) - (containerRef.current.offsetWidth / 2 - cardWidthPx / 2);
-      containerRef.current.scrollLeft = initialScrollLeft;
-      setCurrentIndex(initialIndex);
+      // Ensure containerRef.current.offsetWidth is available
+      const containerWidth = containerRef.current.offsetWidth;
+      if (containerWidth > 0) {
+        const initialScrollLeft = initialIndex * (cardWidthPx + gapPx) - (containerWidth / 2 - cardWidthPx / 2);
+        containerRef.current.scrollLeft = initialScrollLeft;
+        setCurrentIndex(initialIndex);
+      }
     }
-  }, [agents.length, cardWidthPx, gapPx]);
+  }, [agents.length, cardWidthPx, gapPx, scrollToCard]);
 
 
   return (
@@ -115,43 +109,33 @@ const AgentCoverflowSlider: React.FC<AgentCoverflowSliderProps> = ({ agents }) =
       <div
         ref={containerRef}
         className="w-full flex overflow-x-scroll snap-x snap-mandatory py-8 px-4 hide-native-scrollbar items-center relative"
-        style={{ WebkitOverflowScrolling: 'touch' }} // Smooth scrolling on iOS
+        style={{ WebkitOverflowScrolling: 'touch' }}
       >
-        {/* Horizontal Track */}
         <motion.div
             ref={trackRef}
-            className="flex items-center space-x-4" // Using space-x-4 for gap between cards (1rem = 16px)
+            className="flex items-center space-x-4"
             style={{
-             // Dynamically calculate padding to center the first/last card when at edges if needed.
-             // This ensures a card can be centered even when it's the first or last.
              paddingLeft: `calc(50vw - ${cardWidthPx / 2}px - ${gapPx / 2}px)`,
              paddingRight: `calc(50vw - ${cardWidthPx / 2}px - ${gapPx / 2}px)`,
             }}
-            drag="x" // Enable dragging on x-axis
+            drag="x"
             dragConstraints={{
-              left: -(totalTrackWidth - (containerRef.current?.offsetWidth || 0) + cardWidthPx + gapPx), // Approximate constraint
+              left: -(totalTrackWidth - (containerRef.current?.offsetWidth || 0) + cardWidthPx + gapPx),
               right: 0,
             }}
-            dragElastic={0.1} // Adjust elasticity of dragging
-            dragTransition={{ bounceStiffness: 200, bounceDamping: 20 }} // Smoother bounce
+            dragElastic={0.1}
+            dragTransition={{ bounceStiffness: 200, bounceDamping: 20 }}
         >
           {agents.map((agent, index) => {
-            // This progress is specific to each card based on its position in the viewport.
-            // This requires a more complex setup if we want individual card progress.
-            // For simplicity, the current AgentCardItem uses a shared scrollXProgress for its example animation.
-            // A more accurate approach would involve calculating each card's visibility or center-offset.
-            // For this example, we'll keep it simpler.
             return (
               <div key={agent.slug} className="snap-center flex-shrink-0">
-                 {/* Pass a dummy scrollXProgress or a more sophisticated individual one if needed */}
-                <AgentCardItem agent={agent} scrollXProgress={motion.div} />
+                <AgentCardItem agent={agent} scrollXProgress={scrollXProgress} />
               </div>
             );
           })}
         </motion.div>
       </div>
 
-       {/* Navigation Arrows */}
       <AnimatePresence>
         {agents.length > 1 && (
           <>
@@ -215,3 +199,4 @@ if (typeof window !== 'undefined') {
   styleSheet.innerText = styles;
   document.head.appendChild(styleSheet);
 }
+
