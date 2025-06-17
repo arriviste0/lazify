@@ -54,8 +54,8 @@ const AgentDemoModal: React.FC<AgentDemoModalProps> = ({ isOpen, onClose, agent 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] bg-amber-50 text-neutral-800 max-h-[90vh] flex flex-col">
-        <DialogHeader className="text-left pb-4 border-b border-amber-200">
+      <DialogContent className="sm:max-w-[600px] bg-amber-50/90 backdrop-blur-lg text-neutral-800 border border-amber-200/50 shadow-2xl max-h-[90vh] flex flex-col rounded-xl">
+        <DialogHeader className="text-left pb-4 border-b border-amber-300/50">
           <DialogTitle className="text-2xl font-bold text-neutral-900">
             <span className="mr-3 text-3xl">{agent.iconEmoji}</span>
             {agent.name} - Demo
@@ -71,7 +71,7 @@ const AgentDemoModal: React.FC<AgentDemoModalProps> = ({ isOpen, onClose, agent 
           {renderDemoContent()}
         </div>
 
-        <DialogFooter className="pt-6 border-t border-amber-200 sm:justify-start gap-3 flex-col sm:flex-row">
+        <DialogFooter className="pt-6 border-t border-amber-300/50 sm:justify-start gap-3 flex-col sm:flex-row">
           <Button variant="outline" className="border-primary text-primary hover:bg-primary/10 hover:text-primary" asChild>
             <Link href="#contact" onClick={handleFooterButtonClick}>Request Custom Agent</Link>
           </Button>
