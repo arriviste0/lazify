@@ -27,12 +27,18 @@ import {
   Globe,
   FolderKanban,
   IndianRupee,
-  Bot, // Added for AiWorkflowVisualization
-  Zap, // Added for AiWorkflowVisualization
-  MessageSquare, // Added for AiWorkflowVisualization
-  Settings, // Added for AiWorkflowVisualization
-  ExternalLink, // Added for AiWorkflowVisualization
-  Folder, // Added for AiWorkflowVisualization
+  Bot, 
+  Zap, 
+  MessageSquare, 
+  Settings, 
+  ExternalLink, 
+  Folder,
+  type LucideIcon,
+  Inbox,
+  Edit3,
+  Pocket,
+  DollarSign,
+  ShoppingCart,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -40,13 +46,14 @@ import { Card } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import AgentSection from '@/components/agent-section';
 import ServiceCard from '@/components/service-card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { PricingTable } from '@/components/pricing-table';
 import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
-import AiWorkflowVisualization from '@/components/ai-workflow-visualization'; // Import new component
+import AiWorkflowVisualization from '@/components/ai-workflow-visualization'; 
+import AgentCoverflowSlider from '@/components/agent-coverflow-slider';
+import type { AgentInfo } from '@/types/agent';
 
 
 const fadeInUp = {
@@ -77,6 +84,114 @@ const ChartDisplay = () => {
     />
   );
 };
+
+const newAgentsData: AgentInfo[] = [
+  {
+    name: "InboxZero Email Agent",
+    icon: "📥", // Changed from 📨
+    lucideIcon: Inbox,
+    cardDescription: "Cleans your inbox, flags priority emails, archives spam.",
+    slug: "inboxzero-ai",
+    themeColor: "blue-500", // Specific Tailwind color
+    coverImageHint: "email organization digital inbox",
+    functionality: [
+      "Connects to Gmail/Outlook via n8n",
+      "Uses OpenAI for email summarization",
+      "Auto-routes based on label/priority",
+    ],
+    demoButtonText: "View InboxZero Demo",
+  },
+  {
+    name: "LeadSpark LeadGen Agent",
+    icon: "🧲",
+    lucideIcon: Pocket, 
+    cardDescription: "Captures and qualifies leads from LinkedIn, email, or web forms.",
+    slug: "leadspark-ai",
+    themeColor: "green-500", // Specific Tailwind color
+    coverImageHint: "lead generation magnet crm",
+    functionality: [
+      "Scrapes or receives webhook form data",
+      "Filters cold/warm leads",
+      "Adds to CRM or Google Sheet",
+    ],
+    demoButtonText: "View LeadSpark Demo",
+  },
+  {
+    name: "ContentCraft Writer Agent",
+    icon: "✍️",
+    lucideIcon: Edit3,
+    cardDescription: "Auto-generates blogs, social posts, product descriptions.",
+    slug: "contentcraft-ai",
+    themeColor: "rose-500", // Specific Tailwind color
+    coverImageHint: "ai writing content creation",
+     functionality: [
+      "Takes input prompt",
+      "Uses OpenAI API for long-form writing",
+      "Option to export to Notion or CMS",
+    ],
+    demoButtonText: "View ContentCraft Demo",
+  },
+  {
+    name: "ScheduleSync Calendar Agent",
+    icon: "📅",
+    lucideIcon: CalendarDays,
+    cardDescription: "Syncs with Google Calendar, auto-blocks time, and sends reminders.",
+    slug: "schedulesync-ai",
+    themeColor: "amber-500", // Specific Tailwind color
+    coverImageHint: "calendar scheduling automation",
+    functionality: [
+      "Fetches events",
+      "AI finds free slots",
+      "Sends email or Slack reminders",
+    ],
+    demoButtonText: "View ScheduleSync Demo",
+  },
+  {
+    name: "TaskMaster Todo Agent",
+    icon: "✅",
+    lucideIcon: ListChecks,
+    cardDescription: "Tracks tasks, auto-sorts by priority, and nudges for deadlines.",
+    slug: "taskmaster-ai",
+    themeColor: "teal-500", // Specific Tailwind color
+    coverImageHint: "task management checklist productivity",
+    functionality: [
+      "Todoist/Notion integration",
+      "OpenAI-based prioritization",
+      "Daily summary email",
+    ],
+    demoButtonText: "View TaskMaster Demo",
+  },
+  {
+    name: "FinanceTracker Budget Agent",
+    icon: "💰",
+    lucideIcon: DollarSign,
+    cardDescription: "Tracks expenses, categorizes transactions, and recommends savings.",
+    slug: "financetracker-ai",
+    themeColor: "lime-500", // Specific Tailwind color
+    coverImageHint: "finance budget expense tracking chart",
+    functionality: [
+      "Bank webhook ingestion (manual or automated)",
+      "Auto-tags: Food, Bills, Travel",
+      "Graph/chart integration",
+    ],
+    demoButtonText: "View FinanceTracker Demo",
+  },
+  {
+    name: "ShopSmart Ecommerce Agent",
+    icon: "🛍️",
+    lucideIcon: ShoppingCart,
+    cardDescription: "Recommends products, handles FAQs, and boosts conversion for e-commerce.",
+    slug: "shopsmart-ai",
+    themeColor: "fuchsia-500", // Specific Tailwind color
+    coverImageHint: "ecommerce shopping product recommendation",
+    functionality: [
+      "Product API or CSV sync",
+      "GPT-based Q&A chat agent",
+      "Checkout funnel analytics",
+    ],
+    demoButtonText: "View ShopSmart Demo",
+  },
+];
 
 
 export default function Home() {
@@ -169,49 +284,6 @@ export default function Home() {
       icon: Globe,
       imageHint: 'ai website globe digital marketing',
       color: 'from-sky-600 to-cyan-600',
-    },
-  ];
-
-  const agents = [
-    {
-      name: "LeadSpark AI",
-      description: "Automatically identifies and qualifies potential leads from various sources, enriching your sales pipeline. Your tireless digital prospector.",
-      hint: "robot sifting glowing data leads 3d isometric",
-      color: "from-green-500 to-emerald-500",
-      icon: Users,
-      slug: "leadspark-ai",
-    },
-    {
-      name: "InboxZero AI",
-      description: "Intelligently sorts emails, drafts contextual replies, and prioritizes your inbox so you focus on what truly matters. Achieve inbox zen.",
-      hint: "robot organizing email inbox zero 3d isometric",
-      color: "from-blue-500 to-sky-500",
-      icon: Mail,
-      slug: "inboxzero-ai",
-    },
-    {
-      name: "ScheduleSync AI",
-      description: "Effortlessly coordinates meetings, finds optimal times, and manages your calendar invites across platforms. Never double-book again.",
-      hint: "robot managing digital calendar appointments 3d isometric",
-      color: "from-amber-500 to-yellow-500",
-      icon: CalendarDays,
-      slug: "schedulesync-ai",
-    },
-    {
-      name: "ContentCraft AI",
-      description: "Your AI partner for brainstorming, drafting, and refining engaging content for blogs, social media, and marketing materials.",
-      hint: "robot writing on glowing digital scroll 3d isometric",
-      color: "from-rose-500 to-red-500",
-      icon: Sparkles,
-      slug: "contentcraft-ai",
-    },
-    {
-      name: "TaskMaster AI",
-      description: "Organizes your to-do lists, sets smart reminders, and helps you manage daily personal and professional tasks with ease.",
-      hint: "robot juggling checklist tasks gears 3d isometric",
-      color: "from-teal-500 to-cyan-500",
-      icon: ListChecks,
-      slug: "taskmaster-ai",
     },
   ];
 
@@ -439,7 +511,7 @@ export default function Home() {
         <motion.section
           id="agents"
           ref={sectionRefs.agents}
-          className="w-full section-padding overflow-hidden text-center"
+          className="w-full section-padding overflow-hidden text-center bg-gradient-to-b from-primary/5 via-background to-primary/10"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.1 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
@@ -451,10 +523,10 @@ export default function Home() {
                 Your Dedicated AI Workforce
               </h2>
               <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                Explore some of our specialized AI agents ready to take on specific tasks.
+                Explore our specialized AI agents, ready to transform how you work. Drag to discover.
               </p>
             </motion.div>
-            <AgentSection agents={agents} />
+            <AgentCoverflowSlider agents={newAgentsData} />
           </div>
         </motion.section>
 
@@ -710,4 +782,3 @@ export default function Home() {
     </div>
   );
 }
-
