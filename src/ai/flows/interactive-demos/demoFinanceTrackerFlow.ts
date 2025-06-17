@@ -78,33 +78,50 @@ const demoFinanceTrackerFlow = ai.defineFlow(
     let totalSpend = 0;
 
     expenseLines.forEach(line => {
-      const match = line.match(/(?:₹|\$|USD|INR)?\s*(\d+(\.\d+)?)/);
-      const amount = match ? parseFloat(match[1]) : 0;
+      // Enhanced regex to find amounts with or without currency symbols, and common currency codes
+      const amountMatch = line.match(/(?:₹|\$|€|£|USD|INR|EUR|GBP)?\s*(\d[\d,.]*\d|\d)/);
+      const amount = amountMatch ? parseFloat(amountMatch[1].replace(/,/g, '')) : 0;
       totalSpend += amount;
 
-      if (line.match(/coffee|swiggy|zomato|lunch|dinner|food|restaurant|cafe/i)) categories["Food & Drinks"] += amount;
-      else if (line.match(/bill|netflix|subscription|electricity|internet|rent/i)) categories["Bills & Utilities"] += amount;
-      else if (line.match(/uber|ola|taxi|bus|metro|fuel|flight/i)) categories["Transportation"] += amount;
-      else if (line.match(/shop|clothes|amazon|flipkart|purchase|store/i)) categories["Shopping"] += amount;
-      else if (line.match(/movie|tickets|concert|game|event/i)) categories["Entertainment"] += amount;
+      const lineLower = line.toLowerCase();
+
+      if (lineLower.match(/coffee|tea|swiggy|zomato|lunch|dinner|food|restaurant|cafe|grocer(y|ies)|snacks|juice/i)) categories["Food & Drinks"] += amount;
+      else if (lineLower.match(/bill|netflix|spotify|subscription|electricity|internet|rent|phone|utility|gas|water/i)) categories["Bills & Utilities"] += amount;
+      else if (lineLower.match(/uber|ola|taxi|bus|metro|fuel|flight|train|auto|parking|transport/i)) categories["Transportation"] += amount;
+      else if (lineLower.match(/shop|clothes|amazon|flipkart|purchase|store|gift|apparel|gadget|book/i)) categories["Shopping"] += amount;
+      else if (lineLower.match(/movie|tickets|concert|game|event|entertainment|party|hobby/i)) categories["Entertainment"] += amount;
       else categories["Miscellaneous"] += amount;
     });
     
     const categoryBreakdown = Object.entries(categories)
       .filter(([, amount]) => amount > 0)
-      .map(([category, amount]) => ({ category, amount }));
+      .map(([category, amount]) => ({ category, amount: parseFloat(amount.toFixed(2)) }));
 
-    let savingsTip = "Track your spending for a week to identify areas where you can cut back. Even small changes add up!";
-    if (categories["Food & Drinks"] > totalSpend * 0.4) {
-      savingsTip = "Your food expenses are a significant portion of your spending. Consider cooking more meals at home or looking for meal deals.";
-    } else if (categories["Shopping"] > totalSpend * 0.3) {
-      savingsTip = "Looks like there's some active shopping! Try the 30-day rule for non-essential purchases: if you still want it after 30 days, then consider buying it.";
+    let savingsTip = "Track your spending consistently to identify patterns. Small changes can lead to big savings over time!";
+    if (totalSpend === 0 && expenseLines.length > 0) {
+        savingsTip = "It seems I couldn't parse amounts from your entries. Please ensure they are like 'Item Name ₹100' or 'Item Name 100'.";
+    } else if (categories["Food & Drinks"] > totalSpend * 0.45) {
+      savingsTip = "Your food & drinks expenses are a significant portion of your spending. Consider setting a weekly budget for eating out or exploring meal prepping.";
+    } else if (categories["Shopping"] > totalSpend * 0.35) {
+      savingsTip = "Shopping seems to be a key spending area. Try the '30-day rule' for non-essential purchases: if you still want it after 30 days, then consider buying it.";
+    } else if (categories["Entertainment"] > totalSpend * 0.25) {
+      savingsTip = "Entertainment spending is noticeable. Look for free local events or subscription bundles to save.";
+    } else if (categories["Bills & Utilities"] > totalSpend * 0.5) {
+        savingsTip = "Bills and utilities make up a large part of your expenses. Review subscriptions and look for energy-saving opportunities.";
+    } else if (totalSpend > 0 && categoryBreakdown.length > 0) {
+        const highestCat = categoryBreakdown.sort((a,b) => b.amount - a.amount)[0];
+        if (highestCat) {
+            savingsTip = `Your highest spending category is "${highestCat.category}". Focusing on small reductions here could make a big impact!`;
+        }
     }
+
 
     return {
       categoryBreakdown,
-      totalSpend,
+      totalSpend: parseFloat(totalSpend.toFixed(2)),
       savingsTip,
     };
   }
 );
+
+    

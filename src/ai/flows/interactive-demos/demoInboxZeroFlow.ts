@@ -59,31 +59,59 @@ const demoInboxZeroFlow = ai.defineFlow(
     outputSchema: InboxZeroOutputSchema,
   },
   async (input) => {
-    // Simulate some processing delay
-    await new Promise(resolve => setTimeout(resolve, 700));
+    await new Promise(resolve => setTimeout(resolve, 700)); // Simulate delay
 
-    if (input.emailContent.toLowerCase().includes("urgent review needed")) {
-        return {
-            summary: "The email requests an urgent review of Project Phoenix financials and asks Sarah for marketing copy.",
-            category: "Important",
-            actionItems: [
-                "Review Project Phoenix financials for regional tax calculation errors by EOD.",
-                "Sarah to send finalized marketing copy for the newsletter by tomorrow morning."
-            ]
-        };
+    const content = input.emailContent.toLowerCase();
+    let summary = "The email provides a general update.";
+    let category: InboxZeroOutput["category"] = "FYI";
+    let actionItems: string[] = [];
+
+    if (content.includes("urgent") || content.includes("critical") || content.includes("important") || content.includes("deadline eod")) {
+      summary = "This email requires immediate attention due to urgent matters or deadlines mentioned.";
+      category = "Important";
+      actionItems.push("Address the urgent items mentioned in the email by EOD.");
+      if (content.includes("review needed")) {
+        actionItems.push("Review the document/item mentioned for urgent feedback.");
+      }
+       if (content.includes("meeting") || content.includes("schedule call")) {
+        actionItems.push("Respond to meeting/call request mentioned urgently.");
+      }
+    } else if (content.includes("meeting") || content.includes("schedule call") || content.includes("confirm availability")) {
+      summary = "This email pertains to scheduling or confirming a meeting/call.";
+      category = "Needs Action";
+      actionItems.push("Respond to the meeting/call coordination.");
+      if (content.includes("availability")) {
+        actionItems.push("Check your calendar and provide availability.");
+      }
+    } else if (content.includes("question") || content.includes("clarify") || content.includes("feedback")) {
+      summary = "The email asks a question or seeks clarification/feedback.";
+      category = "Needs Action";
+      actionItems.push("Provide a response to the query or feedback request.");
+    } else if (content.includes("newsletter") || content.includes("promotion") || content.includes("unsubscribe")) {
+      summary = "This appears to be a newsletter or promotional email.";
+      category = "Archive";
+      if (Math.random() > 0.7) category = "Spam"; // Occasionally mark as spam
+    } else if (content.length < 50 && content.includes("thanks")) {
+        summary = "This is a short thank you note or acknowledgement.";
+        category = "FYI";
     }
-     if (input.emailContent.toLowerCase().includes("meeting")) {
-        return {
-            summary: "The email is about scheduling a meeting.",
-            category: "Needs Action",
-            actionItems: ["Respond to meeting request", "Check calendar availability"]
-        };
+
+    if (actionItems.length === 0 && category === "FYI") {
+        actionItems.push("Review for any minor follow-up if necessary.");
     }
+    
+    // Ensure some action items for "Needs Action" if none specific found
+    if (category === "Needs Action" && actionItems.length === 0) {
+        actionItems.push("Determine specific action required and respond accordingly.");
+    }
+
 
     return {
-      summary: "This email seems to be a general update or query.",
-      category: "FYI",
-      actionItems: ["Review for any follow-up needed."]
+      summary,
+      category,
+      actionItems: actionItems.length > 0 ? actionItems.slice(0,3) : undefined,
     };
   }
 );
+
+    

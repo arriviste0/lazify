@@ -36,8 +36,8 @@ const promptTemplate = ai.definePrompt({
 {{tasks}}
 ---
 Analyze these tasks. For each task, assign a priority: "High", "Medium", or "Low".
-If a task mentions a deadline (e.g., "by Friday", "EOD"), it's likely "High".
-If a task seems routine (e.g., "buy groceries"), it might be "Medium" or "Low".
+If a task mentions a deadline (e.g., "by Friday", "EOD", "urgent"), it's likely "High".
+If a task seems routine (e.g., "buy groceries", "read news"), it might be "Medium" or "Low".
 Return a list of these tasks with their assigned priorities. Also provide a one-sentence summary or tip.
 
 Example Output:
@@ -65,28 +65,48 @@ const demoTaskMasterFlow = ai.defineFlow(
     const priorities: ("High" | "Medium" | "Low")[] = ["High", "Medium", "Low"];
     
     const prioritizedTasks = taskLines.map(task => {
-      let priority: "High" | "Medium" | "Low" = priorities[Math.floor(Math.random() * 3)];
-      if (task.match(/by\s+(friday|eod|tomorrow|monday|tuesday|wednesday|thursday)/i) || task.match(/deadline/i)) {
+      let priority: "High" | "Medium" | "Low";
+      const taskLower = task.toLowerCase();
+
+      if (taskLower.match(/by\s+(eod|end of day|today|tonight|friday|monday|tuesday|wednesday|thursday)/i) || taskLower.match(/deadline/i) || taskLower.match(/urgent/i) || taskLower.match(/asap/i)) {
         priority = "High";
-      } else if (task.match(/report|client|project|presentation|meeting/i)) {
+      } else if (taskLower.match(/report|client|project|presentation|meeting|call with|follow up|review/i)) {
         priority = "Medium";
-      } else if (task.match(/buy|groceries|call|book|find hotel/i)) {
-         priority = (Math.random() > 0.5) ? "Medium" : "Low";
+      } else if (taskLower.match(/buy|groceries|plan|research|read|clean|organize/i)) {
+         priority = (Math.random() > 0.6) ? "Medium" : "Low";
+      } else {
+        priority = priorities[Math.floor(Math.random() * 3)];
       }
       return { task, priority };
     });
 
-    // Simple sort: High > Medium > Low
     prioritizedTasks.sort((a, b) => {
         const pValue = (p: string) => (p === "High" ? 3 : p === "Medium" ? 2 : 1);
         return pValue(b.priority) - pValue(a.priority);
     });
     
     const highPriorityCount = prioritizedTasks.filter(t => t.priority === "High").length;
+    const mediumPriorityCount = prioritizedTasks.filter(t => t.priority === "Medium").length;
+    let summary = "";
+
+    if (highPriorityCount > 1) {
+        summary = `You have ${highPriorityCount} high priority tasks. Tackle these first!`;
+    } else if (highPriorityCount === 1) {
+        summary = `Focus on your high priority task: "${prioritizedTasks.find(t=>t.priority === "High")?.task}".`;
+    } else if (mediumPriorityCount > 0) {
+        summary = `Good job, no high priority tasks! Start with your ${mediumPriorityCount} medium priority items.`;
+    } else if (prioritizedTasks.length > 0) {
+        summary = "Looks like a manageable list. Pick one and get started!";
+    } else {
+        summary = "No tasks entered. Add some tasks to prioritize!";
+    }
+
 
     return {
       prioritizedTasks,
-      summary: highPriorityCount > 0 ? `You have ${highPriorityCount} high priority task(s) to focus on.` : "Tasks seem manageable. Start with the top ones!",
+      summary,
     };
   }
 );
+
+    

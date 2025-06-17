@@ -42,23 +42,23 @@ const prompt = ai.definePrompt({
 Based on this, generate:
 1.  A plausible lead name.
 2.  A plausible company name.
-3.  A lead score (0-100). If the query mentions "LinkedIn" or specific positive keywords like "AI", "New York", "Software", score higher. If vague, score lower.
+3.  A lead score (0-100). If the query mentions "LinkedIn" or specific positive keywords like "AI", "New York", "Software", "VP", "Director", "Founder", score higher. If vague, score lower.
 4.  Brief reasoning for the score.
 5.  A CRM preview object with status, contactEmail (fake but plausible), and notes.
 
 Return the output in the specified JSON format.
 Example:
-Input: "Software company specializing in AI based in New York with 50-200 employees"
+Input: "Software company specializing in AI based in New York with 50-200 employees, looking for VP of Marketing"
 Output:
 {
   "leadName": "Alex Chen",
   "companyName": "InnovateAI Solutions",
-  "leadScore": 85,
-  "scoreReasoning": "Specific industry (AI), location (New York), and company size indicate a strong potential match.",
+  "leadScore": 88,
+  "scoreReasoning": "Specific industry (AI), location (New York), company size, and role (VP) indicate a very strong potential match.",
   "crmPreview": {
     "status": "New",
     "contactEmail": "alex.chen@example.com",
-    "notes": "Interested in AI solutions, based in NY, 50-200 employees. From LeadSpark query."
+    "notes": "VP Marketing at InnovateAI Solutions (NY, AI, 50-200 employees). From LeadSpark query."
   }
 }
 `,
@@ -71,50 +71,62 @@ const demoLeadSparkFlow = ai.defineFlow(
     outputSchema: LeadSparkOutputSchema,
   },
   async (input) => {
-    // Simulate some processing delay
-    await new Promise(resolve => setTimeout(resolve, 700));
+    await new Promise(resolve => setTimeout(resolve, 700)); // Simulate delay
 
-    let score = 50;
-    let reasoning = "General query, moderate potential.";
+    const query = input.leadQuery.toLowerCase();
+    let score = 30 + Math.floor(Math.random() * 20); // Base score for vague query
+    let reasoning = "General query, moderate potential. Further details would improve scoring.";
     let leadName = "Jane Doe";
-    let companyName = "Generic Corp";
-    let contactEmail = "jane.doe@example.com";
-    let notes = "Lead generated from demo query.";
+    let companyName = "Generic Corp Ltd.";
+    let contactEmail = `jane.d@${companyName.replace(" Ltd.", "").toLowerCase().replace(/\s+/g, '')}.com`;
+    let notes = `Lead generated from demo query: '${input.leadQuery.substring(0,50)}...'`;
+    let status: LeadSparkOutput["crmPreview"]["status"] = "New";
 
-    if (input.leadQuery.toLowerCase().includes("linkedin.com/in/")) {
-      score = 85;
-      reasoning = "Direct LinkedIn profile provided, high potential for data extraction.";
-      leadName = input.leadQuery.split("/in/")[1].split("/")[0].replace("-"," ").replace(/\b\w/g, l => l.toUpperCase()); // Extract name from URL
-      companyName = `${leadName.split(" ")[0]} Industries`;
-      contactEmail = `${leadName.split(" ")[0].toLowerCase()}@${companyName.replace(" Industries", "").toLowerCase()}.com`;
+    if (query.includes("linkedin.com/in/")) {
+      score = 70 + Math.floor(Math.random() * 15);
+      reasoning = "Direct LinkedIn profile provided, high potential for data extraction and qualification.";
+      const profileName = query.split("/in/")[1]?.split("/")[0]?.replace(/-/g, " ") || "LinkedIn User";
+      leadName = profileName.replace(/\b\w/g, l => l.toUpperCase());
+      companyName = `${leadName.split(" ")[0]} Global Solutions`;
+      contactEmail = `${leadName.split(" ")[0].toLowerCase()}@${companyName.replace(" Global Solutions", "").toLowerCase()}.com`;
       notes = `Lead from LinkedIn profile: ${input.leadQuery}`;
-    } else if (input.leadQuery.toLowerCase().includes("ai") && input.leadQuery.toLowerCase().includes("new york")) {
-      score = 90;
-      reasoning = "Specific industry (AI) and location (New York) match target criteria.";
-      leadName = "Dr. Eva Rostova";
-      companyName = "NY AI Dynamics";
-      contactEmail = "eva.r@nyai.dev";
-      notes = "Strong match for AI solutions in NY.";
-    } else if (input.leadQuery.toLowerCase().includes("software")) {
-      score = 70;
-      reasoning = "Industry (Software) specified, good potential.";
-      leadName = "Mark Olsen";
-      companyName = "CodeCrafters Inc.";
-      contactEmail = "mark.olsen@codecrafters.io";
-      notes = "Software company, needs further qualification.";
+      status = Math.random() > 0.6 ? "Qualified" : "New";
+    } else {
+        if (query.includes("ai") || query.includes("artificial intelligence")) { score += 15; reasoning += " AI focus increases relevance.";}
+        if (query.includes("new york")|| query.includes("nyc") || query.includes("london") || query.includes("sf") || query.includes("san francisco")) { score += 10; reasoning += " Prime location noted.";}
+        if (query.includes("software") || query.includes("tech") || query.includes("saas")) { score += 10; reasoning += " Tech industry match.";}
+        if (query.includes("vp") || query.includes("director") || query.includes("manager")|| query.includes("founder") || query.includes("ceo")) { score += 15; reasoning += " Senior role specified.";}
+        if (query.includes("startup")) { score += 5; reasoning += " Startup context."; }
+        if (query.includes("enterprise")) { score += 8; reasoning += " Enterprise context."; }
+        
+        if (score > 85) {
+            leadName = "Dr. Eva Rostova"; companyName = "QuantumLeap AI"; contactEmail = "eva.r@quantumleap.ai";
+            notes = "High-potential lead matching multiple specific criteria from query.";
+            status = "Qualified";
+        } else if (score > 65) {
+            leadName = "Mark Olsen"; companyName = "CodeCrafters Solutions"; contactEmail = "mark.o@codecrafters.io";
+            notes = "Good match for software solutions. Query: " + input.leadQuery.substring(0,50);
+            status = "Nurturing";
+        } else if (score > 45) {
+            leadName = "Sarah Woods"; companyName = "Innovatech Systems"; contactEmail = "s.woods@innovatech.sys";
+            notes = "Moderate potential based on query: " + input.leadQuery.substring(0,50);
+            status = "Contacted";
+        }
     }
-
+    score = Math.min(100, Math.max(0, score)); // Clamp score
 
     return {
-      leadName: leadName,
-      companyName: companyName,
+      leadName,
+      companyName,
       leadScore: score,
-      scoreReasoning: reasoning,
+      scoreReasoning: reasoning.trim(),
       crmPreview: {
-        status: "New",
-        contactEmail: contactEmail,
-        notes: notes,
+        status,
+        contactEmail,
+        notes,
       },
     };
   }
 );
+
+    

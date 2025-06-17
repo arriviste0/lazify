@@ -54,7 +54,6 @@ import HeroBackground from '@/components/hero-background';
 import AiWorkflowVisualization from '@/components/ai-workflow-visualization';
 import type { InteractiveAgentInfo } from '@/types/agent';
 import InteractiveAgentSlider from '@/components/interactive-agents/InteractiveAgentSlider';
-import AgentDemoModal from '@/components/interactive-agents/AgentDemoModal';
 
 
 const fadeInUp = {
@@ -165,15 +164,6 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState('home');
   const [isClient, setIsClient] = useState(false);
   const isMobile = useIsMobile();
-
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-  const [selectedAgentForDemo, setSelectedAgentForDemo] = useState<InteractiveAgentInfo | null>(null);
-
-  const handleTryDemo = (agent: InteractiveAgentInfo) => {
-    setSelectedAgentForDemo(agent);
-    setIsDemoModalOpen(true);
-  };
-
 
   const sectionRefs = {
     home: useRef(null),
@@ -499,10 +489,10 @@ export default function Home() {
                 Meet Your AI Workforce
               </h2>
               <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                Explore our specialized AI agents, ready to transform how you work. Drag to discover and try a live demo.
+                Explore our specialized AI agents, ready to transform how you work. Drag to discover and try a live demo on its dedicated page.
               </p>
             </motion.div>
-            <InteractiveAgentSlider agents={interactiveAgentsData} onTryDemo={handleTryDemo} />
+            <InteractiveAgentSlider agents={interactiveAgentsData} />
           </div>
         </motion.section>
 
@@ -756,12 +746,8 @@ export default function Home() {
           </div>
         </div>
       </motion.footer>
-      
-      <AgentDemoModal
-        isOpen={isDemoModalOpen}
-        onClose={() => setIsDemoModalOpen(false)}
-        agent={selectedAgentForDemo}
-      />
     </div>
   );
 }
+
+    

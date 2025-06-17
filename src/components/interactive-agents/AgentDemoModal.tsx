@@ -1,87 +1,10 @@
+// Add imports for new Lazify AI flows here when created.
+import '@/ai/flows/interactive-demos/demoInboxZeroFlow.ts';
+import '@/ai/flows/interactive-demos/demoLeadSparkFlow.ts';
+import '@/ai/flows/interactive-demos/demoContentCraftFlow.ts';
+import '@/ai/flows/interactive-demos/demoScheduleSyncFlow.ts';
+import '@/ai/flows/interactive-demos/demoTaskMasterFlow.ts';
+import '@/ai/flows/interactive-demos/demoFinanceTrackerFlow.ts';
+import '@/ai/flows/interactive-demos/demoShopSmartFlow.ts';
 
-"use client";
-
-import React from "react";
-import Link from "next/link";
-import type { InteractiveAgentInfo } from "@/types/agent";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-
-// Demo Component Imports
-import InboxZeroDemo from "./demos/InboxZeroDemo";
-import LeadSparkDemo from "./demos/LeadSparkDemo";
-import ContentCraftDemo from "./demos/ContentCraftDemo";
-import ScheduleSyncDemo from "./demos/ScheduleSyncDemo";
-import TaskMasterDemo from "./demos/TaskMasterDemo";
-import FinanceTrackerDemo from "./demos/FinanceTrackerDemo";
-import ShopSmartDemo from "./demos/ShopSmartDemo";
-
-interface AgentDemoModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  agent: InteractiveAgentInfo | null;
-}
-
-const AgentDemoModal: React.FC<AgentDemoModalProps> = ({ isOpen, onClose, agent }) => {
-  if (!agent) return null;
-
-  const renderDemoContent = () => {
-    switch (agent.demoType) {
-      case "inboxZero":
-        return <InboxZeroDemo agent={agent} />;
-      case "leadSpark":
-        return <LeadSparkDemo agent={agent} />;
-      case "contentCraft":
-        return <ContentCraftDemo agent={agent} />;
-      case "scheduleSync":
-        return <ScheduleSyncDemo agent={agent} />;
-      case "taskMaster":
-        return <TaskMasterDemo agent={agent} />;
-      case "financeTracker":
-        return <FinanceTrackerDemo agent={agent} />;
-      case "shopSmart":
-        return <ShopSmartDemo agent={agent} />;
-      default:
-        return <p>No demo available for this agent yet.</p>;
-    }
-  };
-
-  const handleFooterButtonClick = () => {
-    onClose();
-    // Navigation to #contact is handled by the Link component
-  };
-
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] bg-amber-50/90 backdrop-blur-lg text-neutral-800 border border-amber-200/50 shadow-2xl max-h-[90vh] flex flex-col rounded-xl">
-        <DialogHeader className="text-left pb-4 border-b border-amber-300/50">
-          <DialogTitle className="text-2xl font-bold text-neutral-900">
-            <span className="mr-3 text-3xl">{agent.iconEmoji}</span>
-            {agent.name} - Demo
-          </DialogTitle>
-          {agent.longDescription && (
-            <DialogDescription className="text-sm text-neutral-600 pt-1">
-              {agent.longDescription}
-            </DialogDescription>
-          )}
-        </DialogHeader>
-        
-        <div className="py-6 overflow-y-auto flex-grow">
-          {renderDemoContent()}
-        </div>
-
-        <DialogFooter className="pt-6 border-t border-amber-300/50 sm:justify-start gap-3 flex-col sm:flex-row">
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary/10 hover:text-primary" asChild>
-            <Link href="#contact" onClick={handleFooterButtonClick}>Request Custom Agent</Link>
-          </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
-             <Link href="#contact" onClick={handleFooterButtonClick}>Book a Free Demo Call</Link>
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-export default AgentDemoModal;
+// Old demo flows have been removed as part of the refactor to dedicated agent pages.

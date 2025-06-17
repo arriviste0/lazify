@@ -50,15 +50,24 @@ const demoContentCraftFlow = ai.defineFlow(
   async (input) => {
     await new Promise(resolve => setTimeout(resolve, 700)); // Simulate delay
 
-    let content = `This is a sample ${input.contentType} about "${input.prompt.substring(0, 50)}...". `;
+    let content = `This is a sample ${input.contentType} about "${input.prompt.substring(0, Math.min(50, input.prompt.length))}...". `;
+    const randomSeed = Math.random();
+
     if (input.contentType === "blogPost") {
-      content += "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
+      content += `\n\nParagraph 1 for ${input.contentType}: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`;
+      if (randomSeed > 0.5) {
+        content += `\n\nParagraph 2 for ${input.contentType}: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
+      }
     } else if (input.contentType === "socialMediaCaption") {
-      content += "Engage your audience with this captivating piece! #AI #ContentCreation #Demo";
+      content += `Engage your audience with this captivating ${input.contentType}! #AI #ContentCreation #${input.prompt.split(" ")[0] || "Demo"}`;
+      if (randomSeed > 0.3) content += ` ✨ Check it out!`;
+      if (randomSeed > 0.6) content += ` Follow us for more!`;
     } else if (input.contentType === "productDescription") {
-      content += "This amazing product will solve all your needs. It's innovative, stylish, and built to last. Get yours today!";
+      content += `This amazing product for "${input.prompt.substring(0, Math.min(30, input.prompt.length))}" will solve all your needs. It's innovative, stylish, and built to last. Get yours today!`;
+      if (randomSeed > 0.5) content += ` Features include X, Y, and Z.`;
     } else { // emailDraft
-        content += "Hope this email finds you well. I'm writing to discuss... Let me know your thoughts. Best regards.";
+        content += `\n\nHope this email finds you well.\n\nI'm writing to discuss ${input.prompt.substring(0, Math.min(40, input.prompt.length))}. We should explore options A and B. \n\nLet me know your thoughts.\n\nBest regards,\n[Your Name]`;
+        if (randomSeed > 0.5) content = content.replace("options A and B", "the key points we talked about earlier");
     }
 
     return {
@@ -67,3 +76,5 @@ const demoContentCraftFlow = ai.defineFlow(
     };
   }
 );
+
+    

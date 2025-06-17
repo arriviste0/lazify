@@ -49,13 +49,33 @@ Also, provide a short, helpful Q&A style tip or common question answer related t
 Example for "running shoes", age "youngAdult", gender "male":
 {
   "recommendations": [
-    { "id": "rs001", "name": "SpeedStride X1 Runners", "price": 4999, "imageUrl": "https://placehold.co/300x200.png?text=SpeedStride+X1" },
-    { "id": "rs002", "name": "TrailBlaze Pro All-Terrain", "price": 6499, "imageUrl": "https://placehold.co/300x200.png?text=TrailBlaze+Pro" }
+    { "id": "rs001", "name": "SpeedStride X1 Runners", "price": 4999, "imageUrl": "https://placehold.co/300x200.png?text=SpeedStride+X1", "dataAiHint": "running shoe" },
+    { "id": "rs002", "name": "TrailBlaze Pro All-Terrain", "price": 6499, "imageUrl": "https://placehold.co/300x200.png?text=TrailBlaze+Pro", "dataAiHint": "trail shoe" }
   ],
   "qnaResponse": "Q: What's the best type of running shoe for beginners? A: Look for good cushioning and a neutral support shoe if you're just starting out!"
 }
 `,
 });
+
+const allProducts = [
+    { id: "shoe1", name: "UrbanStride Daily Walker", price: 3499, hint: "modern sneaker side view", tags: ["shoe", "casual", "unisex", "adult", "youngAdult"] },
+    { id: "shoe2", name: "FlexRun Performance Trainer", price: 5299, hint: "sporty running shoe colorful", tags: ["shoe", "sport", "running", "unisex", "youngAdult", "adult"] },
+    { id: "shoe3", name: "Classic Comfort Loafer", price: 2999, hint: "leather loafer casual", tags: ["shoe", "formal", "casual", "male", "adult", "senior"] },
+    { id: "shoe4", name: "SparkleStep Kids Sneakers", price: 1899, hint: "kids sneaker bright colors", tags: ["shoe", "kids", "teen", "unisex"] },
+    { id: "dress1", name: "Floral Summer Midi Dress", price: 2899, hint: "summer dress floral pattern", tags: ["dress", "summer", "female", "youngAdult", "adult"] },
+    { id: "dress2", name: "Elegant Evening Gown", price: 7999, hint: "elegant gown silk", tags: ["dress", "evening", "formal", "female", "adult"] },
+    { id: "dress3", name: "Casual Knit Maxi Dress", price: 3200, hint: "knit dress comfortable", tags: ["dress", "casual", "female", "youngAdult", "adult"] },
+    { id: "dress4", name: "Teen Party Sequins Dress", price: 2500, hint: "teen dress party sequins", tags: ["dress", "party", "female", "teen"] },
+    { id: "lap1", name: "UltraBook Pro X15", price: 89990, hint: "sleek laptop silver", tags: ["laptop", "professional", "unisex", "adult", "youngAdult"] },
+    { id: "lap2", name: "DevWorkstation Z9", price: 125000, hint: "powerful laptop workstation", tags: ["laptop", "developer", "unisex", "adult"] },
+    { id: "lap3", name: "TravelLite Compact 13", price: 65000, hint: "compact laptop lightweight", tags: ["laptop", "travel", "unisex", "youngAdult", "adult"] },
+    { id: "lap4", name: "Gamer Rig Titan X", price: 150000, hint: "gaming laptop RGB lights", tags: ["laptop", "gaming", "unisex", "teen", "youngAdult"] },
+    { id: "gen1", name: "Versatile Smart Gadget", price: 1999, hint: "modern tech gadget", tags: ["gadget", "smart", "unisex", "any"] },
+    { id: "gen2", name: "Premium Lifestyle Accessory", price: 3499, hint: "stylish accessory", tags: ["accessory", "lifestyle", "unisex", "any"] },
+    { id: "book1", name: "Mystery of the Old Manor", price: 499, hint: "mystery book cover", tags: ["book", "mystery", "any", "teen", "adult"] },
+    { id: "book2", name: "Sci-Fi Adventures in Space", price: 650, hint: "sci-fi book spaceship", tags: ["book", "sci-fi", "any", "youngAdult", "adult"] },
+];
+
 
 const demoShopSmartFlow = ai.defineFlow(
   {
@@ -66,46 +86,52 @@ const demoShopSmartFlow = ai.defineFlow(
   async (input) => {
     await new Promise(resolve => setTimeout(resolve, 700)); // Simulate delay
 
-    const recommendations: ProductRecommendation[] = [];
-    const interest = input.productInterest.toLowerCase();
+    const interestLower = input.productInterest.toLowerCase();
+    let filteredProducts = allProducts.filter(p => {
+        const nameMatch = p.name.toLowerCase().includes(interestLower);
+        const tagMatch = p.tags.some(tag => interestLower.includes(tag) || tag.includes(interestLower));
+        const genderMatch = input.gender === "any" || p.tags.includes(input.gender || "any");
+        const ageMatch = input.ageGroup === "any" || p.tags.includes(input.ageGroup || "any");
+        return (nameMatch || tagMatch) && genderMatch && ageMatch;
+    });
 
-    if (interest.includes("shoe") || interest.includes("runner") || interest.includes("sneaker")) {
-      recommendations.push(
-        { id: "shoe1", name: "UrbanStride Daily Walker", price: 3499, imageUrl: `https://placehold.co/300x200.png?text=UrbanStride`, dataAiHint: "modern sneaker side view" },
-        { id: "shoe2", name: "FlexRun Performance Trainer", price: 5299, imageUrl: `https://placehold.co/300x200.png?text=FlexRun`, dataAiHint: "sporty running shoe colorful" },
-        { id: "shoe3", name: "Classic Comfort Loafer", price: 2999, imageUrl: `https://placehold.co/300x200.png?text=Comfort+Loafer`, dataAiHint: "leather loafer casual" }
-      );
-    } else if (interest.includes("dress") || interest.includes("gown")) {
-      recommendations.push(
-        { id: "dress1", name: "Floral Summer Midi Dress", price: 2899, imageUrl: `https://placehold.co/300x200.png?text=Floral+Midi`, dataAiHint: "summer dress floral pattern" },
-        { id: "dress2", name: "Elegant Evening Gown", price: 7999, imageUrl: `https://placehold.co/300x200.png?text=Evening+Gown`, dataAiHint: "elegant gown silk" },
-        { id: "dress3", name: "Casual Knit Maxi Dress", price: 3200, imageUrl: `https://placehold.co/300x200.png?text=Knit+Maxi`, dataAiHint: "knit dress comfortable" }
-      );
-    } else if (interest.includes("laptop") || interest.includes("notebook") || interest.includes("computer")) {
-      recommendations.push(
-        { id: "lap1", name: "UltraBook Pro X15", price: 89990, imageUrl: `https://placehold.co/300x200.png?text=UltraBook+Pro`, dataAiHint: "sleek laptop silver" },
-        { id: "lap2", name: "DevWorkstation Z9", price: 125000, imageUrl: `https://placehold.co/300x200.png?text=DevWorkstation`, dataAiHint: "powerful laptop workstation" },
-        { id: "lap3", name: "TravelLite Compact 13", price: 65000, imageUrl: `https://placehold.co/300x200.png?text=TravelLite+13`, dataAiHint: "compact laptop lightweight" }
-      );
-    } else {
-         recommendations.push(
-            { id: "gen1", name: "Versatile Smart Gadget", price: 1999, imageUrl: `https://placehold.co/300x200.png?text=Smart+Gadget`, dataAiHint: "modern tech gadget" },
-            { id: "gen2", name: "Premium Lifestyle Accessory", price: 3499, imageUrl: `https://placehold.co/300x200.png?text=Lifestyle+Accessory`, dataAiHint: "stylish accessory" }
-         );
+    if (filteredProducts.length === 0) { // Fallback if no specific matches
+        filteredProducts = allProducts.filter(p => {
+            const genderMatch = input.gender === "any" || p.tags.includes(input.gender || "any");
+            const ageMatch = input.ageGroup === "any" || p.tags.includes(input.ageGroup || "any");
+            return genderMatch && ageMatch;
+        });
     }
+     if (filteredProducts.length === 0) { // Wider fallback
+        filteredProducts = allProducts.filter(p => p.tags.includes("any"));
+    }
+
+
+    // Shuffle and pick 2 or 3
+    const recommendations = filteredProducts.sort(() => 0.5 - Math.random()).slice(0, Math.random() > 0.4 ? 3 : 2);
+    const finalRecs = recommendations.map(p => ({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        imageUrl: `https://placehold.co/300x200.png?text=${encodeURIComponent(p.name.split(" ").slice(0,2).join("+"))}`,
+        dataAiHint: p.hint,
+    }));
     
-    // Filter recommendations based on gender if applicable (very basic)
-    if (input.gender === "male") {
-        // Placeholder: In a real scenario, filter by male-specific products or tags
-    } else if (input.gender === "female") {
-        // Placeholder: Filter by female-specific products
+    let qnaResponse = `Q: What should I look for when buying ${input.productInterest}? A: Always check reviews for ${input.productInterest}, compare features against your needs, and ensure it fits your budget! Consider warranty options too.`;
+    if (interestLower.includes("shoe")) {
+        qnaResponse = "Q: How do I find the right shoe size online? A: Check the brand's sizing chart and measure your foot. Reading customer reviews about fit can also be very helpful!";
+    } else if (interestLower.includes("laptop")) {
+        qnaResponse = "Q: What's more important for a laptop, RAM or Processor? A: It depends on your use! For multitasking and heavy apps, more RAM is crucial. For speed and processing power, a better CPU matters. Balance both for general use.";
+    } else if (interestLower.includes("dress")) {
+        qnaResponse = "Q: How can I choose a dress that flatters my body type? A: A-line dresses are versatile for many shapes. Empire waists can be great for pear shapes, while wrap dresses often suit hourglass figures. Experiment to see what you feel best in!";
     }
 
-    const qnaResponse = `Q: What should I consider when buying ${input.productInterest}? A: Always check reviews, compare features, and ensure it fits your specific needs and budget!`;
 
     return {
-      recommendations: recommendations.slice(0, Math.random() > 0.5 ? 2:3), // Show 2 or 3
+      recommendations: finalRecs,
       qnaResponse,
     };
   }
 );
+
+    

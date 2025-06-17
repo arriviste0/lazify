@@ -11,13 +11,12 @@ import { cn } from "@/lib/utils";
 
 interface InteractiveAgentSliderProps {
   agents: InteractiveAgentInfo[];
-  onTryDemo: (agent: InteractiveAgentInfo) => void;
 }
 
 const CARD_WIDTH = 288; // 72 * 4 (w-72 in tailwind)
 const CARD_GAP = 16; // space-x-4
 
-const InteractiveAgentSlider: React.FC<InteractiveAgentSliderProps> = ({ agents, onTryDemo }) => {
+const InteractiveAgentSlider: React.FC<InteractiveAgentSliderProps> = ({ agents }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -32,21 +31,6 @@ const InteractiveAgentSlider: React.FC<InteractiveAgentSliderProps> = ({ agents,
     containerRef.current.scrollTo({ left: scrollAmount, behavior: "smooth" });
     setCurrentIndex(newIndex);
   };
-
-  // Auto-scroll attempt (can be tricky with manual drag)
-  // useEffect(() => {
-  //   if (agents.length <= 1) return;
-  //   const interval = setInterval(() => {
-  //     handleScroll("next");
-  //     if (currentIndex === agents.length - 1) {
-  //        // This logic needs refinement to loop back smoothly or stop
-  //       if (containerRef.current) containerRef.current.scrollTo({ left: 0, behavior: 'smooth'});
-  //       setCurrentIndex(0);
-  //     }
-  //   }, 5000); // Auto-scroll every 5 seconds
-  //   return () => clearInterval(interval);
-  // }, [currentIndex, agents.length]);
-
 
   return (
     <div className="relative w-full">
@@ -72,7 +56,7 @@ const InteractiveAgentSlider: React.FC<InteractiveAgentSliderProps> = ({ agents,
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <AgentCard agent={agent} onTryDemo={() => onTryDemo(agent)} />
+              <AgentCard agent={agent} />
             </motion.div>
           ))}
         </AnimatePresence>
@@ -125,3 +109,5 @@ const InteractiveAgentSlider: React.FC<InteractiveAgentSliderProps> = ({ agents,
 };
 
 export default InteractiveAgentSlider;
+
+    

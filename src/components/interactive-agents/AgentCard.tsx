@@ -2,16 +2,16 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import type { InteractiveAgentInfo } from "@/types/agent";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
 interface AgentCardProps {
   agent: InteractiveAgentInfo;
-  onTryDemo: () => void;
 }
 
-const AgentCard: React.FC<AgentCardProps> = ({ agent, onTryDemo }) => {
+const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
   return (
     <motion.div 
       className="relative rounded-xl p-6 flex flex-col items-center text-center h-[380px] bg-card/70 backdrop-blur-md border border-border/50 shadow-xl overflow-hidden"
@@ -22,14 +22,16 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onTryDemo }) => {
       <h3 className="text-xl font-semibold mb-2 text-foreground">{agent.name}</h3>
       <p className="text-sm text-muted-foreground mb-6 flex-grow line-clamp-3">{agent.description}</p>
       <Button 
-        onClick={onTryDemo} 
+        asChild
         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
         size="lg"
       >
-        Try Demo
+        <Link href={`/interactive-agents/${agent.id}`}>Try Demo</Link>
       </Button>
     </motion.div>
   );
 };
 
 export default AgentCard;
+
+    

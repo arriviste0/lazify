@@ -55,16 +55,30 @@ const demoScheduleSyncFlow = ai.defineFlow(
     await new Promise(resolve => setTimeout(resolve, 700)); // Simulate delay
     
     const dayOptions = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-    const timeOptions = ["10:00 AM", "2:30 PM", "4:00 PM", "11:30 AM"];
+    const timeOptions = ["10:00 AM", "2:30 PM", "4:00 PM", "11:30 AM", "3:15 PM", "9:30 AM"];
     
-    const randomDay = input.preferredDays.includes("Mon") ? "Monday" : dayOptions[Math.floor(Math.random() * dayOptions.length)];
-    const randomTime = input.preferredTime || timeOptions[Math.floor(Math.random() * timeOptions.length)];
+    let randomDay = dayOptions[Math.floor(Math.random() * dayOptions.length)];
+    if (input.preferredDays.toLowerCase().includes("mon")) randomDay = "Monday";
+    else if (input.preferredDays.toLowerCase().includes("tue")) randomDay = "Tuesday";
+    else if (input.preferredDays.toLowerCase().includes("wed")) randomDay = "Wednesday";
+    else if (input.preferredDays.toLowerCase().includes("thu")) randomDay = "Thursday";
+    else if (input.preferredDays.toLowerCase().includes("fri")) randomDay = "Friday";
+    else if (input.preferredDays.toLowerCase().includes("weekend")) randomDay = Math.random() > 0.5 ? "Saturday" : "Sunday";
+
+
+    let randomTime = timeOptions[Math.floor(Math.random() * timeOptions.length)];
+    if (input.preferredTime?.toLowerCase().includes("morning")) randomTime = Math.random() > 0.5 ? "10:00 AM" : "11:30 AM";
+    else if (input.preferredTime?.toLowerCase().includes("afternoon")) randomTime = Math.random() > 0.5 ? "2:30 PM" : "3:45 PM";
+    else if (input.preferredTime?.toLowerCase().includes("evening")) randomTime = Math.random() > 0.5 ? "5:00 PM" : "6:30 PM";
     
     const suggestedSlot = `Next ${randomDay} at ${randomTime}`;
+    const attendeeList = input.attendeeEmails.split(',').map(e => e.trim()).filter(e => e).join(', ');
     
     return {
       suggestedSlot: suggestedSlot,
-      confirmationMessage: `Got it! I've found a spot for your meeting "${input.meetingTopic}" with ${input.attendeeEmails}. How does ${suggestedSlot} sound? Once confirmed, invites will be sent.`,
+      confirmationMessage: `Got it! I've found a spot for your meeting "${input.meetingTopic}" with ${attendeeList || 'your attendees'}. How does ${suggestedSlot} sound? Once confirmed, invites will be sent.`,
     };
   }
 );
+
+    
