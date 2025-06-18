@@ -101,7 +101,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-blue-500', // Used for accents
     longDescription: 'Automatically categorizes emails, drafts replies for common queries, and keeps your inbox clutter-free so you can focus on what matters.',
     features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering'],
-    slideImageUrl: 'https://placehold.co/600x800/007bff/ffffff.png?text=InboxZero',
+    slideImageUrl: 'https://placehold.co/600x800.png',
     slideImageHint: 'email inbox organization tech',
   },
   {
@@ -113,7 +113,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-amber-500',
     longDescription: 'Gathers lead information from LinkedIn, web forms, or email, qualifies them based on your criteria, and syncs with your CRM or Sheets.',
     features: ['LinkedIn Scraping (Demo)', 'Web Form Integration', 'Lead Scoring', 'CRM/Sheet Sync'],
-    slideImageUrl: 'https://placehold.co/600x800/ffc107/333333.png?text=LeadSpark',
+    slideImageUrl: 'https://placehold.co/600x800.png',
     slideImageHint: 'lead generation magnet business',
   },
   {
@@ -125,7 +125,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-rose-500',
     longDescription: 'Provide a prompt and let our AI generate various forms of content, from engaging blog posts to catchy social media captions or detailed product descriptions.',
     features: ['Blog Posts', 'Social Media Captions', 'Product Descriptions', 'Notion/CMS Export (Demo)'],
-    slideImageUrl: 'https://placehold.co/600x800/e83e8c/ffffff.png?text=ContentCraft',
+    slideImageUrl: 'https://placehold.co/600x800.png',
     slideImageHint: 'ai writing content creation creative',
   },
   {
@@ -137,7 +137,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-purple-600', // Adjusted for better contrast if needed
     longDescription: 'Connects to your Google Calendar, finds optimal meeting slots based on preferences, blocks time automatically, and sends timely reminders.',
     features: ['Google Calendar Sync', 'AI Slot Finding', 'Auto Time-Blocking', 'Email/Slack Reminders'],
-    slideImageUrl: 'https://placehold.co/600x800/6f42c1/ffffff.png?text=ScheduleSync',
+    slideImageUrl: 'https://placehold.co/600x800.png',
     slideImageHint: 'calendar scheduling automation productivity',
   },
   {
@@ -149,7 +149,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-green-500',
     longDescription: 'Integrates with Todoist or Notion to manage your tasks, uses AI to prioritize them, and sends daily summaries or deadline nudges.',
     features: ['Todoist/Notion Integration', 'AI Prioritization', 'Deadline Nudges', 'Daily Summaries'],
-    slideImageUrl: 'https://placehold.co/600x800/28a745/ffffff.png?text=TaskMaster',
+    slideImageUrl: 'https://placehold.co/600x800.png',
     slideImageHint: 'task management checklist efficiency',
   },
   {
@@ -161,7 +161,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-teal-500',
     longDescription: 'Ingests expense data (manually or via webhooks), auto-categorizes transactions (Food, Bills, Travel), and provides visual breakdowns with savings tips.',
     features: ['Webhook/Manual Entry', 'Auto-Categorization', 'Spend Breakdown Charts', 'Savings Recommendations'],
-    slideImageUrl: 'https://placehold.co/600x800/20c997/333333.png?text=FinanceTracker',
+    slideImageUrl: 'https://placehold.co/600x800.png',
     slideImageHint: 'finance budget tracking money',
   },
   {
@@ -173,7 +173,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-pink-500',
     longDescription: 'Integrates with your product catalog, offers personalized recommendations, answers customer FAQs using GPT, and analyzes checkout funnel data.',
     features: ['Product API/CSV Sync', 'GPT-based Q&A', 'Personalized Recommendations', 'Funnel Analytics (Demo)'],
-    slideImageUrl: 'https://placehold.co/600x800/d63384/ffffff.png?text=ShopSmart',
+    slideImageUrl: 'https://placehold.co/600x800.png',
     slideImageHint: 'ecommerce shopping assistant retail',
   },
 ];
@@ -460,7 +460,7 @@ export default function Home() {
         <motion.section
           id="services"
           ref={sectionRefs.services}
-          className="w-full section-padding bg-secondary/20"
+          className="w-full section-padding bg-secondary/20 services-cards-section"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
@@ -476,19 +476,20 @@ export default function Home() {
               </p>
             </motion.div>
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+              className="cards-sticky-container" // Changed from grid to sticky container
               variants={staggerContainer}
             >
               {services.map((service, index) => (
-                <motion.div key={index} variants={fadeInUp}>
-                  <ServiceCard
-                    title={service.title}
-                    description={service.description}
-                    icon={service.icon}
-                    imageHint={service.imageHint}
-                    gradientColors={service.color}
-                  />
-                </motion.div>
+                <ServiceCard
+                  key={index}
+                  title={service.title}
+                  description={service.description}
+                  icon={service.icon}
+                  imageHint={service.imageHint}
+                  gradientColors={service.color}
+                  index={index}
+                  totalCards={services.length}
+                />
               ))}
             </motion.div>
           </div>

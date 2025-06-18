@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,14 +50,14 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 262.1 83.3% 57.8%;
 
-    --carousel-section-bg: 240 8% 6%; /* Darker than card, slightly purple tint if primary is purple */
+    --carousel-section-bg: 240 8% 6%;
   }
 
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
-    --card: 240 10% 6.9%; /* Slightly lighter card for dark mode */
+    --card: 240 10% 6.9%; 
     --card-foreground: 0 0% 98%;
 
     --popover: 240 10% 3.9%;
@@ -71,17 +72,17 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 0 0% 62.9%;
 
-    --accent: 300 76% 52%; /* Keep accent vivid */
+    --accent: 300 76% 52%; 
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 72.2% 50.6%; /* More vivid destructive for dark mode */
+    --destructive: 0 72.2% 50.6%; 
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 20.9%; /* Slightly lighter border for dark mode */
+    --border: 240 3.7% 20.9%; 
     --input: 240 3.7% 15.9%;
     --ring: 262.1 83.3% 57.8%;
 
-    --carousel-section-bg: 240 8% 6%; /* Darker, subtly distinct from main bg */
+    --carousel-section-bg: 240 8% 6%;
   }
 }
 
@@ -91,19 +92,18 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: system-ui, sans-serif;
-    /* Font smoothing */
+    font-family: system-ui, sans-serif; /* Fallback font */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
-    font-family: system-ui, sans-serif;
+    font-family: system-ui, sans-serif; /* Fallback font */
   }
 
   code, pre, kbd, samp {
-    font-family: monospace;
+    font-family: monospace; /* Fallback font */
   }
 
   /* Custom scrollbar styling (subtle) */
@@ -127,14 +127,13 @@
   }
   .cta-button {
     @apply bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-primary-foreground font-semibold shadow-lg hover:shadow-primary/40 transition-all duration-300 transform hover:scale-105;
-    /* Adjust gradient colors as needed */
   }
    .outline-button-glow {
     @apply border-primary/50 text-primary hover:bg-primary/10 hover:shadow-[0_0_15px_5px_theme(colors.primary/0.2)] transition-all duration-300;
   }
   .gradient-text-animated {
     @apply bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient-flow;
-    background-size: 200% 200%; /* For animation */
+    background-size: 200% 200%; 
   }
   .animated-background-subtle {
     @apply bg-gradient-to-br from-background via-purple-950/10 to-background;
@@ -148,12 +147,95 @@
     display: none;
   }
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
   }
 }
 
-/* Scroll progress bar */
 .scroll-progress-bar {
    @apply fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent origin-left z-50;
 }
+
+/* Styles for Scroll-Transform Card Stack Animation */
+.services-cards-section {
+    view-timeline-name: --cards-element-scrolls-in-body;
+    view-timeline-axis: block;
+    /* Ensure there's enough scrollable height if content is short, 
+       otherwise this might not be needed if page is long enough */
+    /* min-height: 150vh; */ 
+}
+
+.cards-sticky-container {
+    position: relative;
+    /* The height of this container needs to be enough for all cards to stick and unstick.
+       Example: (number of cards - 1) * (overlap amount or desired scroll per card) + height of one card + viewport height
+       This is complex to get right without knowing card heights and desired scroll distances.
+       A simpler approach might be to set a large min-height and adjust.
+       Or, calculate based on --numcards if possible, e.g. using JS to set height or use a very large padding-bottom.
+    */
+    /* padding-bottom: 100vh; /* Give space for the last card to scroll up */
+}
+
+.service-card-wrapper { /* This is the .card from the prompt */
+    position: sticky;
+    top: 6rem; /* Adjust based on nav height + desired gap from top */
+    min-height: 60vh; /* Give cards some height to be sticky for a duration */
+    margin-bottom: -45vh; /* Create overlap: negative margin = approx (min-height - visible part) */
+                          /* Adjust this value to control how much cards overlap */
+    /* CSS variables derived from JS props */
+    --index0: var(--card-actual-index); /* 0-based */
+    --index: calc(var(--card-actual-index) + 1); /* 1-based */
+    /* --numcards is set via inline style from JS */
+    --reverse-index: calc(var(--numcards) - var(--index0));
+    --reverse-index0: calc(var(--reverse-index) - 1);
+    /* Ensure the card itself doesn't shrink an
+    d has a backdrop for content */
+    width: 100%; /* Take full width of its parent in the sticky container */
+    max-width: 768px; /* Example: lg breakpoint, centered cards */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cards-sticky-container .service-card-wrapper:last-child {
+    margin-bottom: 0; /* No negative margin for the last card */
+}
+
+@keyframes scale-up-service-card {
+    to {
+        transform: scale(calc(1.1 - (0.1 * var(--reverse-index))));
+        /* Example for scaling up instead: transform: scale(calc(1 + (0.05 * var(--index0)))); */
+    }
+}
+
+.service-card-wrapper .card__content { /* This is the shadcn Card component */
+    --start-range-calc: calc(var(--index0) / var(--numcards) * 100%);
+    --end-range-calc: calc(var(--index) / var(--numcards) * 100%);
+    
+    animation: linear scale-up-service-card forwards;
+    animation-timeline: --cards-element-scrolls-in-body;
+    animation-range-start: exit-crossing var(--start-range-calc);
+    animation-range-end: exit-crossing var(--end-range-calc);
+    
+    transform-origin: center center; /* Scale from the center */
+    will-change: transform; /* Hint for browser optimization */
+    transition: transform 0.2s ease-out; /* Add a slight transition for smoothness if direct manipulation occurs */
+}
+
+/* Fallback for browsers that don't support animation-timeline */
+@supports not (animation-timeline: --cards-element-scrolls-in-body) {
+  .service-card-wrapper {
+    position: relative; /* Revert sticky for fallback */
+    top: auto;
+    margin-bottom: 2rem; /* Regular margin for non-sticky fallback */
+    min-height: auto;
+  }
+  .service-card-wrapper .card__content {
+    animation: none; /* Disable CSS scroll-linked animation */
+    /* Optionally, add a simple hover scale effect as a fallback */
+    /* transition: transform 0.3s ease-in-out; */
+  }
+  /* .service-card-wrapper:hover .card__content {
+    transform: scale(1.03);
+  } */
+}
+
