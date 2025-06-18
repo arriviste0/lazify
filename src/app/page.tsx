@@ -92,9 +92,11 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     iconEmoji: '📨',
     description: 'Cleans your inbox, flags priority emails, archives spam.',
     demoType: 'inboxZero',
-    themeColorClass: 'bg-blue-500', // Used for gradient accents
+    themeColorClass: 'bg-blue-500',
     longDescription: 'Automatically categorizes emails, drafts replies for common queries, and keeps your inbox clutter-free so you can focus on what matters.',
-    features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering']
+    features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering'],
+    slideImageUrl: 'https://placehold.co/400x300.png',
+    slideImageHint: 'email inbox organization',
   },
   {
     id: 'leadspark',
@@ -104,7 +106,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     demoType: 'leadSpark',
     themeColorClass: 'bg-amber-500',
     longDescription: 'Gathers lead information from LinkedIn, web forms, or email, qualifies them based on your criteria, and syncs with your CRM or Sheets.',
-    features: ['LinkedIn Scraping (Demo)', 'Web Form Integration', 'Lead Scoring', 'CRM/Sheet Sync']
+    features: ['LinkedIn Scraping (Demo)', 'Web Form Integration', 'Lead Scoring', 'CRM/Sheet Sync'],
+    slideImageUrl: 'https://placehold.co/400x300.png',
+    slideImageHint: 'lead generation magnet',
   },
   {
     id: 'contentcraft',
@@ -114,7 +118,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     demoType: 'contentCraft',
     themeColorClass: 'bg-rose-500',
     longDescription: 'Provide a prompt and let our AI generate various forms of content, from engaging blog posts to catchy social media captions or detailed product descriptions.',
-    features: ['Blog Posts', 'Social Media Captions', 'Product Descriptions', 'Notion/CMS Export (Demo)']
+    features: ['Blog Posts', 'Social Media Captions', 'Product Descriptions', 'Notion/CMS Export (Demo)'],
+    slideImageUrl: 'https://placehold.co/400x300.png',
+    slideImageHint: 'ai writing content creation',
   },
   {
     id: 'schedulesync',
@@ -124,7 +130,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     demoType: 'scheduleSync',
     themeColorClass: 'bg-purple-500',
     longDescription: 'Connects to your Google Calendar, finds optimal meeting slots based on preferences, blocks time automatically, and sends timely reminders.',
-    features: ['Google Calendar Sync', 'AI Slot Finding', 'Auto Time-Blocking', 'Email/Slack Reminders']
+    features: ['Google Calendar Sync', 'AI Slot Finding', 'Auto Time-Blocking', 'Email/Slack Reminders'],
+    slideImageUrl: 'https://placehold.co/400x300.png',
+    slideImageHint: 'calendar scheduling automation',
   },
   {
     id: 'taskmaster',
@@ -134,7 +142,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     demoType: 'taskMaster',
     themeColorClass: 'bg-green-500',
     longDescription: 'Integrates with Todoist or Notion to manage your tasks, uses AI to prioritize them, and sends daily summaries or deadline nudges.',
-    features: ['Todoist/Notion Integration', 'AI Prioritization', 'Deadline Nudges', 'Daily Summaries']
+    features: ['Todoist/Notion Integration', 'AI Prioritization', 'Deadline Nudges', 'Daily Summaries'],
+    slideImageUrl: 'https://placehold.co/400x300.png',
+    slideImageHint: 'task management checklist',
   },
   {
     id: 'financetracker',
@@ -144,7 +154,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     demoType: 'financeTracker',
     themeColorClass: 'bg-teal-500',
     longDescription: 'Ingests expense data (manually or via webhooks), auto-categorizes transactions (Food, Bills, Travel), and provides visual breakdowns with savings tips.',
-    features: ['Webhook/Manual Entry', 'Auto-Categorization', 'Spend Breakdown Charts', 'Savings Recommendations']
+    features: ['Webhook/Manual Entry', 'Auto-Categorization', 'Spend Breakdown Charts', 'Savings Recommendations'],
+    slideImageUrl: 'https://placehold.co/400x300.png',
+    slideImageHint: 'finance budget tracking',
   },
   {
     id: 'shopsmart',
@@ -154,7 +166,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     demoType: 'shopSmart',
     themeColorClass: 'bg-pink-500',
     longDescription: 'Integrates with your product catalog, offers personalized recommendations, answers customer FAQs using GPT, and analyzes checkout funnel data.',
-    features: ['Product API/CSV Sync', 'GPT-based Q&A', 'Personalized Recommendations', 'Funnel Analytics (Demo)']
+    features: ['Product API/CSV Sync', 'GPT-based Q&A', 'Personalized Recommendations', 'Funnel Analytics (Demo)'],
+    slideImageUrl: 'https://placehold.co/400x300.png',
+    slideImageHint: 'ecommerce shopping assistant',
   },
 ];
 
@@ -736,3 +750,4 @@ export default function Home() {
     </div>
   );
 }
+

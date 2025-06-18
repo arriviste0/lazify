@@ -3,6 +3,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import type { InteractiveAgentInfo } from "@/types/agent";
 import { Button } from "@/components/ui/button";
@@ -59,6 +60,21 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
         <motion.div variants={itemVariants} className="text-6xl md:text-7xl mb-6">
           {agent.iconEmoji}
         </motion.div>
+
+        <motion.div 
+          variants={itemVariants} 
+          className="mb-8 relative w-56 h-40 sm:w-64 sm:h-48 md:w-80 md:h-60" // Adjusted size for different screens
+        >
+          <Image
+            src={agent.slideImageUrl || `https://placehold.co/400x300.png?text=${encodeURIComponent(agent.name)}`}
+            alt={`${agent.name} visual representation`}
+            fill
+            className="object-contain rounded-lg shadow-xl"
+            data-ai-hint={agent.slideImageHint || agent.name.toLowerCase().replace(/\s+/g, ' ')}
+            priority={isActive} // Prioritize loading image for active/nearby slides
+          />
+        </motion.div>
+
         <motion.h2
           variants={itemVariants}
           className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-foreground"
@@ -88,3 +104,4 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
 };
 
 export default Slide;
+

@@ -33,4 +33,7 @@ export interface InteractiveAgentInfo {
   themeColorClass: string; // e.g., 'bg-blue-500', 'text-rose-500'
   longDescription?: string;
   features?: string[];
+  slideImageUrl?: string; // Added for the full-viewport slider image
+  slideImageHint?: string; // Added for AI hint for the slide image
 }
+
