@@ -9,6 +9,7 @@ import { Loader2, AlertTriangle, ListChecks, Zap } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { handleTaskMasterAction } from "@/app/interactive-agents/actions/taskMasterActions";
 import type { TaskMasterInput, TaskMasterOutput } from "@/ai/flows/interactive-demos/demoTaskMasterFlow";
+import { useToast } from "@/hooks/use-toast";
 
 interface TaskMasterDemoProps {
   agent: InteractiveAgentInfo;
@@ -19,6 +20,7 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
   const [result, setResult] = useState<TaskMasterOutput | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
 
   const handleSubmit = async () => {
     if (!taskList.trim()) {
@@ -32,13 +34,16 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
         const response = await handleTaskMasterAction({ tasks: taskList });
         if (response && 'error' in response) {
           setError(response.error);
+          toast({ variant: "destructive", title: "Error", description: response.error });
         } else if (response) {
           setResult(response);
         } else {
           setError("Received an unexpected response from the agent.");
+          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while prioritizing tasks.");
+        toast({ variant: "destructive", title: "Error", description: e.message || "An unexpected error occurred." });
       }
     });
   };
@@ -53,24 +58,32 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
 - Find hotel near Seminyak
 `.trim();
 
+  // Extract color name for dynamic class generation, e.g., "green" from "bg-green-500"
+  const colorName = agent.themeColorClass.replace('bg-', '').split('-')[0];
+  const demoButtonClass = `bg-${colorName}-500 hover:bg-${colorName}-600`;
+  const demoInputFocusClass = `focus:ring-${colorName}-500`;
+  const demoCardAccentBorder = `border-${colorName}-200`;
+  const demoCardAccentBg = `bg-${colorName}-50`;
+  const demoCardAccentText = `text-${colorName}-700`;
+
   return (
     <div className="space-y-6">
       <div>
-        <Label htmlFor="taskList" className="text-neutral-700 font-medium">Enter Your Tasks (one per line)</Label>
+        <Label htmlFor="taskList" className="font-medium text-foreground/90">Enter Your Tasks (one per line)</Label>
         <Textarea
           id="taskList"
           value={taskList}
           onChange={(e) => setTaskList(e.target.value)}
-          placeholder="e.g., Finalize report&#10;Call John&#10;Buy groceries"
-          className="min-h-[150px] bg-white border-amber-300 focus:ring-primary mt-1"
+          placeholder="e.g., Finalize report\nCall John\nBuy groceries"
+          className={`min-h-[150px] bg-background/30 border-border ${demoInputFocusClass} mt-1`}
           disabled={isPending}
         />
-         <Button variant="outline" size="sm" onClick={() => setTaskList(sampleTasks)} className="mt-2 border-primary text-primary hover:bg-primary/10" disabled={isPending}>
+         <Button variant="outline" size="sm" onClick={() => setTaskList(sampleTasks)} className={`mt-2 border-${colorName}-500/50 text-${colorName}-600 hover:bg-${colorName}-500/10`} disabled={isPending}>
           Use Sample Tasks
         </Button>
       </div>
 
-      <Button onClick={handleSubmit} disabled={isPending} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+      <Button onClick={handleSubmit} disabled={isPending} className={`w-full text-white ${demoButtonClass}`}>
         {isPending ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Prioritizing...
@@ -82,31 +95,31 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
         )}
       </Button>
 
-      {error && (
-        <Card className="bg-red-50 border-red-200">
-          <CardHeader><CardTitle className="text-red-700 flex items-center"><AlertTriangle className="mr-2 h-5 w-5" /> Error</CardTitle></CardHeader>
-          <CardContent><p className="text-red-600">{error}</p></CardContent>
+      {error && !isPending && (
+        <Card className={`bg-destructive/10 ${demoCardAccentBorder}`}>
+          <CardHeader><CardTitle className="text-destructive flex items-center"><AlertTriangle className="mr-2 h-5 w-5" /> Error</CardTitle></CardHeader>
+          <CardContent><p className="text-destructive/90">{error}</p></CardContent>
         </Card>
       )}
 
       {result && (
-        <Card className="bg-green-50 border-green-200">
+        <Card className={`${demoCardAccentBg} ${demoCardAccentBorder}`}>
           <CardHeader>
-            <CardTitle className="text-green-700 flex items-center">
+            <CardTitle className={`${demoCardAccentText} flex items-center`}>
               <ListChecks className="mr-2 h-5 w-5" /> Prioritized Task List
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-neutral-700">
+          <CardContent className="space-y-3 text-foreground/90">
             {result.prioritizedTasks.length > 0 ? (
               <ul className="space-y-2">
                 {result.prioritizedTasks.map((task, index) => (
-                  <li key={index} className="p-2 bg-white rounded border border-amber-100 flex justify-between items-center">
+                  <li key={index} className="p-2 bg-background/50 rounded border border-border flex justify-between items-center">
                     <span>{task.task}</span>
                     <span 
                       className={`px-2 py-0.5 rounded-full text-xs font-medium text-white ${
                         task.priority === "High" ? "bg-red-500" :
                         task.priority === "Medium" ? "bg-yellow-500 text-black" :
-                        "bg-green-500" 
+                        `bg-${colorName}-500` // Use agent theme for Low priority as a base
                       }`}
                     >
                       {task.priority}
@@ -117,13 +130,13 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
             ) : (
               <p>No tasks to display.</p>
             )}
-            <p className="text-xs text-neutral-500 pt-2">{result.summary}</p>
-            <p className="text-xs text-neutral-500 pt-1">Simulated prioritization. For demo purposes only.</p>
+            <p className="text-xs text-muted-foreground pt-2">{result.summary}</p>
+            <p className="text-xs text-muted-foreground pt-1">Simulated prioritization. For demo purposes only.</p>
           </CardContent>
         </Card>
       )}
       {!result && !error && !isPending && (
-         <div className="text-center text-neutral-500 py-8 border-2 border-dashed border-amber-200 rounded-lg">
+         <div className={`text-center text-muted-foreground py-8 border-2 border-dashed ${demoCardAccentBorder} rounded-lg bg-background/20`}>
             <ListChecks size={40} className="mx-auto mb-2 opacity-50" />
             <p>Your prioritized tasks will appear here.</p>
         </div>

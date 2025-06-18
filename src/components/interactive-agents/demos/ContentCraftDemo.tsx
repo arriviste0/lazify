@@ -36,13 +36,16 @@ const ContentCraftDemo: React.FC<ContentCraftDemoProps> = ({ agent }) => {
         const response = await handleContentCraftAction({ prompt, contentType });
         if (response && 'error' in response) {
           setError(response.error);
+          toast({ variant: "destructive", title: "Error", description: response.error });
         } else if (response) {
           setResult(response);
         } else {
           setError("Received an unexpected response from the agent.");
+          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while generating content.");
+        toast({ variant: "destructive", title: "Error", description: e.message || "An unexpected error occurred." });
       }
     });
   };
@@ -54,26 +57,38 @@ const ContentCraftDemo: React.FC<ContentCraftDemoProps> = ({ agent }) => {
     }
   };
 
+  // Extract color name for dynamic class generation, e.g., "rose" from "bg-rose-500"
+  const colorName = agent.themeColorClass.replace('bg-', '').split('-')[0];
+  const demoButtonClass = `bg-${colorName}-500 hover:bg-${colorName}-600`;
+  const demoInputFocusClass = `focus:ring-${colorName}-500`;
+  const demoCardAccentBorder = `border-${colorName}-200`;
+  const demoCardAccentBg = `bg-${colorName}-50`;
+  const demoCardAccentText = `text-${colorName}-700`;
+  const demoResultCardAccentBorder = `border-${colorName}-200`;
+  const demoResultCardAccentBg = `bg-${colorName}-50`;
+  const demoResultCardAccentText = `text-${colorName}-700`;
+
+
   return (
     <div className="space-y-6">
       <div>
-        <Label htmlFor="prompt" className="text-neutral-700 font-medium">Enter Your Content Prompt</Label>
+        <Label htmlFor="prompt" className="font-medium text-foreground/90">Enter Your Content Prompt</Label>
         <Textarea
           id="prompt"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="e.g., 'Write a short blog post about the benefits of AI in marketing...'"
-          className="min-h-[120px] bg-white border-amber-300 focus:ring-primary mt-1"
+          className={`min-h-[120px] bg-background/30 border-border ${demoInputFocusClass} mt-1`}
           disabled={isPending}
         />
       </div>
       <div>
-        <Label htmlFor="contentType" className="text-neutral-700 font-medium">Select Content Type</Label>
+        <Label htmlFor="contentType" className="font-medium text-foreground/90">Select Content Type</Label>
         <Select value={contentType} onValueChange={(value: ContentCraftInput["contentType"]) => setContentType(value)} disabled={isPending}>
-          <SelectTrigger className="w-full bg-white border-amber-300 focus:ring-primary mt-1 text-neutral-800">
+          <SelectTrigger className={`w-full bg-background/30 border-border ${demoInputFocusClass} mt-1 text-foreground`}>
             <SelectValue placeholder="Select content type" />
           </SelectTrigger>
-          <SelectContent className="bg-amber-50 text-neutral-800">
+          <SelectContent className={`bg-popover text-popover-foreground border-${colorName}-500/50`}>
             <SelectItem value="blogPost">Blog Post</SelectItem>
             <SelectItem value="socialMediaCaption">Social Media Caption</SelectItem>
             <SelectItem value="productDescription">Product Description</SelectItem>
@@ -82,7 +97,7 @@ const ContentCraftDemo: React.FC<ContentCraftDemoProps> = ({ agent }) => {
         </Select>
       </div>
 
-      <Button onClick={handleSubmit} disabled={isPending} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+      <Button onClick={handleSubmit} disabled={isPending} className={`w-full text-white ${demoButtonClass}`}>
         {isPending ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...
@@ -94,33 +109,33 @@ const ContentCraftDemo: React.FC<ContentCraftDemoProps> = ({ agent }) => {
         )}
       </Button>
 
-      {error && (
-        <Card className="bg-red-50 border-red-200">
-          <CardHeader><CardTitle className="text-red-700 flex items-center"><AlertTriangle className="mr-2 h-5 w-5" /> Error</CardTitle></CardHeader>
-          <CardContent><p className="text-red-600">{error}</p></CardContent>
+      {error && !isPending && (
+        <Card className={`bg-destructive/10 ${demoCardAccentBorder}`}>
+          <CardHeader><CardTitle className="text-destructive flex items-center"><AlertTriangle className="mr-2 h-5 w-5" /> Error</CardTitle></CardHeader>
+          <CardContent><p className="text-destructive/90">{error}</p></CardContent>
         </Card>
       )}
 
       {result && (
-        <Card className="bg-green-50 border-green-200">
+        <Card className={`${demoResultCardAccentBg} ${demoResultCardAccentBorder}`}>
           <CardHeader>
-            <CardTitle className="text-green-700 flex items-center justify-between">
+            <CardTitle className={`${demoResultCardAccentText} flex items-center justify-between`}>
               <div className="flex items-center">
                 <Edit3 className="mr-2 h-5 w-5" /> Generated Content
               </div>
-              <Button variant="ghost" size="sm" onClick={handleCopy} className="text-green-600 hover:text-green-700 hover:bg-green-100">
+              <Button variant="ghost" size="sm" onClick={handleCopy} className={`${demoResultCardAccentText} hover:bg-${colorName}-100`}>
                 <Copy className="mr-1.5 h-4 w-4" /> Copy
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className="text-sm whitespace-pre-wrap bg-white p-3 rounded border border-amber-100 text-neutral-700 max-h-[200px] overflow-y-auto">{result.generatedContent}</pre>
-            <p className="text-xs text-neutral-500 pt-2">Simulated generation. For demo purposes only.</p>
+            <pre className="text-sm whitespace-pre-wrap bg-background/50 p-3 rounded border border-border text-foreground max-h-[200px] overflow-y-auto">{result.generatedContent}</pre>
+            <p className="text-xs text-muted-foreground pt-2">Simulated generation. For demo purposes only.</p>
           </CardContent>
         </Card>
       )}
        {!result && !error && !isPending && (
-         <div className="text-center text-neutral-500 py-8 border-2 border-dashed border-amber-200 rounded-lg">
+         <div className={`text-center text-muted-foreground py-8 border-2 border-dashed ${demoCardAccentBorder} rounded-lg bg-background/20`}>
             <Edit3 size={40} className="mx-auto mb-2 opacity-50" />
             <p>Your AI-generated content will appear here.</p>
         </div>

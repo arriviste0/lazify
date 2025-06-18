@@ -14,7 +14,7 @@ interface InteractiveAgentSliderProps {
 }
 
 const CARD_WIDTH = 288; // 72 * 4 (w-72 in tailwind)
-const CARD_GAP = 16; // space-x-4
+const CARD_GAP = 8; // Reduced from 16
 
 const InteractiveAgentSlider: React.FC<InteractiveAgentSliderProps> = ({ agents }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,33 +32,40 @@ const InteractiveAgentSlider: React.FC<InteractiveAgentSliderProps> = ({ agents 
     setCurrentIndex(newIndex);
   };
 
+  // Update padding to correctly center the card when using CARD_GAP for spacing
+  const PADDING_HORIZONTAL = `calc(50% - ${CARD_WIDTH / 2}px - ${CARD_GAP / 2}px)`;
+
+
   return (
     <div className="relative w-full">
       <div
         ref={containerRef}
         className="flex overflow-x-auto snap-x snap-mandatory py-4 scrollbar-thin scrollbar-thumb-primary/50 scrollbar-track-transparent scrollbar-thumb-rounded-full"
         style={{
-          paddingLeft: `calc(50% - ${CARD_WIDTH / 2}px)`,
-          paddingRight: `calc(50% - ${CARD_WIDTH / 2}px)`,
+          paddingLeft: PADDING_HORIZONTAL,
+          paddingRight: PADDING_HORIZONTAL,
         }}
       >
         <AnimatePresence initial={false}>
-          {agents.map((agent, index) => (
-            <motion.div
-              key={agent.id}
-              className="snap-center flex-shrink-0 mx-2" // mx-2 provides the gap
-              style={{ width: `${CARD_WIDTH}px` }}
-              initial={{ opacity: 0.7, scale: 0.9 }}
-              animate={{ 
-                opacity: index === currentIndex ? 1 : 0.7,
-                scale: index === currentIndex ? 1 : 0.9,
-                x: (index - currentIndex) * (CARD_WIDTH + CARD_GAP) / 3 // Subtle parallax
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
-              <AgentCard agent={agent} />
-            </motion.div>
-          ))}
+          {/* Use a flex container for the cards with a defined gap */}
+          <motion.div className="flex" style={{ gap: `${CARD_GAP}px` }}>
+            {agents.map((agent, index) => (
+              <motion.div
+                key={agent.id}
+                className="snap-center flex-shrink-0" // Removed mx-1, gap is handled by parent
+                style={{ width: `${CARD_WIDTH}px` }}
+                initial={{ opacity: 0.7, scale: 0.9 }}
+                animate={{ 
+                  opacity: index === currentIndex ? 1 : 0.7,
+                  scale: index === currentIndex ? 1 : 0.9,
+                  x: (index - currentIndex) * (CARD_WIDTH + CARD_GAP) / 4 // Adjusted parallax for tighter spacing
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <AgentCard agent={agent} />
+              </motion.div>
+            ))}
+          </motion.div>
         </AnimatePresence>
       </div>
 
@@ -109,5 +116,3 @@ const InteractiveAgentSlider: React.FC<InteractiveAgentSliderProps> = ({ agents 
 };
 
 export default InteractiveAgentSlider;
-
-    

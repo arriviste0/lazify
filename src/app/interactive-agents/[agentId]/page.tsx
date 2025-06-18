@@ -7,13 +7,10 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 
-// Import agent data (assuming it's exported from the main page or a shared lib)
-import { interactiveAgentsData } from '@/app/page'; 
+import { interactiveAgentsData } from '@/app/page';
 import type { InteractiveAgentInfo } from '@/types/agent';
 
-// Demo Component Imports
 import InboxZeroDemo from "@/components/interactive-agents/demos/InboxZeroDemo";
 import LeadSparkDemo from "@/components/interactive-agents/demos/LeadSparkDemo";
 import ContentCraftDemo from "@/components/interactive-agents/demos/ContentCraftDemo";
@@ -21,7 +18,7 @@ import ScheduleSyncDemo from "@/components/interactive-agents/demos/ScheduleSync
 import TaskMasterDemo from "@/components/interactive-agents/demos/TaskMasterDemo";
 import FinanceTrackerDemo from "@/components/interactive-agents/demos/FinanceTrackerDemo";
 import ShopSmartDemo from "@/components/interactive-agents/demos/ShopSmartDemo";
-
+import { cn } from '@/lib/utils';
 
 export default function AgentDemoPage() {
   const params = useParams();
@@ -63,8 +60,23 @@ export default function AgentDemoPage() {
     }
   };
 
+  // Extract color name for dynamic class generation, e.g., "blue" from "bg-blue-500"
+  const colorName = agent.themeColorClass.replace('bg-', '').split('-')[0];
+  const agentThemeGradientFrom = `from-background`;
+  const agentThemeGradientVia = `via-${colorName}-950/10`; // e.g. via-blue-950/10
+  const agentThemeGradientTo = `to-background`;
+  const agentCardBorderColor = `border-${colorName}-500/30`; // e.g. border-blue-500/30
+  const agentIconColor = `text-${colorName}-400`; // e.g. text-blue-400
+  const agentTitleColor = `text-${colorName}-500`; // e.g. text-blue-500, might need adjustment for light/dark themes
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-amber-950/10 to-background py-8 px-4 md:px-6 flex flex-col items-center">
+    <div className={cn(
+        "min-h-screen py-8 px-4 md:px-6 flex flex-col items-center bg-gradient-to-br",
+        agentThemeGradientFrom,
+        agentThemeGradientVia,
+        agentThemeGradientTo
+      )}
+    >
       <header className="w-full max-w-3xl mb-8">
         <Button variant="ghost" onClick={() => router.push('/')} className="text-primary hover:text-primary/80 hover:bg-primary/5">
           <ArrowLeft className="mr-2 h-5 w-5" />
@@ -73,12 +85,20 @@ export default function AgentDemoPage() {
       </header>
 
       <main className="w-full max-w-3xl">
-        <Card className="bg-amber-50/80 backdrop-blur-lg text-neutral-800 border border-amber-200/50 shadow-2xl rounded-xl overflow-hidden">
-          <CardHeader className="text-center pb-6 border-b border-amber-300/50 bg-amber-100/50 p-6">
-            <div className="text-5xl mb-4 mx-auto w-fit">{agent.iconEmoji}</div>
-            <CardTitle className="text-3xl font-bold text-neutral-900">{agent.name}</CardTitle>
+        <Card className={cn(
+            "bg-card/80 backdrop-blur-lg text-foreground border shadow-2xl rounded-xl overflow-hidden",
+            agentCardBorderColor
+          )}
+        >
+          <CardHeader className={cn(
+              "text-center pb-6 border-b p-6 md:p-8",
+              `border-${colorName}-500/20 bg-${colorName}-500/5`
+            )}
+          >
+            <div className={cn("text-6xl mb-4 mx-auto w-fit", agentIconColor)}>{agent.iconEmoji}</div>
+            <CardTitle className={cn("text-3xl md:text-4xl font-bold", agentTitleColor)}>{agent.name}</CardTitle>
             {agent.longDescription && (
-              <CardDescription className="text-md text-neutral-600 pt-2 max-w-xl mx-auto">
+              <CardDescription className="text-md text-muted-foreground pt-3 max-w-xl mx-auto">
                 {agent.longDescription}
               </CardDescription>
             )}
@@ -88,11 +108,15 @@ export default function AgentDemoPage() {
             {renderDemoContent()}
           </CardContent>
 
-          <CardFooter className="p-6 border-t border-amber-300/50 bg-amber-100/30 sm:justify-center gap-4 flex-col sm:flex-row">
-            <Button variant="outline" className="border-primary text-primary hover:bg-primary/10 hover:text-primary w-full sm:w-auto" asChild>
+          <CardFooter className={cn(
+              "p-6 border-t sm:justify-center gap-4 flex-col sm:flex-row",
+              `border-${colorName}-500/20 bg-${colorName}-500/5`
+            )}
+          >
+            <Button variant="outline" className="outline-button-glow w-full sm:w-auto" asChild>
               <Link href="/#contact">Request Custom Agent</Link>
             </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto" asChild>
+            <Button className="cta-button w-full sm:w-auto" asChild>
                <Link href="/#contact">Book a Free Demo Call</Link>
             </Button>
           </CardFooter>
@@ -105,5 +129,3 @@ export default function AgentDemoPage() {
     </div>
   );
 }
-
-    
