@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -7,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 interface PricingPlan {
   title: string;
@@ -80,7 +82,13 @@ export function PricingTable() {
                 Most Popular
               </div>
             )}
-            <Card className={`modern-card flex flex-col flex-grow ${plan.isPopular ? 'border-primary shadow-primary/20' : ''}`}>
+            <Card className={cn(
+                "modern-card flex flex-col flex-grow",
+                plan.isPopular 
+                  ? 'border-2 border-primary shadow-primary/20' 
+                  : 'hover:border-primary/40'
+              )}
+            >
               <CardHeader className="pb-4">
                 <CardTitle className="text-2xl text-center">{plan.title}</CardTitle>
                 <CardDescription className="text-center pt-1">{plan.description}</CardDescription>

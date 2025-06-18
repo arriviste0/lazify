@@ -91,7 +91,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-sans, system-ui, sans-serif);
+    font-family: system-ui, sans-serif;
     /* Font smoothing */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -99,11 +99,11 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
-    font-family: var(--font-geist-sans, system-ui, sans-serif);
+    font-family: system-ui, sans-serif;
   }
 
   code, pre, kbd, samp {
-    font-family: var(--font-geist-mono, monospace);
+    font-family: monospace;
   }
 
   /* Custom scrollbar styling (subtle) */
@@ -123,7 +123,7 @@
 
 @layer utilities {
   .modern-card {
-    @apply bg-card/80 backdrop-blur-lg border border-card-foreground/10 rounded-xl shadow-xl hover:shadow-2xl transition-shadow;
+    @apply bg-card/80 backdrop-blur-lg border border-card-foreground/10 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300;
   }
   .cta-button {
     @apply bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-primary-foreground font-semibold shadow-lg hover:shadow-primary/40 transition-all duration-300 transform hover:scale-105;
