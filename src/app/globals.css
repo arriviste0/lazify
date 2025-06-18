@@ -151,11 +151,6 @@
      background-size: 400% 400%;
      animation: gradient-subtle 15s ease infinite;
    }
-
-   /* Scroll progress bar */
-   .scroll-progress-bar {
-      @apply fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent origin-left z-50;
-   }
 }
 
 @layer utilities {
@@ -209,5 +204,4 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground));
 }
-
     
