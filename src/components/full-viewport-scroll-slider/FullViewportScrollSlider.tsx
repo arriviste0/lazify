@@ -33,38 +33,42 @@ const FullViewportScrollSlider: React.FC<FullViewportScrollSliderProps> = ({ age
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
-    offset: ["start start", "end end"],
+    offset: ["start start", "end end"], // Pin the section while scrolling through its height
   });
 
   const totalSlides = agents.length + 1; // +1 for the intro slide
 
+  // Horizontal scroll: X goes from 0% to -N*100% where N is number of agent slides
   const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${agents.length * 100}%`]);
 
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [activeGlobalSlideIndex, setActiveGlobalSlideIndex] = useState(0);
 
   useEffect(() => {
-    return scrollYProgress.on("change", (latest) => {
-      // Calculate active slide index, ensuring it's within bounds [0, totalSlides - 1]
+    // This effect updates the active slide index based on scroll progress.
+    // It's primarily for the navigation dots.
+    // The actual slide transitions and animations are driven by scrollYProgress directly.
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
       const newActiveSlide = Math.min(totalSlides - 1, Math.floor(latest * totalSlides));
-      if (newActiveSlide !== activeSlide) {
-        setActiveSlide(newActiveSlide);
+      if (newActiveSlide !== activeGlobalSlideIndex) {
+        setActiveGlobalSlideIndex(newActiveSlide);
       }
     });
-  }, [scrollYProgress, totalSlides, activeSlide]);
+    return () => unsubscribe();
+  }, [scrollYProgress, totalSlides, activeGlobalSlideIndex]);
 
 
   return (
     <div ref={scrollContainerRef} className="relative" style={{ height: `${totalSlides * 100}vh` }}>
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="sticky top-0 h-screen overflow-hidden"> {/* This makes the slider section sticky */}
         <motion.div
-          className="flex h-full"
-          style={{ x, width: `${totalSlides * 100}vw` }}
+          className="flex h-full" // Horizontal track for all slides
+          style={{ x, width: `${totalSlides * 100}vw` }} // Width is sum of all slides
         >
           {/* Intro Slide */}
           <div 
             className={cn(
               "relative h-screen w-screen flex-shrink-0 flex items-center justify-center text-center p-8 overflow-hidden",
-              "bg-gradient-to-br from-primary/20 via-background/50 to-accent/20" // Adjusted opacities
+              "bg-gradient-to-br from-primary/20 via-background/50 to-accent/20"
             )}
           >
             <div className="absolute inset-0 animated-background-subtle opacity-[0.03] pointer-events-none"></div>
@@ -72,7 +76,7 @@ const FullViewportScrollSlider: React.FC<FullViewportScrollSliderProps> = ({ age
               className="relative z-10 max-w-2xl flex flex-col items-center"
               variants={contentVariants}
               initial="hidden"
-              animate={activeSlide === 0 ? "visible" : "hidden"}
+              animate={activeGlobalSlideIndex === 0 ? "visible" : "hidden"}
             >
               <motion.h1 
                 variants={itemVariants}
@@ -91,7 +95,13 @@ const FullViewportScrollSlider: React.FC<FullViewportScrollSliderProps> = ({ age
 
           {/* Agent Slides */}
           {agents.map((agent, index) => (
-            <Slide key={agent.id} agent={agent} isActive={(index + 1) === activeSlide} />
+            <Slide 
+              key={agent.id} 
+              agent={agent} 
+              slideIndex={index + 1} // 0 is intro, so agent slides start at 1
+              totalSlides={totalSlides}
+              scrollYProgress={scrollYProgress}
+            />
           ))}
         </motion.div>
 
@@ -101,14 +111,20 @@ const FullViewportScrollSlider: React.FC<FullViewportScrollSliderProps> = ({ age
             <motion.div
               key={`dot-${index}`}
               className={cn(
-                "h-2.5 w-2.5 rounded-full transition-colors duration-300",
-                activeSlide === index ? "bg-primary scale-125" : "bg-muted-foreground/50"
+                "h-2.5 w-2.5 rounded-full transition-colors duration-300 cursor-pointer",
+                activeGlobalSlideIndex === index ? "bg-primary scale-125" : "bg-muted-foreground/50 hover:bg-muted-foreground/70"
               )}
               animate={{
-                scale: activeSlide === index ? 1.25 : 1,
-                backgroundColor: activeSlide === index ? "hsl(var(--primary))" : "hsl(var(--muted-foreground) / 0.5)",
+                scale: activeGlobalSlideIndex === index ? 1.25 : 1,
+                backgroundColor: activeGlobalSlideIndex === index ? "hsl(var(--primary))" : "hsl(var(--muted-foreground) / 0.5)",
               }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              onClick={() => {
+                if (scrollContainerRef.current) {
+                  const targetScroll = (index / totalSlides) * scrollContainerRef.current.scrollHeight;
+                  window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                }
+              }}
             />
           ))}
         </div>
