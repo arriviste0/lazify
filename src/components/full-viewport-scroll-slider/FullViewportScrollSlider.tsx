@@ -64,7 +64,7 @@ const FullViewportScrollSlider: React.FC<FullViewportScrollSliderProps> = ({ age
           <div 
             className={cn(
               "relative h-screen w-screen flex-shrink-0 flex items-center justify-center text-center p-8 overflow-hidden",
-              "bg-gradient-to-br from-primary/10 via-background to-accent/10" // General theme gradient for intro
+              "bg-gradient-to-br from-primary/20 via-background/50 to-accent/20" // Adjusted opacities
             )}
           >
             <div className="absolute inset-0 animated-background-subtle opacity-[0.03] pointer-events-none"></div>

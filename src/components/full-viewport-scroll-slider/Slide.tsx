@@ -15,28 +15,28 @@ interface SlideProps {
 }
 
 const contentVariants = {
-  hidden: { opacity: 0, y: 30 }, // Increased y for a more noticeable slide-in
+  hidden: { opacity: 0, y: 30 }, 
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7, // Slightly longer duration
+      duration: 0.7, 
       ease: [0.6, -0.05, 0.01, 0.99],
-      staggerChildren: 0.2, // Increased stagger
+      staggerChildren: 0.2, 
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 25 }, // Increased y
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }, // Slightly longer
+  hidden: { opacity: 0, y: 25 }, 
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }, 
 };
 
-// Function to generate a very subtle gradient based on the theme color
 const getAgentGradient = (themeColorClass: string) => {
   const colorName = themeColorClass.replace('bg-', '').split('-')[0];
-  // Using darker shades (950) and slightly more prominent opacities (e.g., /25, /20)
-  return `bg-gradient-to-br from-${colorName}-950/25 via-background/80 to-${colorName}-950/20`;
+  // Adjusted gradient for better visibility and lighter feel
+  // Using -700, -800, -900 shades with adjusted opacities
+  return `bg-gradient-to-br from-${colorName}-700/30 via-${colorName}-800/20 to-${colorName}-950/25`;
 };
 
 
@@ -63,7 +63,7 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
 
         <motion.div 
           variants={itemVariants} 
-          className="mb-8 relative w-56 h-40 sm:w-64 sm:h-48 md:w-80 md:h-60" // Adjusted size for different screens
+          className="mb-8 relative w-56 h-40 sm:w-64 sm:h-48 md:w-80 md:h-60"
         >
           <Image
             src={agent.slideImageUrl || `https://placehold.co/400x300.png?text=${encodeURIComponent(agent.name)}`}
@@ -71,7 +71,7 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
             fill
             className="object-contain rounded-lg shadow-xl"
             data-ai-hint={agent.slideImageHint || agent.name.toLowerCase().replace(/\s+/g, ' ')}
-            priority={isActive} // Prioritize loading image for active/nearby slides
+            priority={isActive} 
           />
         </motion.div>
 
@@ -90,7 +90,7 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
         <motion.div variants={itemVariants}>
           <Button
             size="lg"
-            className="cta-button text-base md:text-lg" // Using existing cta-button for consistency
+            className="cta-button text-base md:text-lg" 
             asChild
           >
             <Link href={`/interactive-agents/${agent.id}`}>
@@ -104,4 +104,3 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
 };
 
 export default Slide;
-
