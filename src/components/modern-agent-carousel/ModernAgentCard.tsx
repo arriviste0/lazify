@@ -66,4 +66,3 @@ const ModernAgentCard: React.FC<ModernAgentCardProps> = ({ agent, isActive }) =>
 };
 
 export default ModernAgentCard;
-```
