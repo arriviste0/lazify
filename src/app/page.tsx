@@ -59,7 +59,7 @@ import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
 import AiWorkflowVisualization from '@/components/ai-workflow-visualization';
 import type { InteractiveAgentInfo } from '@/types/agent';
-import AgentCarousel from '@/components/agent-carousel/AgentCarousel';
+import ModernAgentCarousel from '@/components/modern-agent-carousel/ModernAgentCarousel';
 
 
 const fadeInUp = {
@@ -101,7 +101,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-blue-500', // Used for accents
     longDescription: 'Automatically categorizes emails, drafts replies for common queries, and keeps your inbox clutter-free so you can focus on what matters.',
     features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering'],
-    slideImageUrl: 'https://placehold.co/600x800/007bff/ffffff.png', // Brighter, theme-colored placeholder
+    slideImageUrl: 'https://placehold.co/600x800/007bff/ffffff.png?text=InboxZero',
     slideImageHint: 'email inbox organization tech',
   },
   {
@@ -113,7 +113,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-amber-500',
     longDescription: 'Gathers lead information from LinkedIn, web forms, or email, qualifies them based on your criteria, and syncs with your CRM or Sheets.',
     features: ['LinkedIn Scraping (Demo)', 'Web Form Integration', 'Lead Scoring', 'CRM/Sheet Sync'],
-    slideImageUrl: 'https://placehold.co/600x800/ffc107/333333.png',
+    slideImageUrl: 'https://placehold.co/600x800/ffc107/333333.png?text=LeadSpark',
     slideImageHint: 'lead generation magnet business',
   },
   {
@@ -125,7 +125,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-rose-500',
     longDescription: 'Provide a prompt and let our AI generate various forms of content, from engaging blog posts to catchy social media captions or detailed product descriptions.',
     features: ['Blog Posts', 'Social Media Captions', 'Product Descriptions', 'Notion/CMS Export (Demo)'],
-    slideImageUrl: 'https://placehold.co/600x800/e83e8c/ffffff.png',
+    slideImageUrl: 'https://placehold.co/600x800/e83e8c/ffffff.png?text=ContentCraft',
     slideImageHint: 'ai writing content creation creative',
   },
   {
@@ -137,7 +137,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-purple-600', // Adjusted for better contrast if needed
     longDescription: 'Connects to your Google Calendar, finds optimal meeting slots based on preferences, blocks time automatically, and sends timely reminders.',
     features: ['Google Calendar Sync', 'AI Slot Finding', 'Auto Time-Blocking', 'Email/Slack Reminders'],
-    slideImageUrl: 'https://placehold.co/600x800/6f42c1/ffffff.png',
+    slideImageUrl: 'https://placehold.co/600x800/6f42c1/ffffff.png?text=ScheduleSync',
     slideImageHint: 'calendar scheduling automation productivity',
   },
   {
@@ -149,7 +149,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-green-500',
     longDescription: 'Integrates with Todoist or Notion to manage your tasks, uses AI to prioritize them, and sends daily summaries or deadline nudges.',
     features: ['Todoist/Notion Integration', 'AI Prioritization', 'Deadline Nudges', 'Daily Summaries'],
-    slideImageUrl: 'https://placehold.co/600x800/28a745/ffffff.png',
+    slideImageUrl: 'https://placehold.co/600x800/28a745/ffffff.png?text=TaskMaster',
     slideImageHint: 'task management checklist efficiency',
   },
   {
@@ -161,7 +161,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-teal-500',
     longDescription: 'Ingests expense data (manually or via webhooks), auto-categorizes transactions (Food, Bills, Travel), and provides visual breakdowns with savings tips.',
     features: ['Webhook/Manual Entry', 'Auto-Categorization', 'Spend Breakdown Charts', 'Savings Recommendations'],
-    slideImageUrl: 'https://placehold.co/600x800/20c997/333333.png',
+    slideImageUrl: 'https://placehold.co/600x800/20c997/333333.png?text=FinanceTracker',
     slideImageHint: 'finance budget tracking money',
   },
   {
@@ -173,7 +173,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-pink-500',
     longDescription: 'Integrates with your product catalog, offers personalized recommendations, answers customer FAQs using GPT, and analyzes checkout funnel data.',
     features: ['Product API/CSV Sync', 'GPT-based Q&A', 'Personalized Recommendations', 'Funnel Analytics (Demo)'],
-    slideImageUrl: 'https://placehold.co/600x800/d63384/ffffff.png',
+    slideImageUrl: 'https://placehold.co/600x800/d63384/ffffff.png?text=ShopSmart',
     slideImageHint: 'ecommerce shopping assistant retail',
   },
 ];
@@ -188,7 +188,7 @@ export default function Home() {
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
-    agentCarousel: useRef(null), // New section for the carousel
+    agentCarousel: useRef(null),
     whyLazify: useRef(null),
     pricing: useRef(null),
     faq: useRef(null),
@@ -212,8 +212,8 @@ export default function Home() {
     const observers: IntersectionObserver[] = [];
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -20% 0px', // Adjust rootMargin to trigger earlier/later if needed
-      threshold: 0.2, // How much of the element needs to be visible
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: 0.2,
     };
 
     Object.entries(sectionRefs).forEach(([id, ref]) => {
@@ -234,7 +234,7 @@ export default function Home() {
   const navLinks = [
     { href: '#home', label: 'Home', ref: sectionRefs.home },
     { href: '#services', label: 'Services', ref: sectionRefs.services },
-    { href: '#agent-carousel', label: 'AI Agents', ref: sectionRefs.agentCarousel }, // New nav link
+    { href: '#agent-carousel', label: 'AI Agents', ref: sectionRefs.agentCarousel },
     { href: '#why-lazify', label: 'Why Us', ref: sectionRefs.whyLazify },
     { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
     { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
@@ -497,22 +497,22 @@ export default function Home() {
         <motion.section
           id="agent-carousel"
           ref={sectionRefs.agentCarousel}
-          className="w-full section-padding bg-background"
+          className="w-full section-padding bg-carousel-section text-foreground"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.1 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-0 md:px-6"> {/* Adjusted padding for full-width feel on mobile */}
+          <div className="container mx-auto px-0 md:px-6">
             <motion.div className="mb-12 md:mb-16 text-center" variants={fadeInUp}>
-              <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
+              <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                 Meet Our AI Agent Lineup
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
                 Your Intelligent Workforce Awaits
               </h2>
               <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
                 Explore our diverse range of AI agents, each designed to tackle specific tasks and boost your productivity.
               </p>
             </motion.div>
-            {isClient && <AgentCarousel agents={interactiveAgentsData} />}
+            {isClient && <ModernAgentCarousel agents={interactiveAgentsData} />}
           </div>
         </motion.section>
 
@@ -770,3 +770,4 @@ export default function Home() {
   );
 }
 
+```

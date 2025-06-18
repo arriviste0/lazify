@@ -54,6 +54,9 @@
 
     /* Custom Glow */
     --glow-color: hsla(var(--primary) / 0.5);
+
+    /* New Carousel Section Background */
+    --carousel-section-bg: 40 50% 97%; /* Light cream for light mode */
   }
 
   .dark {
@@ -77,6 +80,8 @@
     --border: 240 4% 20%;
     --input: 240 4% 16%;
     --ring: 263 70% 60%;
+    /* New Carousel Section Background for Dark Mode */
+    --carousel-section-bg: 240 4% 6%; /* A very dark gray, slightly off main background */
   }
 }
 
@@ -159,6 +164,14 @@
     background-size: 200% 200%;
     animation: gradient-flow 8s ease infinite;
   }
+  /* Hide scrollbar utility */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }
 
 /* Keyframes for animations */
@@ -183,6 +196,7 @@
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px; /* For horizontal scrollbars */
 }
 ::-webkit-scrollbar-track {
   background: hsl(var(--background));
@@ -194,3 +208,4 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground));
 }
+```
