@@ -206,7 +206,7 @@
 
 /* New Scroll-Driven 3D Carousel Styles */
 .agent-scroll-carousel-section {
-    min-height: 400vh; /* Adjust based on number of agents and desired scroll length */
+    min-height: 500vh; /* Increased from 400vh. Adjust based on number of agents and desired scroll length */
     position: relative;
     background: var(--carousel-section-bg); /* From theme */
      /* background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%); From example */
@@ -411,3 +411,4 @@ html {
 /* Update if primary changes to ensure --primary-rgb is correct */
 /* If primary is 262.1 83.3% 57.8% -> HSL(262, 83%, 58%) approx -> RGB(106, 27, 154) */
 /* You'd need to manually update --primary-rgb if --primary changes significantly */
+
