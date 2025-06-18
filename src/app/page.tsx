@@ -39,12 +39,12 @@ import {
   Pocket,
   DollarSign,
   ShoppingCart,
-  BookUser, // For LeadSpark - if using Lucide
-  Smartphone, // For InboxZero - if using Lucide
-  PenTool, // For ContentCraft - if using Lucide
-  Briefcase, // For TaskMaster - if using Lucide
-  Landmark, // For FinanceTracker - if using Lucide
-  Store, // For ShopSmart - if using Lucide
+  BookUser, 
+  Smartphone, 
+  PenTool, 
+  Briefcase, 
+  Landmark, 
+  Store, 
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -94,21 +94,21 @@ const ChartDisplay = () => {
 export const interactiveAgentsData: InteractiveAgentInfo[] = [
   {
     id: 'inboxzero',
-    name: 'InboxZero Email Agent',
+    name: 'InboxZero AI',
     iconEmoji: '📨',
-    description: 'Cleans your inbox, flags priority emails, archives spam.',
+    description: 'Cleans your inbox, flags priority emails, archives spam, and drafts replies. Integrates with Gmail & Outlook.',
     demoType: 'inboxZero',
-    themeColorClass: 'bg-blue-500', // Used for accents
+    themeColorClass: 'bg-blue-500', 
     longDescription: 'Automatically categorizes emails, drafts replies for common queries, and keeps your inbox clutter-free so you can focus on what matters.',
     features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering'],
-    slideImageUrl: 'https://placehold.co/600x800.png',
+    slideImageUrl: 'https://placehold.co/600x800.png', // Example, replace
     slideImageHint: 'email inbox organization tech',
   },
   {
     id: 'leadspark',
-    name: 'LeadSpark LeadGen Agent',
+    name: 'LeadSpark AI',
     iconEmoji: '🧲',
-    description: 'Captures and qualifies leads from multiple sources.',
+    description: 'Captures, qualifies leads from LinkedIn, web forms, or email, and syncs to CRM/Sheets.',
     demoType: 'leadSpark',
     themeColorClass: 'bg-amber-500',
     longDescription: 'Gathers lead information from LinkedIn, web forms, or email, qualifies them based on your criteria, and syncs with your CRM or Sheets.',
@@ -118,9 +118,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
   },
   {
     id: 'contentcraft',
-    name: 'ContentCraft Writer Agent',
+    name: 'ContentCraft AI',
     iconEmoji: '✍️',
-    description: 'Auto-generates blogs, social posts, product descriptions.',
+    description: 'Auto-generates blogs, social posts, product descriptions from a simple prompt. Exports to Notion/CMS.',
     demoType: 'contentCraft',
     themeColorClass: 'bg-rose-500',
     longDescription: 'Provide a prompt and let our AI generate various forms of content, from engaging blog posts to catchy social media captions or detailed product descriptions.',
@@ -130,11 +130,11 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
   },
   {
     id: 'schedulesync',
-    name: 'ScheduleSync Calendar Agent',
+    name: 'ScheduleSync AI',
     iconEmoji: '📅',
-    description: 'Syncs calendars, auto-blocks time, sends reminders.',
+    description: 'Syncs Google Calendar, finds optimal meeting slots, auto-blocks time, and sends reminders.',
     demoType: 'scheduleSync',
-    themeColorClass: 'bg-purple-600', // Adjusted for better contrast if needed
+    themeColorClass: 'bg-purple-600', 
     longDescription: 'Connects to your Google Calendar, finds optimal meeting slots based on preferences, blocks time automatically, and sends timely reminders.',
     features: ['Google Calendar Sync', 'AI Slot Finding', 'Auto Time-Blocking', 'Email/Slack Reminders'],
     slideImageUrl: 'https://placehold.co/600x800.png',
@@ -142,9 +142,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
   },
   {
     id: 'taskmaster',
-    name: 'TaskMaster Todo Agent',
+    name: 'TaskMaster AI',
     iconEmoji: '✅',
-    description: 'Tracks tasks, auto-sorts by priority, nudges for deadlines.',
+    description: 'Tracks Todoist/Notion tasks, auto-sorts by priority, and nudges for deadlines. Daily summaries included.',
     demoType: 'taskMaster',
     themeColorClass: 'bg-green-500',
     longDescription: 'Integrates with Todoist or Notion to manage your tasks, uses AI to prioritize them, and sends daily summaries or deadline nudges.',
@@ -154,9 +154,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
   },
   {
     id: 'financetracker',
-    name: 'FinanceTracker Budget Agent',
+    name: 'FinanceTracker AI',
     iconEmoji: '💰',
-    description: 'Tracks expenses, categorizes transactions, recommends savings.',
+    description: 'Tracks expenses via webhook/manual entry, auto-categorizes, and provides savings tips with charts.',
     demoType: 'financeTracker',
     themeColorClass: 'bg-teal-500',
     longDescription: 'Ingests expense data (manually or via webhooks), auto-categorizes transactions (Food, Bills, Travel), and provides visual breakdowns with savings tips.',
@@ -166,9 +166,9 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
   },
   {
     id: 'shopsmart',
-    name: 'ShopSmart Ecommerce Agent',
+    name: 'ShopSmart AI',
     iconEmoji: '🛍️',
-    description: 'Recommends products, handles FAQs, and boosts conversion.',
+    description: 'Recommends products from catalog (API/CSV), handles FAQs via GPT, analyzes checkout funnel.',
     demoType: 'shopSmart',
     themeColorClass: 'bg-pink-500',
     longDescription: 'Integrates with your product catalog, offers personalized recommendations, answers customer FAQs using GPT, and analyzes checkout funnel data.',
@@ -188,7 +188,7 @@ export default function Home() {
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
-    agentCarousel: useRef(null),
+    agentCarousel: useRef(null), // This will be the .agent-scroll-carousel-section
     whyLazify: useRef(null),
     pricing: useRef(null),
     faq: useRef(null),
@@ -476,7 +476,7 @@ export default function Home() {
               </p>
             </motion.div>
             <motion.div
-              className="cards-sticky-container" // Changed from grid to sticky container
+              className="cards-sticky-container" 
               variants={staggerContainer}
             >
               {services.map((service, index) => (
@@ -495,27 +495,35 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <motion.section
+        {/* AGENT CAROUSEL SECTION - Updated for Scroll Animation */}
+        <section
           id="agent-carousel"
           ref={sectionRefs.agentCarousel}
-          className="w-full section-padding bg-carousel-section text-foreground"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.1 }} variants={fadeInUp}
+          className="agent-scroll-carousel-section w-full bg-carousel-section text-foreground relative" 
         >
-          <div className="container mx-auto px-0 md:px-6">
-            <motion.div className="mb-12 md:mb-16 text-center" variants={fadeInUp}>
-              <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
-                Meet Our AI Agent Lineup
-              </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-                Your Intelligent Workforce Awaits
-              </h2>
-              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                Explore our diverse range of AI agents, each designed to tackle specific tasks and boost your productivity.
-              </p>
-            </motion.div>
-            {isClient && <ModernAgentCarousel agents={interactiveAgentsData} />}
+          <div className="agent-scroll-carousel-container">
+            <div className="container mx-auto px-0 md:px-6 flex flex-col items-center justify-center h-full relative z-10">
+                <motion.div 
+                    className="mb-12 md:mb-16 text-center" 
+                    variants={fadeInUp} 
+                    initial="initial" 
+                    whileInView="animate" 
+                    viewport={{ once: true, amount:0.1}}
+                >
+                    <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
+                        Meet Our AI Agent Lineup
+                    </span>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+                        Your Intelligent Workforce Awaits
+                    </h2>
+                    <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
+                        Explore our diverse range of AI agents, each designed to tackle specific tasks and boost your productivity.
+                    </p>
+                </motion.div>
+                {isClient && <ModernAgentCarousel agents={interactiveAgentsData} scrollTargetRef={sectionRefs.agentCarousel} />}
+            </div>
           </div>
-        </motion.section>
+        </section>
 
 
         <motion.section
