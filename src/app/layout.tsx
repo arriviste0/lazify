@@ -1,7 +1,6 @@
 
 import type { Metadata } from 'next';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
+// Removed GeistSans import
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ScrollProgressBar } from '@/components/scroll-progress-bar';
@@ -19,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${GeistSans.variable} ${GeistMono.variable} bg-background text-foreground antialiased`}>
+      <body className="bg-background text-foreground antialiased"> {/* Removed GeistSans.variable */}
         <SmoothCursor />
         <ScrollProgressBar />
         {children}

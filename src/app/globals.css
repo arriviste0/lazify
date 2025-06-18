@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -94,12 +95,12 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-sans), system-ui, sans-serif; /* Ensure Geist Sans is primary */
+    font-family: system-ui, sans-serif; /* Reverted to system fonts */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    font-family: system-ui, sans-serif; /* Reverted to system fonts */
     @apply font-bold tracking-tight; /* Bold headings */
   }
   /* Large, bold headings */
@@ -109,7 +110,7 @@
   p { @apply text-base md:text-lg text-muted-foreground; }
 
   code, pre, kbd, samp {
-    font-family: var(--font-geist-mono), monospace;
+    font-family: monospace; /* Fallback to generic monospace */
   }
 }
 
@@ -153,7 +154,7 @@
 
    /* Scroll progress bar */
    .scroll-progress-bar {
-      @apply fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent origin-left z-[100];
+      @apply fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent origin-left z-50;
    }
 }
 
@@ -208,4 +209,5 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground));
 }
-```
+
+    
