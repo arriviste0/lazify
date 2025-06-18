@@ -3,12 +3,13 @@
 
 import React,
  { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, useAnimation, useMotionValue, useTransform, PanInfo } from 'framer-motion';
+import { motion, useAnimation, useMotionValue, useTransform, PanInfo, useScroll } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AgentCarouselCard from './AgentCarouselCard';
 import type { InteractiveAgentInfo } from '@/types/agent';
-import { useIsMobile } from '@/hooks/use-mobile'; // Assuming you have this hook
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 interface AgentCarouselProps {
   agents: InteractiveAgentInfo[];
@@ -19,21 +20,33 @@ const CARD_WIDTH_MOBILE = 320 + 16; // 320px (w-80) + 16px (gap-4)
 
 const AgentCarousel: React.FC<AgentCarouselProps> = ({ agents }) => {
   const controls = useAnimation();
-  const x = useMotionValue(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const dragX = useMotionValue(0); // Motion value for drag and button-based translation
+  const carouselWrapperRef = useRef<HTMLDivElement>(null); // Ref for the outermost container of the carousel
+  
+  const { scrollYProgress } = useScroll({
+    target: carouselWrapperRef,
+    offset: ["start end", "end start"] // Animate when the carousel is in view
+  });
+
+  // Parallax effect: move cards horizontally based on page scroll
+  // Moves cards by -100px when carousel starts entering view, to +100px when it's fully scrolled past
+  const parallaxX = useTransform(scrollYProgress, [0, 1], [-150, 150]);
+
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const isMobile = useIsMobile();
 
   const cardWidth = isMobile ? CARD_WIDTH_MOBILE : CARD_WIDTH_DESKTOP;
   const totalWidth = cardWidth * agents.length;
-  const visibleCards = Math.floor(containerWidth / cardWidth);
-  const maxIndex = Math.max(0, agents.length - visibleCards);
+  const visibleCards = typeof window !== 'undefined' ? Math.floor(containerWidth / cardWidth) : 1;
+  const maxIndex = Math.max(0, agents.length - Math.max(1,visibleCards));
+
 
   useEffect(() => {
     const updateWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
+      if (carouselWrapperRef.current) {
+        setContainerWidth(carouselWrapperRef.current.offsetWidth);
       }
     };
     updateWidth();
@@ -52,21 +65,25 @@ const AgentCarousel: React.FC<AgentCarouselProps> = ({ agents }) => {
   }, [currentIndex]);
 
   useEffect(() => {
+    // Update dragX for button clicks (snapping)
+    dragX.set(-currentIndex * cardWidth);
     controls.start({
       x: -currentIndex * cardWidth,
       transition: { type: 'spring', stiffness: 300, damping: 40 },
     });
-  }, [currentIndex, cardWidth, controls]);
+  }, [currentIndex, cardWidth, controls, dragX]);
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const dragThreshold = cardWidth / 3;
+    const currentOffset = dragX.get();
+    const dragThreshold = cardWidth / 4; // Reduced threshold for easier swipe
+    
     if (info.offset.x < -dragThreshold) {
       handleNext();
     } else if (info.offset.x > dragThreshold) {
       handlePrev();
     } else {
-      // Snap back to current position if drag is not enough
-      controls.start({
+      // Snap back to current card if drag is not enough
+       controls.start({
         x: -currentIndex * cardWidth,
         transition: { type: 'spring', stiffness: 400, damping: 50 },
       });
@@ -78,19 +95,24 @@ const AgentCarousel: React.FC<AgentCarouselProps> = ({ agents }) => {
 
 
   return (
-    <div className="relative w-full" ref={containerRef}>
+    <div className="relative w-full overflow-hidden" ref={carouselWrapperRef}> {/* Added overflow-hidden here */}
       <motion.div
-        className={cn("flex py-4", isMobile ? "gap-4 px-4" : "gap-6 px-6")}
+        className={cn("flex py-4 cursor-grab active:cursor-grabbing", isMobile ? "gap-4 px-4" : "gap-6 px-6")}
         drag="x"
         dragConstraints={{
-          left: -(totalWidth - containerWidth + (isMobile ? 16 : 24)), // Add last gap
+          left: -(totalWidth - containerWidth + (isMobile ? 16 : 24) - cardWidth * (visibleCards > 1 ? 0.5 : 0)),
           right: 0,
         }}
-        style={{ x }}
+        style={{ 
+          x: dragX, // This will be controlled by drag and buttons
+          translateX: parallaxX // This adds the scroll-driven parallax
+        }}
         animate={controls}
         onDragEnd={handleDragEnd}
-        // Disable native scrollbars on the motion.div itself
-        onWheel={(e) => e.currentTarget.scrollLeft += e.deltaY > 0 ? cardWidth : -cardWidth }
+        onWheel={(e) => {
+          // Optional: Prevent vertical scroll while horiontally scrolling carousel with wheel
+          // if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.stopPropagation();
+        }}
       >
         {agents.map((agent) => (
           <AgentCarouselCard key={agent.id} agent={agent} />
@@ -127,7 +149,7 @@ const AgentCarousel: React.FC<AgentCarouselProps> = ({ agents }) => {
             {Array.from({ length: numPages }).map((_, pageIndex) => (
               <button
                 key={pageIndex}
-                onClick={() => setCurrentIndex(pageIndex * Math.max(1, visibleCards))}
+                onClick={() => setCurrentIndex(Math.min(maxIndex, pageIndex * Math.max(1, visibleCards)))}
                 className={cn(
                   "h-2.5 w-2.5 rounded-full transition-all duration-300 ease-in-out",
                   currentPage === pageIndex ? "bg-primary scale-125" : "bg-muted hover:bg-muted-foreground/50"
@@ -142,6 +164,3 @@ const AgentCarousel: React.FC<AgentCarouselProps> = ({ agents }) => {
 };
 
 export default AgentCarousel;
-
-// Helper function to determine if running in browser
-const cn = (...inputs: any[]) => inputs.filter(Boolean).join(' ');
