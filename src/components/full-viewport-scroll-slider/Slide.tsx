@@ -15,27 +15,26 @@ interface SlideProps {
 }
 
 const contentVariants = {
-  hidden: { opacity: 0, y: 30 }, 
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7, 
+      duration: 0.7,
       ease: [0.6, -0.05, 0.01, 0.99],
-      staggerChildren: 0.2, 
+      staggerChildren: 0.2,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 25 }, 
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }, 
+  hidden: { opacity: 0, y: 25, scale: 0.95 }, // Start slightly scaled down
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
 const getAgentGradient = (themeColorClass: string) => {
   const colorName = themeColorClass.replace('bg-', '').split('-')[0];
-  // Adjusted gradient for better visibility and lighter feel
-  // Using -700, -800, -900 shades with adjusted opacities
+  // Using lighter, more transparent theme colors with a mix of the main background for subtlety
   return `bg-gradient-to-br from-${colorName}-700/30 via-${colorName}-800/20 to-${colorName}-950/25`;
 };
 
@@ -46,7 +45,7 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
   return (
     <div className={cn(
         "relative h-screen w-screen flex-shrink-0 flex items-center justify-center text-center p-8 overflow-hidden",
-        slideBackgroundClass 
+        slideBackgroundClass
       )}
     >
        <div className="absolute inset-0 animated-background-subtle opacity-[0.04] pointer-events-none"></div>
@@ -61,17 +60,18 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
           {agent.iconEmoji}
         </motion.div>
 
-        <motion.div 
-          variants={itemVariants} 
-          className="mb-8 relative w-56 h-40 sm:w-64 sm:h-48 md:w-80 md:h-60"
+        {/* Image container with diagnostic background */}
+        <motion.div
+          variants={itemVariants}
+          className="mb-8 relative w-56 h-40 sm:w-64 sm:h-48 md:w-80 md:h-60 bg-pink-500/30" // Diagnostic background
         >
           <Image
             src={agent.slideImageUrl || `https://placehold.co/400x300.png?text=${encodeURIComponent(agent.name)}`}
             alt={`${agent.name} visual representation`}
             fill
-            className="object-contain rounded-lg shadow-xl"
+            className="object-contain rounded-lg shadow-xl border-2 border-green-500" // Diagnostic border
             data-ai-hint={agent.slideImageHint || agent.name.toLowerCase().replace(/\s+/g, ' ')}
-            priority={isActive} 
+            priority={isActive}
           />
         </motion.div>
 
@@ -90,7 +90,7 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
         <motion.div variants={itemVariants}>
           <Button
             size="lg"
-            className="cta-button text-base md:text-lg" 
+            className="cta-button text-base md:text-lg"
             asChild
           >
             <Link href={`/interactive-agents/${agent.id}`}>
