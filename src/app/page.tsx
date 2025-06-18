@@ -53,7 +53,6 @@ import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
 import AiWorkflowVisualization from '@/components/ai-workflow-visualization';
 import type { InteractiveAgentInfo } from '@/types/agent';
-import FullViewportScrollSlider from '@/components/full-viewport-scroll-slider/FullViewportScrollSlider';
 
 
 const fadeInUp = {
@@ -182,7 +181,6 @@ export default function Home() {
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
-    interactiveAgents: useRef(null),
     whyLazify: useRef(null),
     pricing: useRef(null),
     faq: useRef(null),
@@ -228,7 +226,6 @@ export default function Home() {
   const navLinks = [
     { href: '#home', label: 'Home', ref: sectionRefs.home },
     { href: '#services', label: 'Services', ref: sectionRefs.services },
-    { href: '#interactive-agents', label: 'AI Demos', ref: sectionRefs.interactiveAgents },
     { href: '#why-lazify', label: 'Why Us', ref: sectionRefs.whyLazify },
     { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
     { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
@@ -488,14 +485,13 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <section
-          id="interactive-agents"
-          ref={sectionRefs.interactiveAgents}
-          className="w-full bg-background relative" // No section-padding, slider handles height
-        >
-          {/* The FullViewportScrollSlider manages its own height and sticky behavior */}
-          <FullViewportScrollSlider agents={interactiveAgentsData} />
-        </section>
+        {/* Placeholder for where the Interactive Agents section was. Users can re-add content here later. */}
+        {/* <section id="interactive-agents" ref={sectionRefs.interactiveAgents} className="w-full section-padding">
+           <div className="container mx-auto px-4 md:px-6">
+              <h2 className="text-center text-3xl md:text-4xl font-bold mb-12">Explore Our AI Agents</h2>
+              // Content for interactive agents can go here
+           </div>
+        </section> */}
 
 
         <motion.section
