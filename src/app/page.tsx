@@ -101,7 +101,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     themeColorClass: 'bg-blue-500', 
     longDescription: 'Automatically categorizes emails, drafts replies for common queries, and keeps your inbox clutter-free so you can focus on what matters.',
     features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering'],
-    slideImageUrl: 'https://placehold.co/600x800.png', // Example, replace
+    slideImageUrl: 'https://placehold.co/600x800.png', 
     slideImageHint: 'email inbox organization tech',
   },
   {
@@ -188,7 +188,7 @@ export default function Home() {
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
-    agentCarousel: useRef(null), // This will be the .agent-scroll-carousel-section
+    agentCarousel: useRef(null), 
     whyLazify: useRef(null),
     pricing: useRef(null),
     faq: useRef(null),
@@ -495,7 +495,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* AGENT CAROUSEL SECTION - Updated for Scroll Animation */}
+        
         <section
           id="agent-carousel"
           ref={sectionRefs.agentCarousel}
@@ -529,10 +529,10 @@ export default function Home() {
         <motion.section
           id="why-lazify"
           ref={sectionRefs.whyLazify}
-          className="w-full section-padding bg-gradient-to-b from-secondary/20 to-background text-center md:text-left"
+          className="w-full bg-gradient-to-b from-secondary/20 to-background text-center md:text-left pb-16 md:pb-24 lg:pb-28"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-4 md:px-6">
+          <div className="container mx-auto px-4 md:px-6 pt-16 md:pt-24 lg:pt-28"> {/* Added explicit top padding here */}
             <div className="grid gap-12 lg:grid-cols-2 items-center">
               <motion.div variants={fadeInUp}>
                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
