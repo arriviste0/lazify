@@ -15,25 +15,25 @@ export interface AgentInfo {
 }
 
 // New type for the interactive agent demos
-export type DemoType = 
-  | 'inboxZero' 
-  | 'leadSpark' 
-  | 'contentCraft' 
-  | 'scheduleSync' 
-  | 'taskMaster' 
-  | 'financeTracker' 
+export type DemoType =
+  | 'inboxZero'
+  | 'leadSpark'
+  | 'contentCraft'
+  | 'scheduleSync'
+  | 'taskMaster'
+  | 'financeTracker'
   | 'shopSmart';
 
 export interface InteractiveAgentInfo {
   id: string;
   name: string;
-  iconEmoji: string;
+  iconEmoji: string; // Using emoji for the new carousel cards
   description: string;
   demoType: DemoType;
-  themeColorClass: string; // e.g., 'bg-blue-500', 'text-rose-500'
+  themeColorClass: string; // e.g., 'bg-blue-500', used for accents
   longDescription?: string;
   features?: string[];
-  slideImageUrl?: string; // Added for the full-viewport slider image
-  slideImageHint?: string; // Added for AI hint for the slide image
+  slideImageUrl?: string; // Image for the card background
+  slideImageHint?: string; // AI hint for the card background image
 }
 
