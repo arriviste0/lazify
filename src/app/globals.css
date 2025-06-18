@@ -2,7 +2,158 @@
 @tailwind components;
 @tailwind utilities;
 
-/* All custom CSS has been removed for diagnostics */
-/* Previous content has been backed up and can be restored once the parsing issue is resolved. */
-/* The error "Unterminated template (114:4)" was persistent even with simplified CSS. */
-/* This version is the absolute minimum to see if the issue is within the custom CSS itself. */
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 262.1 83.3% 57.8%; /* Default Purple */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 0 0% 62.9%;
+
+    --accent: 300 76% 52%; /* Vivid Pink/Magenta as accent */
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 262.1 83.3% 57.8%; /* Ring color matching primary */
+
+    --radius: 0.75rem;
+
+    --chart-1: 262 83% 58%; /* primary */
+    --chart-2: 300 76% 52%; /* accent */
+    --chart-3: 210 40% 96.1%;
+    --chart-4: 10 60% 50%;
+    --chart-5: 180 50% 50%;
+
+    --sidebar-background: 240 10% 3.9%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 262.1 83.3% 57.8%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 262.1 83.3% 57.8%;
+
+    --carousel-section-bg: 240 8% 6%; /* Darker than card, slightly purple tint if primary is purple */
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 6.9%; /* Slightly lighter card for dark mode */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 0 0% 62.9%;
+
+    --accent: 300 76% 52%; /* Keep accent vivid */
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 72.2% 50.6%; /* More vivid destructive for dark mode */
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 20.9%; /* Slightly lighter border for dark mode */
+    --input: 240 3.7% 15.9%;
+    --ring: 262.1 83.3% 57.8%;
+
+    --carousel-section-bg: 240 8% 6%; /* Darker, subtly distinct from main bg */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-geist-sans, system-ui, sans-serif);
+    /* Font smoothing */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+    font-family: var(--font-geist-sans, system-ui, sans-serif);
+  }
+
+  code, pre, kbd, samp {
+    font-family: var(--font-geist-mono, monospace);
+  }
+
+  /* Custom scrollbar styling (subtle) */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-secondary/30 rounded-md;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/50 rounded-md border-2 border-transparent bg-clip-content;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/70;
+  }
+}
+
+@layer utilities {
+  .modern-card {
+    @apply bg-card/80 backdrop-blur-lg border border-card-foreground/10 rounded-xl shadow-xl hover:shadow-2xl transition-shadow;
+  }
+  .cta-button {
+    @apply bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-primary-foreground font-semibold shadow-lg hover:shadow-primary/40 transition-all duration-300 transform hover:scale-105;
+    /* Adjust gradient colors as needed */
+  }
+   .outline-button-glow {
+    @apply border-primary/50 text-primary hover:bg-primary/10 hover:shadow-[0_0_15px_5px_theme(colors.primary/0.2)] transition-all duration-300;
+  }
+  .gradient-text-animated {
+    @apply bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient-flow;
+    background-size: 200% 200%; /* For animation */
+  }
+  .animated-background-subtle {
+    @apply bg-gradient-to-br from-background via-purple-950/10 to-background;
+    background-size: 200% 200%;
+    animation: gradient-subtle 20s ease infinite;
+  }
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-28;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+/* Scroll progress bar */
+.scroll-progress-bar {
+   @apply fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent origin-left z-50;
+}
