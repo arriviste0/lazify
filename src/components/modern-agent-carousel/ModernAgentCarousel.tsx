@@ -31,31 +31,18 @@ const ModernAgentCarousel: React.FC<ModernAgentCarouselProps> = ({ agents }) => 
     (index: number, behavior: ScrollBehavior = 'smooth') => {
       if (carouselRef.current) {
         const containerWidth = carouselRef.current.offsetWidth;
-        let scrollAmount = 0;
-
-        if (itemsPerPage === 1) {
-          // Calculate width of one card including gap (approx for centering)
-          // Each card takes almost full width, minus some padding/margin
-          const cardEffectiveWidth = containerWidth * 0.9; // Assuming card is 90% of container for single view
-          scrollAmount = index * cardEffectiveWidth;
-        } else {
-          // For multiple items, scroll by pages
-          const scrollLeftForIndex = (containerWidth + gapRem * 16) * index; // 16 is approx px for 1rem
-          scrollAmount = scrollLeftForIndex / itemsPerPage;
-        }
-        
         // A more robust way for multiple items: scroll to the DOM element
         const cardElement = carouselRef.current.children[index * itemsPerPage] as HTMLElement;
         if (cardElement) {
             carouselRef.current.scrollTo({
-                left: cardElement.offsetLeft - (gapRem * 16 / itemsPerPage), // Adjust for gap
+                left: cardElement.offsetLeft - (carouselRef.current.firstElementChild && itemsPerPage > 1 ? parseFloat(getComputedStyle(carouselRef.current.firstElementChild).marginRight) / 2 : 0) ,
                 behavior: behavior,
             });
         }
       }
       setCurrentIndex(index);
     },
-    [itemsPerPage, gapRem]
+    [itemsPerPage]
   );
 
   const handleNext = useCallback(() => {
@@ -79,7 +66,7 @@ const ModernAgentCarousel: React.FC<ModernAgentCarouselProps> = ({ agents }) => 
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       handleNext();
-    }, 4000);
+    }, 5000); // Changed from 4000 to 5000 for slower speed
   }, [handleNext]);
 
   const stopAutoScroll = () => {
