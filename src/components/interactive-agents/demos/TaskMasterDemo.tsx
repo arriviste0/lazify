@@ -7,9 +7,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertTriangle, ListChecks, Zap } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { handleTaskMasterAction } from "@/app/interactive-agents/actions/taskMasterActions";
-import type { TaskMasterInput, TaskMasterOutput } from "@/ai/flows/interactive-demos/demoTaskMasterFlow";
+import type { TaskMasterInput, TaskMasterOutput, PrioritizedTaskSchema as TaskType } from "@/ai/flows/interactive-demos/demoTaskMasterFlow";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 interface TaskMasterDemoProps {
   agent: InteractiveAgentInfo;
@@ -48,6 +50,19 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
     });
   };
 
+  const handlePriorityChange = (taskIndex: number, newPriority: TaskType["priority"]) => {
+    setResult(prevResult => {
+      if (!prevResult) return null;
+      const updatedTasks = prevResult.prioritizedTasks.map((task, index) => {
+        if (index === taskIndex) {
+          return { ...task, priority: newPriority };
+        }
+        return task;
+      });
+      return { ...prevResult, prioritizedTasks: updatedTasks };
+    });
+  };
+
   const sampleTasks = `
 - Finish Q3 report by Friday
 - Email client about project update
@@ -58,13 +73,26 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
 - Find hotel near Seminyak
 `.trim();
 
-  // Extract color name for dynamic class generation, e.g., "green" from "bg-green-500"
   const colorName = agent.themeColorClass.replace('bg-', '').split('-')[0];
   const demoButtonClass = `bg-${colorName}-500 hover:bg-${colorName}-600`;
   const demoInputFocusClass = `focus:ring-${colorName}-500`;
   const demoCardAccentBorder = `border-${colorName}-200`;
   const demoCardAccentBg = `bg-${colorName}-50`;
   const demoCardAccentText = `text-${colorName}-700`;
+
+  const getPrioritySelectClasses = (priority: TaskType["priority"]) => {
+    switch (priority) {
+      case "High":
+        return "bg-red-500/20 border-red-500/50 text-red-700 focus:ring-red-500";
+      case "Medium":
+        return "bg-yellow-500/20 border-yellow-500/50 text-yellow-700 focus:ring-yellow-500";
+      case "Low":
+        return `bg-${colorName}-500/20 border-${colorName}-500/50 text-${colorName}-700 focus:ring-${colorName}-500`;
+      default:
+        return "bg-muted border-border";
+    }
+  };
+
 
   return (
     <div className="space-y-6">
@@ -114,16 +142,21 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
               <ul className="space-y-2">
                 {result.prioritizedTasks.map((task, index) => (
                   <li key={index} className="p-2 bg-background/50 rounded border border-border flex justify-between items-center">
-                    <span>{task.task}</span>
-                    <span 
-                      className={`px-2 py-0.5 rounded-full text-xs font-medium text-white ${
-                        task.priority === "High" ? "bg-red-500" :
-                        task.priority === "Medium" ? "bg-yellow-500 text-black" :
-                        `bg-${colorName}-500` // Use agent theme for Low priority as a base
-                      }`}
+                    <span className="flex-grow pr-2">{task.task}</span>
+                    <Select
+                      value={task.priority}
+                      onValueChange={(newPriority: TaskType["priority"]) => handlePriorityChange(index, newPriority)}
+                      disabled={isPending}
                     >
-                      {task.priority}
-                    </span>
+                      <SelectTrigger className={cn("w-[120px] h-8 text-xs", getPrioritySelectClasses(task.priority))}>
+                        <SelectValue placeholder="Set priority" />
+                      </SelectTrigger>
+                      <SelectContent className="text-xs">
+                        <SelectItem value="High" className="text-red-600 focus:bg-red-100">High</SelectItem>
+                        <SelectItem value="Medium" className="text-yellow-600 focus:bg-yellow-100">Medium</SelectItem>
+                        <SelectItem value="Low" className={`text-${colorName}-600 focus:bg-${colorName}-100`}>Low</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </li>
                 ))}
               </ul>
@@ -131,7 +164,7 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
               <p>No tasks to display.</p>
             )}
             <p className="text-xs text-muted-foreground pt-2">{result.summary}</p>
-            <p className="text-xs text-muted-foreground pt-1">Simulated prioritization. For demo purposes only.</p>
+            <p className="text-xs text-muted-foreground pt-1">Simulated prioritization. Edits are client-side. For demo purposes only.</p>
           </CardContent>
         </Card>
       )}
