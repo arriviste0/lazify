@@ -227,4 +227,3 @@ const ModernAgentCarousel: React.FC<ModernAgentCarouselProps> = ({ agents }) => 
 };
 
 export default ModernAgentCarousel;
-```
