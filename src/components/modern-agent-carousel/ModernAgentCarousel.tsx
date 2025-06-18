@@ -46,38 +46,22 @@ interface CarouselItemProps {
 }
 
 const CarouselItem: React.FC<CarouselItemProps> = ({ agent, index, activeSlideIndexDecimal, totalSlides }) => {
-  // Distance of this card from the current "virtual" active slide
-  // When card is active, distance is 0. Left: -1, -2... Right: 1, 2...
   const distance = useTransform(activeSlideIndexDecimal, (latest) => index - latest);
 
-  const X_TRANSLATE_FACTOR_PERCENT = 50; // How much horizontal separation for 3D effect
-  const Z_TRANSLATE_FACTOR_PIXELS = 250; // How much depth for non-active slides
-  const SCALE_FACTOR = 0.2; // How much smaller non-active slides are
-  const ROTATE_Y_FACTOR_DEGREES = 20; // How much Y-axis rotation for non-active slides
-  const OPACITY_FACTOR = 0.5; // Opacity reduction for non-active slides
+  const X_TRANSLATE_FACTOR_PERCENT = 15; 
+  const Z_TRANSLATE_FACTOR_PIXELS = 80; 
+  const SCALE_FACTOR = 0.1; 
+  const ROTATE_Y_FACTOR_DEGREES = 8;
+  const OPACITY_FACTOR = 0.25;
 
-  // translateX: cards further from center are pushed out more
-  // This creates the "fan" or "stack" effect.
-  // A positive distance (card is to the right of active) translates right.
-  // A negative distance (card is to the left of active) translates left.
   const translateX = useTransform(distance, (d) => {
-    // Give a bit more separation to cards far from center
-    return `${d * X_TRANSLATE_FACTOR_PERCENT * (1 + Math.abs(d) * 0.1)}%`;
+    return `${d * X_TRANSLATE_FACTOR_PERCENT}%`;
   });
   
-  // scale: active card is 1, others are smaller
   const scale = useTransform(distance, (d) => 1 - Math.abs(d) * SCALE_FACTOR);
-  
-  // opacity: active card is 1, others are less opaque
   const opacity = useTransform(distance, (d) => Math.max(0.1, 1 - Math.abs(d) * OPACITY_FACTOR));
-  
-  // rotateY: cards to the left rotate one way, to the right another way
   const rotateY = useTransform(distance, (d) => d * -ROTATE_Y_FACTOR_DEGREES);
-
-  // translateZ: non-active cards are pushed "back"
   const translateZ = useTransform(distance, (d) => -Math.abs(d) * Z_TRANSLATE_FACTOR_PIXELS);
-
-  // zIndex: cards closer to the "active" virtual index are higher
   const zIndex = useTransform(distance, (d) => totalSlides - Math.abs(Math.round(d)));
 
 
@@ -85,13 +69,13 @@ const CarouselItem: React.FC<CarouselItemProps> = ({ agent, index, activeSlideIn
     <motion.div
       className="agent-carousel-slide"
       style={{
-        translateX, // This will position cards horizontally in the stack
+        translateX,
         scale,
         opacity,
         rotateY,
-        translateZ, // This pushes cards back or forward in Z space
+        translateZ,
         zIndex,
-        transformOrigin: 'center center', // Ensure transforms originate from center
+        transformOrigin: 'center center',
       }}
     >
       <ModernAgentCard agent={agent} isActive={Math.abs(index - activeSlideIndexDecimal.get()) < 0.5} />
