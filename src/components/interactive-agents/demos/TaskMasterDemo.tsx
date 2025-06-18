@@ -9,7 +9,8 @@ import { Loader2, AlertTriangle, ListChecks, Zap } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { handleTaskMasterAction } from "@/app/interactive-agents/actions/taskMasterActions";
-import type { TaskMasterInput, TaskMasterOutput, PrioritizedTaskSchema as TaskType } from "@/ai/flows/interactive-demos/demoTaskMasterFlow";
+import type { TaskMasterInput, TaskMasterOutput } from "@/ai/flows/interactive-demos/demoTaskMasterFlow";
+import type { PrioritizedTaskSchema as TaskType } from "@/ai/flows/interactive-demos/demoTaskMasterFlow"; // Renamed for clarity
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -83,13 +84,13 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
   const getPrioritySelectClasses = (priority: TaskType["priority"]) => {
     switch (priority) {
       case "High":
-        return "bg-red-500/20 border-red-500/50 text-red-700 focus:ring-red-500";
+        return `bg-red-500/10 text-red-700 border-red-500/30 hover:bg-red-500/20 focus:ring-2 focus:ring-red-400 focus-visible:ring-red-400`;
       case "Medium":
-        return "bg-yellow-500/20 border-yellow-500/50 text-yellow-700 focus:ring-yellow-500";
+        return `bg-amber-500/10 text-amber-700 border-amber-500/30 hover:bg-amber-500/20 focus:ring-2 focus:ring-amber-400 focus-visible:ring-amber-400`;
       case "Low":
-        return `bg-${colorName}-500/20 border-${colorName}-500/50 text-${colorName}-700 focus:ring-${colorName}-500`;
+        return `bg-${colorName}-500/10 text-${colorName}-700 border-${colorName}-500/30 hover:bg-${colorName}-500/20 focus:ring-2 focus:ring-${colorName}-400 focus-visible:ring-${colorName}-400`;
       default:
-        return "bg-muted border-border";
+        return "bg-muted border-border hover:bg-muted/80 focus:ring-2 focus:ring-ring";
     }
   };
 
@@ -140,21 +141,21 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
           <CardContent className="space-y-3 text-foreground/90">
             {result.prioritizedTasks.length > 0 ? (
               <ul className="space-y-2">
-                {result.prioritizedTasks.map((task, index) => (
+                {result.prioritizedTasks.map((taskItem, index) => ( // Renamed task to taskItem
                   <li key={index} className="p-2 bg-background/50 rounded border border-border flex justify-between items-center">
-                    <span className="flex-grow pr-2">{task.task}</span>
+                    <span className="flex-grow pr-2">{taskItem.task}</span>
                     <Select
-                      value={task.priority}
+                      value={taskItem.priority}
                       onValueChange={(newPriority: TaskType["priority"]) => handlePriorityChange(index, newPriority)}
                       disabled={isPending}
                     >
-                      <SelectTrigger className={cn("w-[120px] h-8 text-xs", getPrioritySelectClasses(task.priority))}>
+                      <SelectTrigger className={cn("w-[120px] h-8 text-xs", getPrioritySelectClasses(taskItem.priority))}>
                         <SelectValue placeholder="Set priority" />
                       </SelectTrigger>
-                      <SelectContent className="text-xs">
-                        <SelectItem value="High" className="text-red-600 focus:bg-red-100">High</SelectItem>
-                        <SelectItem value="Medium" className="text-yellow-600 focus:bg-yellow-100">Medium</SelectItem>
-                        <SelectItem value="Low" className={`text-${colorName}-600 focus:bg-${colorName}-100`}>Low</SelectItem>
+                      <SelectContent className="text-xs bg-popover text-popover-foreground border-border">
+                        <SelectItem value="High" className="text-red-700 data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground">High</SelectItem>
+                        <SelectItem value="Medium" className="text-amber-700 data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground">Medium</SelectItem>
+                        <SelectItem value="Low" className={cn(`text-${colorName}-700`, "data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground")}>Low</SelectItem>
                       </SelectContent>
                     </Select>
                   </li>
@@ -179,3 +180,4 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
 };
 
 export default TaskMasterDemo;
+
