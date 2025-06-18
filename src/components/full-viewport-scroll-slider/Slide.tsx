@@ -14,28 +14,28 @@ interface SlideProps {
 }
 
 const contentVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30 }, // Increased y for a more noticeable slide-in
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.7, // Slightly longer duration
       ease: [0.6, -0.05, 0.01, 0.99],
-      staggerChildren: 0.15,
+      staggerChildren: 0.2, // Increased stagger
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 25 }, // Increased y
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }, // Slightly longer
 };
 
 // Function to generate a very subtle gradient based on the theme color
 const getAgentGradient = (themeColorClass: string) => {
   const colorName = themeColorClass.replace('bg-', '').split('-')[0];
-  // These are Tailwind JIT-compatible classes
-  return `bg-gradient-to-br from-${colorName}-900/10 via-background to-${colorName}-900/5`;
+  // Using darker shades (950) and slightly more prominent opacities (e.g., /25, /20)
+  return `bg-gradient-to-br from-${colorName}-950/25 via-background/80 to-${colorName}-950/20`;
 };
 
 
@@ -45,11 +45,10 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
   return (
     <div className={cn(
         "relative h-screen w-screen flex-shrink-0 flex items-center justify-center text-center p-8 overflow-hidden",
-        slideBackgroundClass // Apply dynamic gradient
+        slideBackgroundClass 
       )}
     >
-       {/* Subtle grain overlay if desired */}
-       <div className="absolute inset-0 animated-background-subtle opacity-[0.03] pointer-events-none"></div>
+       <div className="absolute inset-0 animated-background-subtle opacity-[0.04] pointer-events-none"></div>
 
       <motion.div
         className="relative z-10 max-w-2xl flex flex-col items-center"
@@ -75,7 +74,7 @@ const Slide: React.FC<SlideProps> = ({ agent, isActive }) => {
         <motion.div variants={itemVariants}>
           <Button
             size="lg"
-            className="cta-button text-base md:text-lg"
+            className="cta-button text-base md:text-lg" // Using existing cta-button for consistency
             asChild
           >
             <Link href={`/interactive-agents/${agent.id}`}>
