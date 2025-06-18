@@ -16,6 +16,8 @@
 
     --primary: 262.1 83.3% 57.8%; /* Default Purple */
     --primary-foreground: 0 0% 98%;
+    --primary-rgb: 106, 27, 154; /* For purple shadows */
+
 
     --secondary: 240 3.7% 15.9%; /* Dark grey */
     --secondary-foreground: 0 0% 98%;
@@ -25,6 +27,7 @@
 
     --accent: 300 76% 52%; /* Vivid Pink/Magenta as accent */
     --accent-foreground: 0 0% 98%;
+    --accent-rgb: 213, 0, 249; /* For pink/magenta shadows */
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -42,7 +45,7 @@
     --chart-4: 10 60% 50%;
     --chart-5: 180 50% 50%;
 
-    /* Theme colors for agent cards - you might need to add more */
+    /* Theme colors for agent cards - used in ModernAgentCard */
     --theme-blue: linear-gradient(135deg, #667eea, #764ba2);
     --theme-amber: linear-gradient(135deg, #f093fb, #f5576c);
     --theme-rose: linear-gradient(135deg, #4facfe, #00f2fe);
@@ -51,6 +54,7 @@
     --theme-teal: linear-gradient(135deg, #16a085, #f4d03f);
     --theme-pink: linear-gradient(135deg, #fa709a, #fee140);
 
+    /* New variable for carousel section background */
     --carousel-section-bg: 240 8% 6%; /* Darker background for carousel section */
   }
 
@@ -69,17 +73,18 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* From example */
+    /* font-family: var(--font-geist-sans); Using system fonts now */
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden; /* From example */
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
   }
-  
-  /* Custom Scrollbar from example */
+
+  /* Custom Scrollbar */
   ::-webkit-scrollbar {
       width: 8px;
   }
@@ -107,7 +112,7 @@
   }
   .gradient-text-animated {
     @apply bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient-flow;
-    background-size: 200% 200%; 
+    background-size: 200% 200%;
   }
   .animated-background-subtle {
     @apply bg-gradient-to-br from-background via-purple-950/10 to-background;
@@ -121,8 +126,8 @@
     display: none;
   }
   .no-scrollbar {
-    -ms-overflow-style: none; 
-    scrollbar-width: none; 
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
@@ -140,23 +145,22 @@
 
 .cards-sticky-container {
     position: relative;
-    /* Adjusted to give more space for the last card to scroll up */
-    padding-bottom: 100vh; 
+    padding-bottom: 100vh; /* Give space for the last card to scroll up */
 }
 
-.service-card-wrapper { 
+.service-card-wrapper {
     position: relative; /* No longer sticky itself */
-    width: 100%; 
-    max-width: 768px; 
+    width: 100%;
+    max-width: 768px;
     margin-left: auto;
     margin-right: auto;
     /* CSS variables set via inline style in the component for dynamic values */
     /* --card-actual-index: set by JS; */
     /* --numcards-from-prop: set by JS; */
 
-    --index0: var(--card-actual-index); 
+    --index0: var(--card-actual-index);
     --numcards: var(--numcards-from-prop, 4); /* Fallback to 4 if prop not set */
-    --index: calc(var(--index0) + 1); 
+    --index: calc(var(--index0) + 1);
     --reverse-index: calc(var(--numcards) - var(--index0));
     --reverse-index0: calc(var(--reverse-index) - 1);
 }
@@ -166,21 +170,21 @@
     top: 6rem; /* Adjust based on nav height + desired gap from top */
     min-height: 40vh; /* Card sticky duration */
     margin-bottom: -30vh; /* Overlap: (min-height - (visible part like 10vh) ) */
-    
+
     --start-range: calc(var(--index0) / var(--numcards) * 100%);
     --end-range: calc(var(--index) / var(--numcards) * 100%);
-    
+
     animation: linear scale-service-card forwards;
     animation-timeline: --cards-element-scrolls-in-body;
     animation-range: exit-crossing var(--start-range) exit-crossing var(--end-range);
-    
-    transform-origin: center center; 
-    will-change: transform; 
-    transition: transform 0.2s ease-out; 
+
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform 0.2s ease-out; /* For non-scroll-timeline interactions */
 }
 
 .service-card-wrapper:last-child .card__content {
-    margin-bottom: 0; 
+    margin-bottom: 0;
 }
 
 @keyframes scale-service-card {
@@ -189,16 +193,17 @@
     }
 }
 
+/* Fallback for browsers not supporting animation-timeline */
 @supports not (animation-timeline: --cards-element-scrolls-in-body) {
   .service-card-wrapper {
-    position: relative; 
+    position: relative;
     top: auto;
-    margin-bottom: 2rem; 
+    margin-bottom: 2rem; /* Standard margin for stacked cards */
     min-height: auto;
   }
   .service-card-wrapper .card__content {
-    animation: none; 
-    position: static; /* Fallback, no stickiness */
+    animation: none;
+    position: static; /* No stickiness */
     min-height: auto;
     margin-bottom: 0;
   }
@@ -206,10 +211,9 @@
 
 /* New Scroll-Driven 3D Carousel Styles */
 .agent-scroll-carousel-section {
-    min-height: 600vh; /* Increased from 500vh. Adjust based on number of agents and desired scroll length */
+    min-height: 600vh; /* Increased to give more scroll runway */
     position: relative;
-    background: var(--carousel-section-bg); /* From theme */
-     /* background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%); From example */
+    background: var(--carousel-section-bg);
 }
 
 .agent-scroll-carousel-container {
@@ -224,7 +228,7 @@
 }
 
 .agent-carousel-track {
-    display: flex; /* Will contain slides absolutely positioned for transform effect */
+    display: flex;
     width: 100%; /* Track itself doesn't scroll, items transform within it */
     height: 100%; /* Takes height of container */
     position: relative;
@@ -238,7 +242,6 @@
     width: 90%; /* Max width of a card */
     max-width: 400px; /* As per example */
     height: 600px; /* As per example */
-    /* Centering is handled by Framer Motion transforms (translateX based on distance) */
     will-change: transform, opacity;
     transform-origin: center center; /* Ensure transforms are centered */
     display: flex; /* To center ModernAgentCard if it's smaller */
@@ -246,23 +249,23 @@
     justify-content: center;
 }
 
-/* Styling for ModernAgentCard to match .slide-content from example */
 .slide-content-wrapper { /* Outer wrapper for potential animations */
     width: 100%;
     height: 100%;
 }
+
 .slide-content {
-    width: 100%; /* Takes full width of .agent-carousel-slide */
-    height: 100%; /* Takes full height of .agent-carousel-slide */
-    background: rgba(255, 255, 255, 0.03); /* Subtle glassmorphism */
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px); /* Safari */
+    -webkit-backdrop-filter: blur(15px);
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 2rem 1.5rem; /* Adjusted padding */
+    padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Content centered vertically */
+    justify-content: center;
     align-items: center;
     text-align: center;
     position: relative;
@@ -271,7 +274,7 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-.slide-content::before { /* Subtle hover gradient sheen */
+.slide-content::before {
     content: '';
     position: absolute;
     top: 0;
@@ -288,13 +291,13 @@
     opacity: 1;
 }
 
-.slide-content > * { /* Ensure content is above the ::before pseudo-element */
+.slide-content > * {
     position: relative;
     z-index: 1;
 }
 
 .slide-icon {
-    width: 70px; /* Slightly smaller */
+    width: 70px;
     height: 70px;
     margin-bottom: 1.5rem;
     border-radius: 20px;
@@ -308,8 +311,8 @@
 }
 
 .slide-title {
-    font-size: 2rem; /* Adjusted */
-    font-weight: 700; /* Bold */
+    font-size: 2rem;
+    font-weight: 700;
     margin-bottom: 1rem;
     line-height: 1.2;
     color: hsl(var(--foreground));
@@ -317,34 +320,37 @@
 }
 
 .slide-description {
-    font-size: 1rem; /* Adjusted */
+    font-size: 1rem;
     line-height: 1.6;
     opacity: 0.8;
     margin-bottom: 1.5rem;
     color: hsl(var(--muted-foreground));
-    max-width: 90%; /* Prevent text from touching edges */
+    max-width: 90%;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.slide-cta { /* Leverages existing .cta-button utility but can be customized */
-    @apply cta-button; /* Use existing CTA style */
-    padding: 0.8rem 1.8rem; /* Adjusted padding */
+.slide-cta {
+    @apply cta-button;
+    padding: 0.8rem 1.8rem;
     border-radius: 50px;
     font-size: 0.9rem;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-cta:hover {
-    transform: translateY(-2px) scale(1.03); /* Keep existing hover from cta-button */
+    transform: translateY(-2px) scale(1.03);
 }
 
 /* Add specific theme hover for CTA if needed */
 .slide-cta.hover-theme-blue:hover { background: var(--theme-blue); filter: brightness(1.1); }
 .slide-cta.hover-theme-amber:hover { background: var(--theme-amber); filter: brightness(1.1); }
-/* ... add for other colors as defined in :root */
+.slide-cta.hover-theme-rose:hover { background: var(--theme-rose); filter: brightness(1.1); }
+.slide-cta.hover-theme-purple:hover { background: var(--theme-purple); filter: brightness(1.1); }
+.slide-cta.hover-theme-green:hover { background: var(--theme-green); filter: brightness(1.1); }
+.slide-cta.hover-theme-teal:hover { background: var(--theme-teal); filter: brightness(1.1); }
+.slide-cta.hover-theme-pink:hover { background: var(--theme-pink); filter: brightness(1.1); }
 
 
-/* Keyframes from example (can be used for card content entry) */
 @keyframes slideInUp {
     from {
         opacity: 0;
@@ -355,16 +361,15 @@
         transform: translateY(0);
     }
 }
-/* Add if you want a general animate-in class for Framer Motion */
+
 .animate-in-slide {
     animation: slideInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Responsive adjustments for the new carousel */
 @media (max-width: 768px) {
     .agent-carousel-slide {
-        height: 500px; /* Smaller height on mobile */
-        max-width: 90vw; /* Takes more screen width */
+        height: 500px;
+        max-width: 90vw;
     }
     .slide-content {
         padding: 1.5rem 1rem;
@@ -379,36 +384,39 @@
     }
 }
 
-/* Add this if you have a specific progress line like in the example, but this might be handled by ScrollProgressBar */
 .progress-line-custom {
     position: fixed;
-    top: 0; /* Or use your existing scroll-progress-bar */
+    top: 0;
     left: 0;
     width: 100%;
     height: 4px;
     background: rgba(255, 255, 255, 0.05);
-    z-index: 100; /* Ensure it's above content, but below header */
+    z-index: 100;
 }
 
 .progress-fill-custom {
     height: 100%;
     background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
-    width: 0%; /* This would be animated by JS/Framer Motion */
-    transition: width 0.1s ease-out; /* Smooth out width changes */
+    width: 0%;
+    transition: width 0.1s ease-out;
 }
 
-/* Ensure smooth scroll behavior is globally applied if not already */
 html {
     scroll-behavior: smooth;
 }
 
-/* Adjusting root variables for primary color to have an RGB version for shadows */
+/* Variables for primary and accent RGB values if not already defined elsewhere */
 :root {
-    /* ... other variables ... */
-    --primary-rgb: 106, 27, 154; /* Example for purple; adjust if your primary changes */
-    --accent-rgb: 213, 0, 249; /* Example for pink/magenta */
+  /* ... other root variables ... */
+  /* Ensure these are defined. If your primary/accent HSL values change, update these RGBs. */
+  /* --primary-rgb: 106, 27, 154; /* Approx for HSL(262.1, 83.3%, 57.8%) */
+  /* --accent-rgb: 213, 0, 249; /* Approx for HSL(300, 76%, 52%) */
 }
-/* Update if primary changes to ensure --primary-rgb is correct */
-/* If primary is 262.1 83.3% 57.8% -> HSL(262, 83%, 58%) approx -> RGB(106, 27, 154) */
-/* You'd need to manually update --primary-rgb if --primary changes significantly */
 
+/* Make sure body is the direct child of html for some scroll effects if needed */
+/* And ensure no overflow issues on body if html has overflow-x:hidden */
+body {
+    /* overflow-x: hidden; */ /* This is already on html */
+}
+
+    
