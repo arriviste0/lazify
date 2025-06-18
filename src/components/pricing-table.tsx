@@ -78,7 +78,7 @@ export function PricingTable() {
             className="relative flex flex-col"
           >
             {plan.isPopular && (
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-full shadow-lg">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-full shadow-lg">
                 Most Popular
               </div>
             )}
@@ -126,3 +126,4 @@ export function PricingTable() {
     </div>
   );
 }
+
