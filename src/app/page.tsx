@@ -53,7 +53,7 @@ import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
 import AiWorkflowVisualization from '@/components/ai-workflow-visualization';
 import type { InteractiveAgentInfo } from '@/types/agent';
-import InteractiveAgentSlider from '@/components/interactive-agents/InteractiveAgentSlider';
+import FullViewportScrollSlider from '@/components/full-viewport-scroll-slider/FullViewportScrollSlider';
 
 
 const fadeInUp = {
@@ -92,7 +92,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     iconEmoji: '📨',
     description: 'Cleans your inbox, flags priority emails, archives spam.',
     demoType: 'inboxZero',
-    themeColorClass: 'bg-blue-500',
+    themeColorClass: 'bg-blue-500', // Used for gradient accents
     longDescription: 'Automatically categorizes emails, drafts replies for common queries, and keeps your inbox clutter-free so you can focus on what matters.',
     features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering']
   },
@@ -168,7 +168,7 @@ export default function Home() {
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
-    interactiveAgents: useRef(null), // New section for interactive agents
+    interactiveAgents: useRef(null),
     whyLazify: useRef(null),
     pricing: useRef(null),
     faq: useRef(null),
@@ -192,8 +192,8 @@ export default function Home() {
     const observers: IntersectionObserver[] = [];
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -20% 0px',
-      threshold: 0.2,
+      rootMargin: '-20% 0px -20% 0px', // Adjust rootMargin to trigger earlier/later if needed
+      threshold: 0.2, // How much of the element needs to be visible
     };
 
     Object.entries(sectionRefs).forEach(([id, ref]) => {
@@ -474,27 +474,14 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <motion.section
+        <section
           id="interactive-agents"
           ref={sectionRefs.interactiveAgents}
-          className="w-full section-padding bg-background"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.1 }} variants={fadeInUp}
+          className="w-full bg-background relative" // No section-padding, slider handles height
         >
-          <div className="container mx-auto px-4 md:px-6">
-            <motion.div className="mb-12 md:mb-16 text-center" variants={fadeInUp}>
-              <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
-                Interactive Demos
-              </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
-                Meet Your AI Workforce
-              </h2>
-              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                Explore our specialized AI agents, ready to transform how you work. Drag to discover and try a live demo on its dedicated page.
-              </p>
-            </motion.div>
-            <InteractiveAgentSlider agents={interactiveAgentsData} />
-          </div>
-        </motion.section>
+          {/* The FullViewportScrollSlider manages its own height and sticky behavior */}
+          <FullViewportScrollSlider agents={interactiveAgentsData} />
+        </section>
 
 
         <motion.section
@@ -749,5 +736,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
