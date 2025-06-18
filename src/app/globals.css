@@ -206,7 +206,7 @@
 
 /* New Scroll-Driven 3D Carousel Styles */
 .agent-scroll-carousel-section {
-    min-height: 500vh; /* Increased from 400vh. Adjust based on number of agents and desired scroll length */
+    min-height: 600vh; /* Increased from 500vh. Adjust based on number of agents and desired scroll length */
     position: relative;
     background: var(--carousel-section-bg); /* From theme */
      /* background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%); From example */
