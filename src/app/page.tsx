@@ -461,10 +461,15 @@ export default function Home() {
           id="services"
           ref={sectionRefs.services}
           className="w-full section-padding bg-secondary/20 services-cards-section"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
-             <motion.div className="mb-12 md:mb-16 text-center md:text-left" variants={fadeInUp}>
+             <motion.div 
+                className="mb-12 md:mb-16 text-center md:text-left"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true, amount: 0.3 }}
+             >
               <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                 Our Services
               </span>
@@ -525,11 +530,15 @@ export default function Home() {
           id="why-lazify"
           ref={sectionRefs.whyLazify}
           className="w-full bg-gradient-to-b from-secondary/20 to-background text-center md:text-left pb-16 md:pb-24 lg:pb-28"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-4 md:px-6"> {/* Removed explicit top padding here */}
+          <div className="container mx-auto px-4 md:px-6">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
-              <motion.div variants={fadeInUp}>
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                viewport={{ once: true, amount: 0.2 }}
+              >
                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                   The Lazify Advantage
                 </span>
@@ -542,6 +551,9 @@ export default function Home() {
                 <motion.div
                   className="grid grid-cols-1 sm:grid-cols-3 gap-4"
                   variants={staggerContainer}
+                  initial="initial"
+                  whileInView="animate"
+                  viewport={{ once: true, amount: 0.2, staggerChildren: 0.1 }}
                 >
                   {metrics.map((metric, index) => (
                     <motion.div key={index} variants={fadeInUp}>
@@ -559,7 +571,10 @@ export default function Home() {
                <motion.div
                  className="flex items-center justify-center"
                  style={{ y: whyLazifyContainerParallaxY }}
-                 variants={fadeInUp}
+                 initial={{ opacity: 0, x: 50 }}
+                 whileInView={{ opacity: 1, x: 0 }}
+                 transition={{ duration: 0.6, ease: "easeOut" }}
+                 viewport={{ once: true, amount: 0.2 }}
                >
                 <div className="w-full h-[400px] relative">
                   {isClient && (

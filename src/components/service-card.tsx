@@ -6,6 +6,9 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import type { LucideIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 interface ServiceCardProps {
   title: string;
@@ -18,7 +21,6 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon: Icon, imageHint, gradientColors, index, totalCards }) => {
-  // CSS variables are passed to the wrapper div to be used by CSS for the scroll animation
   const cardStyle = {
     '--card-actual-index': index,
     '--numcards-from-prop': totalCards,
@@ -26,54 +28,48 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon: Ico
 
   return (
     <motion.div
-      className="service-card-wrapper" // Wrapper for scroll-driven animation CSS
+      className="service-card-wrapper"
       style={cardStyle}
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }} // Staggered delay for entry
+      viewport={{ once: true, amount: 0.2 }} // Trigger animation when 20% of the card is visible
     >
-      <Card className="card__content group h-full flex flex-col text-center items-center p-6 transition-all duration-300 modern-card overflow-hidden relative isolate">
-         <div className={`absolute inset-0 rounded-lg bg-gradient-to-br ${gradientColors} opacity-0 group-hover:opacity-10 transition-opacity duration-300 -z-10`}></div>
-        <div className={`mb-4 rounded-full bg-gradient-to-r ${gradientColors} p-4 text-white shadow-lg`}>
-          <Icon className="h-8 w-8" />
+      <motion.div
+        className="card__content group h-full flex flex-col text-center items-center p-6 md:p-8 transition-all duration-300 modern-card bg-card overflow-hidden relative isolate rounded-xl" // Ensure white background and rounded corners
+        whileHover={{ y: -8, scale: 1.01, boxShadow: "0 20px 30px -10px hsla(var(--primary-rgb), 0.3)" }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      >
+        <div className={`mb-5 rounded-full bg-gradient-to-r ${gradientColors} p-4 text-white shadow-lg`}>
+          <Icon className="h-10 w-10" />
         </div>
-        <CardHeader className="p-0 mb-2">
-          <CardTitle className="text-xl font-semibold text-foreground transition-colors">
+        <CardHeader className="p-0 mb-3">
+          <CardTitle className="text-2xl font-semibold text-foreground transition-colors">
             {title}
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-0 flex-grow flex flex-col">
-          <CardDescription className="mb-4 text-muted-foreground">{description}</CardDescription>
-          <div className="mt-auto relative w-48 h-48 mx-auto">
-            <motion.div
-              className="w-full h-full"
-              style={{ perspective: 1000 }}
-              whileHover={{
-                scale: 1.08,
-                transition: { type: 'spring', stiffness: 200, damping: 10 }
-              }}
-            >
-               <motion.div
-                 className="w-full h-full"
-                 style={{ transformStyle: 'preserve-3d' }}
-                 whileHover={{
-                   rotateY: 15,
-                   rotateX: -10,
-                   transition: { type: 'spring', stiffness: 200, damping: 10 }
-                 }}
-               >
-                  <div className={`absolute inset-4 bg-gradient-to-br ${gradientColors} opacity-30 blur-xl -z-10 rounded-full`}></div>
-                   <Image
-                     src={`https://placehold.co/200x200.png?text=${title.split(" ")[0]}+${index}`}
-                     alt={`${title} 3D illustration`}
-                     width={200}
-                     height={200}
-                     className="object-contain w-full h-full rounded-lg"
-                     data-ai-hint={`${imageHint} ${gradientColors.split("-")[1]}`}
-                     loading="lazy"
-                   />
-               </motion.div>
-            </motion.div>
+        <CardContent className="p-0 flex-grow flex flex-col items-center">
+          <CardDescription className="mb-6 text-muted-foreground max-w-xs">
+            {description}
+          </CardDescription>
+          <div className="mt-auto relative w-40 h-40 md:w-48 md:h-48 mx-auto mb-6">
+            <Image
+                src={`https://placehold.co/200x200.png?text=${title.split(" ")[0]}+${index}`}
+                alt={`${title} 3D illustration`}
+                width={200}
+                height={200}
+                className="object-contain w-full h-full rounded-md"
+                data-ai-hint={`${imageHint} ${gradientColors.split("-")[1]}`}
+                loading="lazy"
+            />
           </div>
+           <Button asChild className="cta-button w-full max-w-xs">
+            <Link href="#contact">
+              Try Demo <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
         </CardContent>
-      </Card>
+      </motion.div>
     </motion.div>
   );
 };
