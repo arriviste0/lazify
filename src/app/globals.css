@@ -46,16 +46,18 @@
     --chart-5: 180 50% 50%;
 
     /* Theme colors for agent cards - used in ModernAgentCard */
-    --theme-blue: linear-gradient(135deg, #667eea, #764ba2);
-    --theme-amber: linear-gradient(135deg, #f093fb, #f5576c);
-    --theme-rose: linear-gradient(135deg, #4facfe, #00f2fe);
-    --theme-purple: linear-gradient(135deg, #6a11cb, #2575fc);
-    --theme-green: linear-gradient(135deg, #43e97b, #38f9d7);
-    --theme-teal: linear-gradient(135deg, #16a085, #f4d03f);
-    --theme-pink: linear-gradient(135deg, #fa709a, #fee140);
+    /* Ensure these map to the color names used in agent.themeColorClass */
+    /* e.g. if themeColorClass is 'bg-blue-500', then --theme-blue should exist */
+    --theme-blue: linear-gradient(135deg, #667eea, #764ba2); /* Corresponds to blue-500 */
+    --theme-amber: linear-gradient(135deg, #f093fb, #f5576c); /* Corresponds to amber-500 */
+    --theme-rose: linear-gradient(135deg, #4facfe, #00f2fe);  /* Corresponds to rose-500 */
+    --theme-purple: linear-gradient(135deg, #6a11cb, #2575fc); /* Corresponds to purple-600 */
+    --theme-green: linear-gradient(135deg, #43e97b, #38f9d7); /* Corresponds to green-500 */
+    --theme-teal: linear-gradient(135deg, #16a085, #f4d03f);  /* Corresponds to teal-500 */
+    --theme-pink: linear-gradient(135deg, #fa709a, #fee140);  /* Corresponds to pink-500 */
 
-    /* New variable for carousel section background */
-    --carousel-section-bg: 240 8% 6%; /* Darker background for carousel section */
+    /* New variable for carousel section background from example */
+    --carousel-section-bg: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
   }
 
   /* .dark class is effectively the default due to <html class="dark"> */
@@ -84,19 +86,19 @@
     @apply font-bold tracking-tight;
   }
 
-  /* Custom Scrollbar */
+  /* Custom Scrollbar from example*/
   ::-webkit-scrollbar {
       width: 8px;
   }
   ::-webkit-scrollbar-track {
-      background: #1a1a1a; /* Dark track */
+      background: #1a1a1a;
   }
   ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+      background: linear-gradient(135deg, #667eea, #764ba2); /* Matches example */
       border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
+      background: linear-gradient(135deg, #764ba2, #667eea); /* Matches example */
   }
 }
 
@@ -209,11 +211,11 @@
   }
 }
 
-/* New Scroll-Driven 3D Carousel Styles */
+/* New Scroll-Driven 3D Carousel Styles from example */
 .agent-scroll-carousel-section {
     min-height: 600vh; /* Increased to give more scroll runway */
     position: relative;
-    background: var(--carousel-section-bg);
+    background: var(--carousel-section-bg); /* Uses CSS var defined above */
 }
 
 .agent-scroll-carousel-container {
@@ -224,45 +226,49 @@
     align-items: center;
     justify-content: center;
     overflow: hidden; /* Crucial for containing transformed slides */
-    perspective: 1200px; /* For 3D transformations */
+    perspective: 1200px; /* For 3D transformations, from example */
 }
 
 .agent-carousel-track {
     display: flex;
-    width: 100%; /* Track itself doesn't scroll, items transform within it */
-    height: 100%; /* Takes height of container */
+    /* width: 500%; */ /* From example, but Framer Motion handles this differently with absolute positioning of slides */
+    height: 80vh; /* From example */
     position: relative;
     transform-style: preserve-3d;
-    align-items: center; /* Vertically center slides in the track */
-    justify-content: center; /* Horizontally center the "active" slide area */
-}
-
-.agent-carousel-slide {
-    position: absolute; /* Slides are absolutely positioned within the track for 3D effect */
-    width: 90%; /* Max width of a card */
-    max-width: 400px; /* As per example */
-    height: 600px; /* As per example */
-    will-change: transform, opacity;
-    transform-origin: center center; /* Ensure transforms are centered */
-    display: flex; /* To center ModernAgentCard if it's smaller */
     align-items: center;
     justify-content: center;
 }
 
+.agent-carousel-slide {
+    /* flex: 0 0 20%; */ /* From example, Framer Motion handles width via style prop or child component size */
+    position: absolute; /* Key for Framer Motion layout */
+    height: 100%; /* Takes height of track or as defined by content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+    will-change: transform, opacity, filter; /* Added filter */
+}
+
+/* Styles for content within ModernAgentCard, matching example's .slide-content */
 .slide-content-wrapper { /* Outer wrapper for potential animations */
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .slide-content {
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 2rem 1.5rem;
+    width: 90%;
+    max-width: 400px; /* From example */
+    height: 600px; /* From example */
+    background: rgba(255, 255, 255, 0.05); /* From example */
+    backdrop-filter: blur(20px); /* From example */
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px; /* From example */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* From example */
+    padding: 3rem 2rem; /* From example */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -270,24 +276,24 @@
     text-align: center;
     position: relative;
     overflow: hidden;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* From example */
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-.slide-content::before {
+.slide-content::before { /* From example */
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 50%, rgba(255,255,255,0.03) 100%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
     opacity: 0;
     transition: opacity 0.6s ease;
     z-index: 0;
 }
 
-.slide-content:hover::before {
+.slide-content:hover::before { /* From example */
     opacity: 1;
 }
 
@@ -296,62 +302,80 @@
     z-index: 1;
 }
 
-.slide-icon {
-    width: 70px;
-    height: 70px;
-    margin-bottom: 1.5rem;
+.slide-icon { /* From example, adapted for dynamic background */
+    width: 80px;
+    height: 80px;
+    margin-bottom: 2rem;
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2.5rem; /* Emoji size */
-    box-shadow: 0 15px 30px rgba(var(--primary-rgb), 0.2); /* Use primary color for shadow */
+    box-shadow: 0 20px 40px rgba(var(--primary-rgb), 0.2); /* Using primary RGB for shadow */
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    /* Actual background set by inline style in ModernAgentCard.tsx using CSS vars */
+    /* Background is set dynamically in ModernAgentCard.tsx using CSS variables */
 }
 
-.slide-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
+.slide-title { /* From example */
+    font-size: 2.5rem; /* Equivalent to example's 2.5rem */
+    font-weight: 800;
+    margin-bottom: 1.5rem;
     line-height: 1.2;
     color: hsl(var(--foreground));
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.slide-description {
-    font-size: 1rem;
+.slide-description { /* From example */
+    font-size: 1.1rem; /* Equivalent to example's 1.1rem */
     line-height: 1.6;
     opacity: 0.8;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     color: hsl(var(--muted-foreground));
     max-width: 90%;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.slide-cta {
-    @apply cta-button;
-    padding: 0.8rem 1.8rem;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.slide-cta { /* From example, adapted */
+    @apply text-white font-semibold py-4 px-8 rounded-full text-base cursor-pointer transition-all duration-300 relative overflow-hidden;
+    /* background: linear-gradient(135deg, #667eea, #764ba2); Example's default, will be overridden by theme */
+    /* Will use dynamic background from theme or fallback to primary gradient button */
+}
+.slide-cta.cta-button { /* Ensure it picks up the base cta-button styles if no specific theme is applied */
+   /* @apply cta-button; This created a circular dependency. Styles from .cta-button will apply if the class is present. */
 }
 
-.slide-cta:hover {
-    transform: translateY(-2px) scale(1.03);
+
+.slide-cta::before { /* From example */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s ease;
 }
 
-/* Add specific theme hover for CTA if needed */
-.slide-cta.hover-theme-blue:hover { background: var(--theme-blue); filter: brightness(1.1); }
-.slide-cta.hover-theme-amber:hover { background: var(--theme-amber); filter: brightness(1.1); }
-.slide-cta.hover-theme-rose:hover { background: var(--theme-rose); filter: brightness(1.1); }
-.slide-cta.hover-theme-purple:hover { background: var(--theme-purple); filter: brightness(1.1); }
-.slide-cta.hover-theme-green:hover { background: var(--theme-green); filter: brightness(1.1); }
-.slide-cta.hover-theme-teal:hover { background: var(--theme-teal); filter: brightness(1.1); }
-.slide-cta.hover-theme-pink:hover { background: var(--theme-pink); filter: brightness(1.1); }
+.slide-cta:hover::before { /* From example */
+    left: 100%;
+}
+
+.slide-cta:hover { /* From example, combined with existing cta-button hover */
+    transform: translateY(-2px) scale(1.03); /* Added scale from existing cta-button */
+    box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.4); /* Using primary RGB for shadow */
+}
+
+/* Specific hover theme for CTA button if a theme is applied */
+.slide-cta.hover-theme-blue:hover { background: var(--theme-blue); filter: brightness(1.15); }
+.slide-cta.hover-theme-amber:hover { background: var(--theme-amber); filter: brightness(1.15); }
+.slide-cta.hover-theme-rose:hover { background: var(--theme-rose); filter: brightness(1.15); }
+.slide-cta.hover-theme-purple:hover { background: var(--theme-purple); filter: brightness(1.15); }
+.slide-cta.hover-theme-green:hover { background: var(--theme-green); filter: brightness(1.15); }
+.slide-cta.hover-theme-teal:hover { background: var(--theme-teal); filter: brightness(1.15); }
+.slide-cta.hover-theme-pink:hover { background: var(--theme-pink); filter: brightness(1.15); }
 
 
-@keyframes slideInUp {
+@keyframes slideInUp { /* From example */
     from {
         opacity: 0;
         transform: translateY(30px);
@@ -362,61 +386,52 @@
     }
 }
 
-.animate-in-slide {
+.animate-in-slide > * { /* Apply to children of animated container */
     animation: slideInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+.animate-in-slide > *:nth-child(1) { animation-delay: 0.1s; }
+.animate-in-slide > *:nth-child(2) { animation-delay: 0.2s; }
+.animate-in-slide > *:nth-child(3) { animation-delay: 0.3s; }
+.animate-in-slide > *:nth-child(4) { animation-delay: 0.4s; }
 
-@media (max-width: 768px) {
-    .agent-carousel-slide {
+
+@media (max-width: 768px) { /* From example */
+    .agent-carousel-slide .slide-content { /* Target more specifically */
         height: 500px;
         max-width: 90vw;
-    }
-    .slide-content {
-        padding: 1.5rem 1rem;
+        padding: 2rem 1.5rem;
     }
     .slide-title {
-        font-size: 1.75rem;
+        font-size: 2rem;
     }
     .slide-icon {
         width: 60px;
         height: 60px;
-        font-size: 2rem;
+        font-size: 2rem; /* Adjusted emoji size for smaller icon */
     }
 }
 
+/* Progress line from example */
 .progress-line-custom {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.05);
+    height: 4px; /* From example */
+    background: rgba(255, 255, 255, 0.1); /* From example */
     z-index: 100;
 }
 
 .progress-fill-custom {
     height: 100%;
-    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
-    width: 0%;
-    transition: width 0.1s ease-out;
+    /* Matches example gradient, but could use primary/accent from theme */
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #4facfe, #43e97b);
+    width: 0%; /* Controlled by JS/Framer Motion */
+    /* transition: width 0.3s ease; */ /* Framer Motion handles smooth updates */
 }
+
 
 html {
     scroll-behavior: smooth;
 }
 
-/* Variables for primary and accent RGB values if not already defined elsewhere */
-:root {
-  /* ... other root variables ... */
-  /* Ensure these are defined. If your primary/accent HSL values change, update these RGBs. */
-  /* --primary-rgb: 106, 27, 154; /* Approx for HSL(262.1, 83.3%, 57.8%) */
-  /* --accent-rgb: 213, 0, 249; /* Approx for HSL(300, 76%, 52%) */
-}
-
-/* Make sure body is the direct child of html for some scroll effects if needed */
-/* And ensure no overflow issues on body if html has overflow-x:hidden */
-body {
-    /* overflow-x: hidden; */ /* This is already on html */
-}
-
-    
