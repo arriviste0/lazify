@@ -457,7 +457,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <motion.section
+        <section
           id="services"
           ref={sectionRefs.services}
           className="w-full section-padding bg-secondary/20 services-cards-section"
@@ -468,7 +468,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                viewport={{ once: true, amount: 0.3 }}
+                viewport={{ once: false, amount: 0.3 }}
              >
               <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                 Our Services
@@ -495,7 +495,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </motion.section>
+        </section>
 
 
         <section
@@ -509,7 +509,7 @@ export default function Home() {
                   variants={fadeInUp}
                   initial="initial"
                   whileInView="animate"
-                  viewport={{ once: true, amount:0.1}}
+                  viewport={{ once: false, amount:0.1}}
               >
                   <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                       Meet Our AI Agent Lineup
@@ -537,7 +537,7 @@ export default function Home() {
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{ once: false, amount: 0.2 }}
               >
                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                   The Lazify Advantage
@@ -553,7 +553,7 @@ export default function Home() {
                   variants={staggerContainer}
                   initial="initial"
                   whileInView="animate"
-                  viewport={{ once: true, amount: 0.2, staggerChildren: 0.1 }}
+                  viewport={{ once: false, amount: 0.2, staggerChildren: 0.1 }}
                 >
                   {metrics.map((metric, index) => (
                     <motion.div key={index} variants={fadeInUp}>
@@ -574,7 +574,7 @@ export default function Home() {
                  initial={{ opacity: 0, x: 50 }}
                  whileInView={{ opacity: 1, x: 0 }}
                  transition={{ duration: 0.6, ease: "easeOut" }}
-                 viewport={{ once: true, amount: 0.2 }}
+                 viewport={{ once: false, amount: 0.2 }}
                >
                 <div className="w-full h-[400px] relative">
                   {isClient && (
@@ -598,7 +598,7 @@ export default function Home() {
           id="pricing"
           ref={sectionRefs.pricing}
           className="w-full section-padding text-center"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
+          initial="initial" whileInView="animate" viewport={{ once: false, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
              <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
@@ -620,7 +620,7 @@ export default function Home() {
           id="faq"
           ref={sectionRefs.faq}
           className="w-full section-padding bg-secondary/10 text-center"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
+          initial="initial" whileInView="animate" viewport={{ once: false, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6 max-w-3xl">
             <motion.div className="mb-12 md:mb-16 text-center" variants={fadeInUp}>
@@ -650,11 +650,11 @@ export default function Home() {
           id="ai-workflow"
           ref={sectionRefs.aiWorkflow}
           className="w-full section-padding bg-secondary/20"
-          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
+          initial="initial" whileInView="animate" viewport={{ once: false, amount: 0.2 }} variants={fadeInUp}
         >
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid lg:grid-cols-2 gap-10 md:gap-12 items-center">
-              <motion.div className="order-2 lg:order-1" variants={fadeInUp}>
+              <motion.div className="order-2 lg:order-1" variants={fadeInUp} viewport={{ once: false, amount: 0.2 }}>
                 <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-3">
                   Exclusive Offer
                 </span>
@@ -677,6 +677,7 @@ export default function Home() {
                 className="order-1 lg:order-2 flex justify-center items-center min-h-[350px] md:min-h-[450px]"
                 variants={fadeInUp}
                 transition={{ delay: 0.2, ...fadeInUp.transition }}
+                viewport={{ once: false, amount: 0.2 }}
               >
                 <AiWorkflowVisualization />
               </motion.div>
@@ -688,12 +689,13 @@ export default function Home() {
            id="contact"
            ref={sectionRefs.contact}
            className="w-full section-padding bg-card"
-           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
+           initial="initial" whileInView="animate" viewport={{ once: false, amount: 0.2 }} variants={fadeInUp}
          >
            <div className="container mx-auto px-4 md:px-6">
              <motion.div
                className="max-w-2xl mx-auto bg-secondary/20 p-8 md:p-12 rounded-xl shadow-2xl border border-border/50"
                variants={fadeInUp}
+               viewport={{ once: false, amount: 0.2 }}
              >
                <div className="text-center mb-8 md:mb-10">
                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-primary">Get in Touch</h2>
@@ -711,12 +713,12 @@ export default function Home() {
          className="w-full py-12 md:py-16 bg-secondary/30 border-t border-border/50 text-center"
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1 }}
-         viewport={{ once: true, amount: 0.1 }}
+         viewport={{ once: false, amount: 0.1 }}
          transition={{ duration: 0.8 }}
        >
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid gap-8 md:grid-cols-3 items-center md:items-start text-center md:text-left">
-            <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp}>
+            <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} viewport={{ once: false, amount: 0.1 }}>
               <Link href="#home" className="flex items-center justify-center md:justify-start gap-2 text-xl font-bold">
                 <BrainCircuit className="h-6 w-6 text-primary" />
                 <span className="gradient-text-animated">
@@ -734,7 +736,7 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }}>
+            <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }} viewport={{ once: false, amount: 0.1 }}>
               <h4 className="font-semibold text-foreground">Quick Links</h4>
               <nav className="flex flex-col gap-1 items-center md:items-start">
                 {[...navLinks.slice(1, 5), { href: '#', label: 'Privacy Policy' }, { href: '#', label: 'Terms of Service' }].map((link) => (
@@ -756,7 +758,7 @@ export default function Home() {
               </nav>
             </motion.div>
 
-            <motion.div className="space-y-4 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }}>
+            <motion.div className="space-y-4 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }} viewport={{ once: false, amount: 0.1 }}>
               <h4 className="font-semibold text-foreground">Connect With Us</h4>
               <p className="text-sm text-muted-foreground">
                  Follow us on social media for the latest updates and insights on AI automation.

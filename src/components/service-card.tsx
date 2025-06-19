@@ -33,7 +33,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon: Ico
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }} // Staggered delay for entry
-      viewport={{ once: true, amount: 0.2 }} // Trigger animation when 20% of the card is visible
+      viewport={{ once: false, amount: 0.2 }} // Trigger animation when 20% of the card is visible, and replay
     >
       <motion.div
         className="card__content group h-full flex flex-col text-center items-center p-6 md:p-8 transition-all duration-300 modern-card bg-card overflow-hidden relative isolate rounded-xl" // Ensure white background and rounded corners

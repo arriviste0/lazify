@@ -231,7 +231,7 @@
 /* Styles for Horizontal Agent Carousel */
 .agent-carousel-section {
     background: var(--carousel-section-bg); /* Use variable for background */
-    padding-top: theme(spacing.16); /* Equivalent to section-padding top */
+    /* Removed padding-top: theme(spacing.16); */
     padding-bottom: theme(spacing.16); /* Equivalent to section-padding bottom */
     position: relative; /* For potential absolute positioned children like decorative elements */
 }
