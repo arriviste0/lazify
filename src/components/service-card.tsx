@@ -6,9 +6,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import type { LucideIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+// Button and ArrowRight are no longer needed as "Try Demo" button is removed
+// import { Button } from "@/components/ui/button";
+// import { ArrowRight } from "lucide-react";
+// Link is also not needed if the button is removed
+// import Link from "next/link";
 
 interface ServiceCardProps {
   title: string;
@@ -32,11 +34,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon: Ico
       style={cardStyle}
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }} // Staggered delay for entry
-      viewport={{ once: false, amount: 0.2 }} // Trigger animation when 20% of the card is visible, and replay
+      transition={{ duration: 0.7, delay: index * 0.2, ease: [0.42, 0, 0.58, 1] }} // Smoother ease and slightly longer duration
+      viewport={{ once: false, amount: 0.2 }}
     >
       <motion.div
-        className="card__content group h-full flex flex-col text-center items-center p-6 md:p-8 transition-all duration-300 modern-card bg-card overflow-hidden relative isolate rounded-xl" // Ensure white background and rounded corners
+        className="card__content group h-full flex flex-col text-center items-center p-6 md:p-8 transition-all duration-300 modern-card bg-card overflow-hidden relative isolate rounded-xl"
         whileHover={{ y: -8, scale: 1.01, boxShadow: "0 20px 30px -10px hsla(var(--primary-rgb), 0.3)" }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
@@ -63,11 +65,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon: Ico
                 loading="lazy"
             />
           </div>
-           <Button asChild className="cta-button w-full max-w-xs">
+          {/* "Try Demo" button removed as per request */}
+          {/*
+          <Button asChild className="cta-button w-full max-w-xs">
             <Link href="#contact">
               Try Demo <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
+          */}
         </CardContent>
       </motion.div>
     </motion.div>

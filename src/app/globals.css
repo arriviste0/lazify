@@ -99,7 +99,6 @@
 @layer utilities {
   .modern-card {
     @apply bg-card/80 backdrop-blur-lg border border-card-foreground/10 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300;
-    /* Ensure it applies to .service-card-wrapper .card__content if not overridden by more specific rules */
   }
   .cta-button {
     @apply bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-primary-foreground font-semibold shadow-lg hover:shadow-primary/40 transition-all duration-300 transform hover:scale-105;
@@ -136,47 +135,42 @@
 .services-cards-section {
     view-timeline-name: --cards-element-scrolls-in-body;
     view-timeline-axis: block;
-    min-height: 300vh; /* Adjusted for 4 cards: (40vh sticky + 10vh overlap) * 4 + 100vh bottom padding on container */
-    /* --numcards: 4; */ /* This will be set by inline style on the component */
+    min-height: 300vh; /* (45vh sticky + 5vh overlap) * 4 cards + 100vh bottom padding = 200vh + 100vh */
 }
 
 .cards-sticky-container {
     position: relative;
     padding-bottom: 100vh; /* Give space for the last card to scroll up fully */
-    display: flex; /* For centering children if needed */
+    display: flex;
     flex-direction: column;
-    align-items: center; /* Center cards horizontally */
+    align-items: center;
 }
 
 .service-card-wrapper {
-    position: relative; /* Keep for potential absolute positioning inside */
+    position: relative;
     width: 100%;
-    max-width: 768px; /* Max width of cards */
-    /* CSS variables set via inline style in the component for dynamic values */
-    /* --card-actual-index: will be set by component; */
-    /* --numcards-from-prop: will be set by component; */
-
-    --index0: var(--card-actual-index); /* 0-based index */
-    --numcards: var(--numcards-from-prop, 4); /* Fallback if prop not set */
-    --index1: calc(var(--index0) + 1); /* 1-based index for calculations if needed */
-    --reverse-index-from-top: var(--index0); /* 0 for first card, 1 for second etc. */
+    max-width: 832px; /* Increased from 768px (approx md:max-w-3xl) */
+    --card-actual-index: 0; /* Set by component */
+    --numcards-from-prop: 4; /* Set by component, fallback */
+    --index0: var(--card-actual-index);
+    --index1: calc(var(--index0) + 1);
+    --reverse-index-from-top: var(--index0);
 }
 
-.service-card-wrapper .card__content { /* This is the shadcn Card component */
+.service-card-wrapper .card__content {
     position: sticky;
-    top: 8rem; /* Adjust based on nav height + desired gap from top, increased slightly */
-    min-height: 40vh; /* Duration each card is prominently sticky */
-    margin-bottom: -35vh; /* Creates overlap: (min-height - (visible part e.g. 5vh)) */
-    width: 100%; /* Ensure card takes up wrapper width */
-    border-radius: 1rem !important; /* As per new request, ensure it overrides shadcn card */
-    background-color: hsl(var(--card)) !important; /* Ensures white background, overrides shadcn card */
-    border: 1px solid hsl(var(--border)) !important; /* Light border, overrides shadcn card */
-    box-shadow: 0 4px 12px hsla(var(--primary-rgb), 0.1) !important; /* Light shadow */
-
-
+    top: 8rem; /* Gap from top */
+    min-height: 45vh; /* Increased from 40vh - duration each card is prominently sticky */
+    margin-bottom: -40vh; /* Adjusted: (min-height - (visible part e.g. 5vh)) */
+    width: 100%;
+    border-radius: 1rem !important;
+    background-color: hsl(var(--card)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    box-shadow: 0 4px 12px hsla(var(--primary-rgb), 0.1) !important;
+    
     /* Animation range for each card */
-    --start-range: calc(var(--index0) / var(--numcards) * 100%);
-    --end-range: calc(var(--index1) / var(--numcards) * 100%);
+    --start-range: calc(var(--index0) / var(--numcards-from-prop) * 100%);
+    --end-range: calc(var(--index1) / var(--numcards-from-prop) * 100%);
 
     animation: linear stack-and-scale-card forwards;
     animation-timeline: --cards-element-scrolls-in-body;
@@ -196,8 +190,8 @@
         opacity: 1;
     }
     to { /* Card is stacked and moving back */
-        transform: translateY(calc(-15px * (var(--numcards) - var(--index1)))) scale(calc(1 - (0.04 * (var(--numcards) - var(--index1)))));
-        opacity: calc(1 - (0.2 * (var(--numcards) - var(--index1))));
+        transform: translateY(calc(-15px * (var(--numcards-from-prop) - var(--index1)))) scale(calc(1 - (0.04 * (var(--numcards-from-prop) - var(--index1)))));
+        opacity: calc(1 - (0.2 * (var(--numcards-from-prop) - var(--index1))));
     }
 }
 
@@ -211,14 +205,14 @@
   }
   .service-card-wrapper {
     position: relative;
-    margin-bottom: 2rem; /* Standard margin for stacked cards */
+    margin-bottom: 2rem;
   }
   .service-card-wrapper .card__content {
     animation: none;
-    position: static; /* No stickiness */
+    position: static;
     min-height: auto;
     margin-bottom: 0;
-    transform: scale(1); /* Ensure cards are full size */
+    transform: scale(1);
     opacity: 1;
     border-radius: 1rem !important;
     background-color: hsl(var(--card)) !important;
@@ -230,10 +224,10 @@
 
 /* Styles for Horizontal Agent Carousel */
 .agent-carousel-section {
-    background: var(--carousel-section-bg); /* Use variable for background */
-    /* Removed padding-top: theme(spacing.16); */
-    padding-bottom: theme(spacing.16); /* Equivalent to section-padding bottom */
-    position: relative; /* For potential absolute positioned children like decorative elements */
+    background: var(--carousel-section-bg);
+    padding-top: 0; /* Ensure no top padding for this section */
+    padding-bottom: theme(spacing.16);
+    position: relative;
 }
 
 .embla {
@@ -242,7 +236,7 @@
 }
 
 .embla__viewport-wrapper {
-    position: relative; /* For fading edges */
+    position: relative;
 }
 
 .embla__viewport-wrapper::before,
@@ -251,9 +245,9 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 80px; /* Width of the fade effect */
-  z-index: 2; /* Above slides but below nav buttons */
-  pointer-events: none; /* Allow clicks through */
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .embla__viewport-wrapper::before {
@@ -278,38 +272,38 @@
 
 .embla__container {
     display: flex;
-    margin-left: -1rem; /* Counteract slide padding */
+    margin-left: -1rem;
 }
 
 .embla__slide {
-    flex: 0 0 100%; /* Default: 1 slide visible on smallest screens */
+    flex: 0 0 100%;
     min-width: 0;
-    padding-left: 1rem; /* Gutter space */
+    padding-left: 1rem;
     position: relative;
 }
 
 @media (min-width: 640px) { /* sm */
     .embla__slide {
-        flex-basis: 50%; /* 2 slides */
+        flex-basis: 50%;
     }
 }
 @media (min-width: 768px) { /* md */
     .embla__slide {
-        flex-basis: calc(100% / 2.5); /* ~2.5 slides, adjust for desired partial view */
+        flex-basis: calc(100% / 2.5);
     }
      .embla__viewport-wrapper::before,
     .embla__viewport-wrapper::after {
-        width: 100px; /* Wider fade on larger screens */
+        width: 100px;
     }
 }
 @media (min-width: 1024px) { /* lg */
     .embla__slide {
-        flex-basis: calc(100% / 3.5); /* ~3.5 slides */
+        flex-basis: calc(100% / 3.5);
     }
 }
 @media (min-width: 1280px) { /* xl */
     .embla__slide {
-        flex-basis: calc(100% / 4); /* 4 slides */
+        flex-basis: calc(100% / 4);
     }
      .embla__viewport-wrapper::before,
     .embla__viewport-wrapper::after {
