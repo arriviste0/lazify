@@ -45,22 +45,18 @@
     --chart-4: 10 60% 50%;
     --chart-5: 180 50% 50%;
 
-    /* Theme colors for agent cards - used in ModernAgentCard */
-    /* Ensure these map to the color names used in agent.themeColorClass */
-    /* e.g. if themeColorClass is 'bg-blue-500', then --theme-blue should exist */
-    --theme-blue: linear-gradient(135deg, #667eea, #764ba2); /* Corresponds to blue-500 */
-    --theme-amber: linear-gradient(135deg, #f093fb, #f5576c); /* Corresponds to amber-500 */
-    --theme-rose: linear-gradient(135deg, #4facfe, #00f2fe);  /* Corresponds to rose-500 */
-    --theme-purple: linear-gradient(135deg, #6a11cb, #2575fc); /* Corresponds to purple-600 */
-    --theme-green: linear-gradient(135deg, #43e97b, #38f9d7); /* Corresponds to green-500 */
-    --theme-teal: linear-gradient(135deg, #16a085, #f4d03f);  /* Corresponds to teal-500 */
-    --theme-pink: linear-gradient(135deg, #fa709a, #fee140);  /* Corresponds to pink-500 */
+    /* Theme colors for agent cards - used in HorizontalAgentCard */
+    --theme-blue: linear-gradient(135deg, #667eea, #764ba2);
+    --theme-amber: linear-gradient(135deg, #f093fb, #f5576c);
+    --theme-rose: linear-gradient(135deg, #4facfe, #00f2fe);
+    --theme-purple: linear-gradient(135deg, #6a11cb, #2575fc);
+    --theme-green: linear-gradient(135deg, #43e97b, #38f9d7);
+    --theme-teal: linear-gradient(135deg, #16a085, #f4d03f);
+    --theme-pink: linear-gradient(135deg, #fa709a, #fee140);
 
-    /* New variable for carousel section background from example */
-    --carousel-section-bg: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+    --carousel-section-bg: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--primary) / 0.05) 30%, hsl(var(--primary) / 0.05) 70%, hsl(var(--background)) 100%);
   }
 
-  /* .dark class is effectively the default due to <html class="dark"> */
   .dark {
     /* All variables are already defined in :root for dark theme */
   }
@@ -75,7 +71,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* font-family: var(--font-geist-sans); Using system fonts now */
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -86,7 +81,6 @@
     @apply font-bold tracking-tight;
   }
 
-  /* Custom Scrollbar from example*/
   ::-webkit-scrollbar {
       width: 8px;
   }
@@ -94,11 +88,11 @@
       background: #1a1a1a;
   }
   ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #667eea, #764ba2); /* Matches example */
+      background: linear-gradient(135deg, #667eea, #764ba2);
       border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, #764ba2, #667eea); /* Matches example */
+      background: linear-gradient(135deg, #764ba2, #667eea);
   }
 }
 
@@ -141,42 +135,42 @@
 .services-cards-section {
     view-timeline-name: --cards-element-scrolls-in-body;
     view-timeline-axis: block;
-    min-height: 200vh; /* Ensure enough scrollable height for 4 cards */
-    --numcards: 4; /* Default, overridden by inline style */
+    min-height: 250vh; /* Adjust based on number of cards and desired scroll length */
+    --numcards: 4; /* Default, overridden by inline style from component */
 }
 
 .cards-sticky-container {
     position: relative;
-    padding-bottom: 100vh; /* Give space for the last card to scroll up */
+    padding-bottom: 100vh; /* Give space for the last card to scroll up fully */
 }
 
 .service-card-wrapper {
-    position: relative; /* No longer sticky itself */
+    position: relative;
     width: 100%;
-    max-width: 768px;
+    max-width: 768px; /* Max width of cards */
     margin-left: auto;
     margin-right: auto;
-    /* CSS variables set via inline style in the component for dynamic values */
-    /* --card-actual-index: set by JS; */
-    /* --numcards-from-prop: set by JS; */
 
-    --index0: var(--card-actual-index);
-    --numcards: var(--numcards-from-prop, 4); /* Fallback to 4 if prop not set */
-    --index: calc(var(--index0) + 1);
-    --reverse-index: calc(var(--numcards) - var(--index0));
-    --reverse-index0: calc(var(--reverse-index) - 1);
+    /* CSS variables set via inline style in the component for dynamic values */
+    /* --card-actual-index: will be set by component; */
+    /* --numcards-from-prop: will be set by component; */
+
+    --index0: var(--card-actual-index); /* 0-based index */
+    --numcards: var(--numcards-from-prop, 4); /* Fallback if prop not set */
+    --index: calc(var(--index0) + 1); /* 1-based index for calculations if needed */
+    --reverse-index: calc(var(--numcards) - var(--index0)); /* reverse index, 1-based for scale */
 }
 
 .service-card-wrapper .card__content { /* This is the shadcn Card component */
     position: sticky;
     top: 6rem; /* Adjust based on nav height + desired gap from top */
-    min-height: 40vh; /* Card sticky duration */
-    margin-bottom: -30vh; /* Overlap: (min-height - (visible part like 10vh) ) */
+    min-height: 40vh; /* Duration each card is prominently sticky */
+    margin-bottom: -30vh; /* Creates overlap: (min-height - (visible part e.g. 10vh)) */
 
     --start-range: calc(var(--index0) / var(--numcards) * 100%);
     --end-range: calc(var(--index) / var(--numcards) * 100%);
 
-    animation: linear scale forwards;
+    animation: linear scale-service-card forwards; /* Renamed keyframe */
     animation-timeline: --cards-element-scrolls-in-body;
     animation-range: exit-crossing var(--start-range) exit-crossing var(--end-range);
 
@@ -186,10 +180,10 @@
 }
 
 .service-card-wrapper:last-child .card__content {
-    margin-bottom: 0;
+    margin-bottom: 0; /* Last card doesn't need negative margin */
 }
 
-@keyframes scale {
+@keyframes scale-service-card { /* Renamed keyframe */
     to {
         transform: scale(calc(1.1 - (0.1 * var(--reverse-index))));
     }
@@ -197,25 +191,32 @@
 
 /* Fallback for browsers not supporting animation-timeline */
 @supports not (animation-timeline: --cards-element-scrolls-in-body) {
+  .services-cards-section {
+    min-height: auto;
+  }
+  .cards-sticky-container {
+    padding-bottom: 0;
+  }
   .service-card-wrapper {
     position: relative;
-    top: auto;
     margin-bottom: 2rem; /* Standard margin for stacked cards */
-    min-height: auto;
   }
   .service-card-wrapper .card__content {
     animation: none;
     position: static; /* No stickiness */
     min-height: auto;
     margin-bottom: 0;
+    transform: scale(1); /* Ensure cards are full size */
   }
 }
 
+
 /* Styles for Horizontal Agent Carousel */
 .agent-carousel-section {
-    background: var(--carousel-section-bg);
+    background: var(--carousel-section-bg); /* Use variable for background */
     padding-top: theme(spacing.16); /* Equivalent to section-padding top */
     padding-bottom: theme(spacing.16); /* Equivalent to section-padding bottom */
+    position: relative; /* For potential absolute positioned children like decorative elements */
 }
 
 .embla {
@@ -233,7 +234,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 60px; /* Width of the fade effect */
+  width: 80px; /* Width of the fade effect */
   z-index: 2; /* Above slides but below nav buttons */
   pointer-events: none; /* Allow clicks through */
 }
@@ -260,12 +261,11 @@
 
 .embla__container {
     display: flex;
-    /* gap: 1rem; Spacing via slide padding or margin */
     margin-left: -1rem; /* Counteract slide padding */
 }
 
 .embla__slide {
-    flex: 0 0 100%; /* Default: 1 slide visible */
+    flex: 0 0 100%; /* Default: 1 slide visible on smallest screens */
     min-width: 0;
     padding-left: 1rem; /* Gutter space */
     position: relative;
@@ -280,6 +280,10 @@
     .embla__slide {
         flex-basis: calc(100% / 2.5); /* ~2.5 slides, adjust for desired partial view */
     }
+     .embla__viewport-wrapper::before,
+    .embla__viewport-wrapper::after {
+        width: 100px; /* Wider fade on larger screens */
+    }
 }
 @media (min-width: 1024px) { /* lg */
     .embla__slide {
@@ -290,12 +294,16 @@
     .embla__slide {
         flex-basis: calc(100% / 4); /* 4 slides */
     }
+     .embla__viewport-wrapper::before,
+    .embla__viewport-wrapper::after {
+        width: 120px;
+    }
 }
 
 
-.embla__slide__content { /* This will be the HorizontalAgentCard */
-    height: 100%; /* Ensure card takes full height of slide for consistent alignment */
-    display: flex; /* To make card fill the space */
+.embla__slide__content {
+    height: 100%;
+    display: flex;
 }
 
 .embla__button {
@@ -314,7 +322,7 @@
 
 .horizontal-agent-card {
     @apply bg-card/70 backdrop-blur-md border border-card-foreground/10 rounded-xl shadow-lg p-6 flex flex-col text-center items-center transition-all duration-300 ease-out w-full;
-    transform: scale(0.95); /* Slightly smaller by default */
+    transform: scale(0.95);
     opacity: 0.8;
 }
 
@@ -329,7 +337,6 @@
 
 .horizontal-agent-card__icon-wrapper {
     @apply w-16 h-16 mb-4 rounded-xl flex items-center justify-center text-3xl shadow-lg transition-all duration-300;
-    /* Dynamic background set by style prop in component */
 }
 .horizontal-agent-card:hover .horizontal-agent-card__icon-wrapper {
     @apply scale-110 shadow-xl;
@@ -342,7 +349,7 @@
     @apply text-sm text-muted-foreground mb-4 flex-grow line-clamp-3;
 }
 .horizontal-agent-card__cta {
-    @apply mt-auto w-full; /* Ensure button is at bottom if content height varies */
+    @apply mt-auto w-full;
 }
 
 html {

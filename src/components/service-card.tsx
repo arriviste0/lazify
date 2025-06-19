@@ -13,25 +13,21 @@ interface ServiceCardProps {
   icon: LucideIcon;
   imageHint: string;
   gradientColors: string; // e.g., "from-purple-600 to-indigo-600"
-  index: number; // Added for scroll animation
-  totalCards: number; // Added for scroll animation
+  index: number;
+  totalCards: number;
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon: Icon, imageHint, gradientColors, index, totalCards }) => {
+  // CSS variables are passed to the wrapper div to be used by CSS for the scroll animation
   const cardStyle = {
     '--card-actual-index': index,
-    '--numcards': totalCards,
+    '--numcards-from-prop': totalCards,
   } as React.CSSProperties;
 
   return (
     <motion.div
-      className="service-card-wrapper" // This is the .card equivalent for scroll animation
+      className="service-card-wrapper" // Wrapper for scroll-driven animation CSS
       style={cardStyle}
-      // Removed individual hover from wrapper to let CSS animation take precedence,
-      // hover can be on the .card__content (the shadcn Card) if needed.
-      // initial={{ opacity: 0, y: 20 }} // Handled by stagger in page.tsx
-      // animate={{ opacity: 1, y: 0 }}
-      // transition={{ delay: index * 0.1 }}
     >
       <Card className="card__content group h-full flex flex-col text-center items-center p-6 transition-all duration-300 modern-card overflow-hidden relative isolate">
          <div className={`absolute inset-0 rounded-lg bg-gradient-to-br ${gradientColors} opacity-0 group-hover:opacity-10 transition-opacity duration-300 -z-10`}></div>
@@ -65,12 +61,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon: Ico
                >
                   <div className={`absolute inset-4 bg-gradient-to-br ${gradientColors} opacity-30 blur-xl -z-10 rounded-full`}></div>
                    <Image
-                     src={`https://picsum.photos/200/200?random=${title}`}
+                     src={`https://placehold.co/200x200.png?text=${title.split(" ")[0]}+${index}`}
                      alt={`${title} 3D illustration`}
                      width={200}
                      height={200}
                      className="object-contain w-full h-full rounded-lg"
-                     data-ai-hint={`${imageHint} 3d isometric render purple`}
+                     data-ai-hint={`${imageHint} ${gradientColors.split("-")[1]}`}
                      loading="lazy"
                    />
                </motion.div>

@@ -39,12 +39,12 @@ import {
   Pocket,
   DollarSign,
   ShoppingCart,
-  BookUser, 
-  Smartphone, 
-  PenTool, 
-  Briefcase, 
-  Landmark, 
-  Store, 
+  BookUser,
+  Smartphone,
+  PenTool,
+  Briefcase,
+  Landmark,
+  Store,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
@@ -98,10 +98,10 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     iconEmoji: '📨',
     description: 'Cleans your inbox, flags priority emails, archives spam, and drafts replies. Integrates with Gmail & Outlook.',
     demoType: 'inboxZero',
-    themeColorClass: 'bg-blue-500', 
+    themeColorClass: 'bg-blue-500',
     longDescription: 'Automatically categorizes emails, drafts replies for common queries, and keeps your inbox clutter-free so you can focus on what matters.',
     features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering'],
-    slideImageUrl: 'https://placehold.co/600x800.png', 
+    slideImageUrl: 'https://placehold.co/600x800.png',
     slideImageHint: 'email inbox organization tech',
   },
   {
@@ -134,7 +134,7 @@ export const interactiveAgentsData: InteractiveAgentInfo[] = [
     iconEmoji: '📅',
     description: 'Syncs Google Calendar, finds optimal meeting slots, auto-blocks time, and sends reminders.',
     demoType: 'scheduleSync',
-    themeColorClass: 'bg-purple-600', 
+    themeColorClass: 'bg-purple-600',
     longDescription: 'Connects to your Google Calendar, finds optimal meeting slots based on preferences, blocks time automatically, and sends timely reminders.',
     features: ['Google Calendar Sync', 'AI Slot Finding', 'Auto Time-Blocking', 'Email/Slack Reminders'],
     slideImageUrl: 'https://placehold.co/600x800.png',
@@ -188,7 +188,7 @@ export default function Home() {
   const sectionRefs = {
     home: useRef(null),
     services: useRef(null),
-    agentCarousel: useRef(null), 
+    agentCarousel: useRef(null),
     whyLazify: useRef(null),
     pricing: useRef(null),
     faq: useRef(null),
@@ -475,10 +475,7 @@ export default function Home() {
                 Lazify offers a suite of intelligent services designed to handle your repetitive tasks and boost creative output.
               </p>
             </motion.div>
-            <motion.div
-              className="cards-sticky-container" 
-              variants={staggerContainer}
-            >
+            <div className="cards-sticky-container">
               {services.map((service, index) => (
                 <ServiceCard
                   key={index}
@@ -491,22 +488,22 @@ export default function Home() {
                   totalCards={services.length}
                 />
               ))}
-            </motion.div>
+            </div>
           </div>
         </motion.section>
 
-        
+
         <section
           id="agent-carousel"
           ref={sectionRefs.agentCarousel}
-          className="w-full agent-carousel-section text-foreground relative" 
+          className="w-full agent-carousel-section text-foreground relative"
         >
           <div className="container mx-auto px-0 sm:px-4 md:px-6 flex flex-col items-center justify-center h-full relative z-10">
-              <motion.div 
-                  className="mb-12 md:mb-16 text-center" 
-                  variants={fadeInUp} 
-                  initial="initial" 
-                  whileInView="animate" 
+              <motion.div
+                  className="mb-12 md:mb-16 text-center"
+                  variants={fadeInUp}
+                  initial="initial"
+                  whileInView="animate"
                   viewport={{ once: true, amount:0.1}}
               >
                   <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
@@ -530,7 +527,7 @@ export default function Home() {
           className="w-full bg-gradient-to-b from-secondary/20 to-background text-center md:text-left pb-16 md:pb-24 lg:pb-28"
           initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-4 md:px-6 pt-16 md:pt-24 lg:pt-28"> {/* Added explicit top padding here */}
+          <div className="container mx-auto px-4 md:px-6"> {/* Removed explicit top padding here */}
             <div className="grid gap-12 lg:grid-cols-2 items-center">
               <motion.div variants={fadeInUp}>
                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
