@@ -135,7 +135,7 @@
 .services-cards-section {
     view-timeline-name: --cards-element-scrolls-in-body;
     view-timeline-axis: block;
-    min-height: 300vh; /* Increased from (45vh sticky + 5vh overlap) * 4 cards + 100vh bottom padding = 200vh + 100vh */
+    min-height: 400vh; /* Increased from 300vh to slow down overall animation */
 }
 
 .cards-sticky-container {
@@ -185,11 +185,11 @@
 }
 
 @keyframes stack-and-scale-card {
-    0%, 30% { /* Card remains in its active state for the first 30% of its animation duration */
+    0%, 60% { /* Card remains in its active state for the first 60% of its animation duration */
       transform: translateY(0px) scale(1);
       opacity: 1;
     }
-    100% { /* Then it transitions to its stacked state for the remaining 70% */
+    100% { /* Then it transitions to its stacked state for the remaining 40% */
       transform: translateY(calc(-15px * (var(--numcards-from-prop) - var(--index1)))) scale(calc(1 - (0.04 * (var(--numcards-from-prop) - var(--index1)))));
       opacity: calc(1 - (0.2 * (var(--numcards-from-prop) - var(--index1))));
     }
