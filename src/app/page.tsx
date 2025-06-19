@@ -59,7 +59,7 @@ import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
 import AiWorkflowVisualization from '@/components/ai-workflow-visualization';
 import type { InteractiveAgentInfo } from '@/types/agent';
-import ModernAgentCarousel from '@/components/modern-agent-carousel/ModernAgentCarousel';
+import HorizontalAgentCarousel from '@/components/horizontal-agent-carousel/HorizontalAgentCarousel';
 
 
 const fadeInUp = {
@@ -499,29 +499,27 @@ export default function Home() {
         <section
           id="agent-carousel"
           ref={sectionRefs.agentCarousel}
-          className="agent-scroll-carousel-section w-full bg-carousel-section text-foreground relative" 
+          className="w-full agent-carousel-section text-foreground relative" 
         >
-          <div className="agent-scroll-carousel-container">
-            <div className="container mx-auto px-0 md:px-6 flex flex-col items-center justify-center h-full relative z-10">
-                <motion.div 
-                    className="mb-12 md:mb-16 text-center" 
-                    variants={fadeInUp} 
-                    initial="initial" 
-                    whileInView="animate" 
-                    viewport={{ once: true, amount:0.1}}
-                >
-                    <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
-                        Meet Our AI Agent Lineup
-                    </span>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-                        Your Intelligent Workforce Awaits
-                    </h2>
-                    <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                        Explore our diverse range of AI agents, each designed to tackle specific tasks and boost your productivity.
-                    </p>
-                </motion.div>
-                {isClient && <ModernAgentCarousel agents={interactiveAgentsData} scrollTargetRef={sectionRefs.agentCarousel} />}
-            </div>
+          <div className="container mx-auto px-0 sm:px-4 md:px-6 flex flex-col items-center justify-center h-full relative z-10">
+              <motion.div 
+                  className="mb-12 md:mb-16 text-center" 
+                  variants={fadeInUp} 
+                  initial="initial" 
+                  whileInView="animate" 
+                  viewport={{ once: true, amount:0.1}}
+              >
+                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
+                      Meet Our AI Agent Lineup
+                  </span>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+                      Your Intelligent Workforce Awaits
+                  </h2>
+                  <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
+                      Explore our diverse range of AI agents, each designed to tackle specific tasks and boost your productivity.
+                  </p>
+              </motion.div>
+              {isClient && <HorizontalAgentCarousel agents={interactiveAgentsData} />}
           </div>
         </section>
 

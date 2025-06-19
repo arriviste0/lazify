@@ -176,7 +176,7 @@
     --start-range: calc(var(--index0) / var(--numcards) * 100%);
     --end-range: calc(var(--index) / var(--numcards) * 100%);
 
-    animation: linear scale-service-card forwards;
+    animation: linear scale forwards;
     animation-timeline: --cards-element-scrolls-in-body;
     animation-range: exit-crossing var(--start-range) exit-crossing var(--end-range);
 
@@ -189,7 +189,7 @@
     margin-bottom: 0;
 }
 
-@keyframes scale-service-card {
+@keyframes scale {
     to {
         transform: scale(calc(1.1 - (0.1 * var(--reverse-index))));
     }
@@ -211,227 +211,140 @@
   }
 }
 
-/* New Scroll-Driven 3D Carousel Styles from example */
-.agent-scroll-carousel-section {
-    min-height: 600vh; /* Increased to give more scroll runway */
-    position: relative;
-    background: var(--carousel-section-bg); /* Uses CSS var defined above */
+/* Styles for Horizontal Agent Carousel */
+.agent-carousel-section {
+    background: var(--carousel-section-bg);
+    padding-top: theme(spacing.16); /* Equivalent to section-padding top */
+    padding-bottom: theme(spacing.16); /* Equivalent to section-padding bottom */
 }
 
-.agent-scroll-carousel-container {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Crucial for containing transformed slides */
-    perspective: 1200px; /* For 3D transformations, from example */
-}
-
-.agent-carousel-track {
-    display: flex;
-    /* width: 500%; */ /* From example, but Framer Motion handles this differently with absolute positioning of slides */
-    height: 80vh; /* From example */
-    position: relative;
-    transform-style: preserve-3d;
-    align-items: center;
-    justify-content: center;
-}
-
-.agent-carousel-slide {
-    /* flex: 0 0 20%; */ /* From example, Framer Motion handles width via style prop or child component size */
-    position: absolute; /* Key for Framer Motion layout */
-    height: 100%; /* Takes height of track or as defined by content */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform-origin: center center;
-    will-change: transform, opacity, filter; /* Added filter */
-}
-
-/* Styles for content within ModernAgentCard, matching example's .slide-content */
-.slide-content-wrapper { /* Outer wrapper for potential animations */
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.slide-content {
-    width: 90%;
-    max-width: 400px; /* From example */
-    height: 600px; /* From example */
-    background: rgba(255, 255, 255, 0.05); /* From example */
-    backdrop-filter: blur(20px); /* From example */
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 24px; /* From example */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* From example */
-    padding: 3rem 2rem; /* From example */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: relative;
+.embla {
     overflow: hidden;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* From example */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.slide-content::before { /* From example */
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    z-index: 0;
-}
-
-.slide-content:hover::before { /* From example */
-    opacity: 1;
-}
-
-.slide-content > * {
     position: relative;
-    z-index: 1;
 }
 
-.slide-icon { /* From example, adapted for dynamic background */
-    width: 80px;
-    height: 80px;
-    margin-bottom: 2rem;
-    border-radius: 20px;
+.embla__viewport-wrapper {
+    position: relative; /* For fading edges */
+}
+
+.embla__viewport-wrapper::before,
+.embla__viewport-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px; /* Width of the fade effect */
+  z-index: 2; /* Above slides but below nav buttons */
+  pointer-events: none; /* Allow clicks through */
+}
+
+.embla__viewport-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, hsl(var(--background)), transparent);
+}
+
+.embla__viewport-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, hsl(var(--background)), transparent);
+}
+
+
+.embla__viewport {
+    overflow: hidden;
+    width: 100%;
+}
+
+.embla__viewport.is-dragging {
+    cursor: grabbing;
+}
+
+.embla__container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem; /* Emoji size */
-    box-shadow: 0 20px 40px rgba(var(--primary-rgb), 0.2); /* Using primary RGB for shadow */
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    /* Background is set dynamically in ModernAgentCard.tsx using CSS variables */
+    /* gap: 1rem; Spacing via slide padding or margin */
+    margin-left: -1rem; /* Counteract slide padding */
 }
 
-.slide-title { /* From example */
-    font-size: 2.5rem; /* Equivalent to example's 2.5rem */
-    font-weight: 800;
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-    color: hsl(var(--foreground));
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+.embla__slide {
+    flex: 0 0 100%; /* Default: 1 slide visible */
+    min-width: 0;
+    padding-left: 1rem; /* Gutter space */
+    position: relative;
 }
 
-.slide-description { /* From example */
-    font-size: 1.1rem; /* Equivalent to example's 1.1rem */
-    line-height: 1.6;
+@media (min-width: 640px) { /* sm */
+    .embla__slide {
+        flex-basis: 50%; /* 2 slides */
+    }
+}
+@media (min-width: 768px) { /* md */
+    .embla__slide {
+        flex-basis: calc(100% / 2.5); /* ~2.5 slides, adjust for desired partial view */
+    }
+}
+@media (min-width: 1024px) { /* lg */
+    .embla__slide {
+        flex-basis: calc(100% / 3.5); /* ~3.5 slides */
+    }
+}
+@media (min-width: 1280px) { /* xl */
+    .embla__slide {
+        flex-basis: calc(100% / 4); /* 4 slides */
+    }
+}
+
+
+.embla__slide__content { /* This will be the HorizontalAgentCard */
+    height: 100%; /* Ensure card takes full height of slide for consistent alignment */
+    display: flex; /* To make card fill the space */
+}
+
+.embla__button {
+    @apply absolute top-1/2 z-10 -translate-y-1/2 p-2 rounded-full bg-background/70 backdrop-blur-sm text-foreground shadow-md transition-opacity;
+    @apply hover:bg-primary/20 disabled:opacity-30 disabled:cursor-not-allowed;
+}
+.embla__button--prev {
+    @apply left-2 md:left-4;
+}
+.embla__button--next {
+    @apply right-2 md:right-4;
+}
+.embla__button svg {
+    @apply h-6 w-6;
+}
+
+.horizontal-agent-card {
+    @apply bg-card/70 backdrop-blur-md border border-card-foreground/10 rounded-xl shadow-lg p-6 flex flex-col text-center items-center transition-all duration-300 ease-out w-full;
+    transform: scale(0.95); /* Slightly smaller by default */
     opacity: 0.8;
-    margin-bottom: 2rem;
-    color: hsl(var(--muted-foreground));
-    max-width: 90%;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.slide-cta { /* From example, adapted */
-    @apply text-white font-semibold py-4 px-8 rounded-full text-base cursor-pointer transition-all duration-300 relative overflow-hidden;
-    /* background: linear-gradient(135deg, #667eea, #764ba2); Example's default, will be overridden by theme */
-    /* Will use dynamic background from theme or fallback to primary gradient button */
+.embla__slide--visible .horizontal-agent-card {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15), 0 0 15px hsl(var(--primary) / 0.1);
 }
-.slide-cta.cta-button { /* Ensure it picks up the base cta-button styles if no specific theme is applied */
-   /* @apply cta-button; This created a circular dependency. Styles from .cta-button will apply if the class is present. */
-}
-
-
-.slide-cta::before { /* From example */
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.6s ease;
+.horizontal-agent-card:hover {
+    @apply shadow-primary/20 scale-105 border-primary/30;
 }
 
-.slide-cta:hover::before { /* From example */
-    left: 100%;
+.horizontal-agent-card__icon-wrapper {
+    @apply w-16 h-16 mb-4 rounded-xl flex items-center justify-center text-3xl shadow-lg transition-all duration-300;
+    /* Dynamic background set by style prop in component */
+}
+.horizontal-agent-card:hover .horizontal-agent-card__icon-wrapper {
+    @apply scale-110 shadow-xl;
 }
 
-.slide-cta:hover { /* From example, combined with existing cta-button hover */
-    transform: translateY(-2px) scale(1.03); /* Added scale from existing cta-button */
-    box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.4); /* Using primary RGB for shadow */
+.horizontal-agent-card__title {
+    @apply text-xl font-semibold text-foreground mb-1;
 }
-
-/* Specific hover theme for CTA button if a theme is applied */
-.slide-cta.hover-theme-blue:hover { background: var(--theme-blue); filter: brightness(1.15); }
-.slide-cta.hover-theme-amber:hover { background: var(--theme-amber); filter: brightness(1.15); }
-.slide-cta.hover-theme-rose:hover { background: var(--theme-rose); filter: brightness(1.15); }
-.slide-cta.hover-theme-purple:hover { background: var(--theme-purple); filter: brightness(1.15); }
-.slide-cta.hover-theme-green:hover { background: var(--theme-green); filter: brightness(1.15); }
-.slide-cta.hover-theme-teal:hover { background: var(--theme-teal); filter: brightness(1.15); }
-.slide-cta.hover-theme-pink:hover { background: var(--theme-pink); filter: brightness(1.15); }
-
-
-@keyframes slideInUp { /* From example */
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.horizontal-agent-card__description {
+    @apply text-sm text-muted-foreground mb-4 flex-grow line-clamp-3;
 }
-
-.animate-in-slide > * { /* Apply to children of animated container */
-    animation: slideInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+.horizontal-agent-card__cta {
+    @apply mt-auto w-full; /* Ensure button is at bottom if content height varies */
 }
-.animate-in-slide > *:nth-child(1) { animation-delay: 0.1s; }
-.animate-in-slide > *:nth-child(2) { animation-delay: 0.2s; }
-.animate-in-slide > *:nth-child(3) { animation-delay: 0.3s; }
-.animate-in-slide > *:nth-child(4) { animation-delay: 0.4s; }
-
-
-@media (max-width: 768px) { /* From example */
-    .agent-carousel-slide .slide-content { /* Target more specifically */
-        height: 500px;
-        max-width: 90vw;
-        padding: 2rem 1.5rem;
-    }
-    .slide-title {
-        font-size: 2rem;
-    }
-    .slide-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 2rem; /* Adjusted emoji size for smaller icon */
-    }
-}
-
-/* Progress line from example */
-.progress-line-custom {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px; /* From example */
-    background: rgba(255, 255, 255, 0.1); /* From example */
-    z-index: 100;
-}
-
-.progress-fill-custom {
-    height: 100%;
-    /* Matches example gradient, but could use primary/accent from theme */
-    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #4facfe, #43e97b);
-    width: 0%; /* Controlled by JS/Framer Motion */
-    /* transition: width 0.3s ease; */ /* Framer Motion handles smooth updates */
-}
-
 
 html {
     scroll-behavior: smooth;
 }
-
