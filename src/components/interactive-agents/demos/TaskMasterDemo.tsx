@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useTransition } from "react";
 import type { InteractiveAgentInfo } from "@/types/agent";
@@ -8,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertTriangle, ListChecks, Zap } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { handleTaskMasterAction } from "@/app/interactive-agents/actions/taskMasterActions";
 import type { TaskMasterInput, TaskMasterOutput } from "@/ai/flows/interactive-demos/demoTaskMasterFlow";
 import type { PrioritizedTaskSchema as TaskType } from "@/ai/flows/interactive-demos/demoTaskMasterFlow"; // Renamed for clarity
 import { useToast } from "@/hooks/use-toast";
@@ -34,15 +32,28 @@ const TaskMasterDemo: React.FC<TaskMasterDemoProps> = ({ agent }) => {
     setResult(null);
     startTransition(async () => {
       try {
-        const response = await handleTaskMasterAction({ tasks: taskList });
-        if (response && 'error' in response) {
-          setError(response.error);
-          toast({ variant: "destructive", title: "Error", description: response.error });
-        } else if (response) {
-          setResult(response);
+        const response = await fetch('/api/interactive-agents/task-master', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'getTasks',
+            data: { tasks: taskList },
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok || !responseData.success) {
+          const errorMessage = responseData.message || "An error occurred while prioritizing tasks.";
+          setError(errorMessage);
+          toast({ variant: "destructive", title: "Error", description: errorMessage });
         } else {
-          setError("Received an unexpected response from the agent.");
-          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
+          setResult({
+            prioritizedTasks: responseData.tasks.map((t: any) => ({ task: t.title, priority: t.priority })),
+            summary: "Tasks have been prioritized based on simulated urgency and importance."
+          });
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while prioritizing tasks.");

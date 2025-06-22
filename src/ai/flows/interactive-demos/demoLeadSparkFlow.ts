@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Simulates LeadSpark AI for interactive demos.
  *

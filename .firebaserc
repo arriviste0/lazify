@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "lazify-agency",
+    "build": "lazify-agency"
+  },
+  "targets": {},
+  "etags": {}
+}

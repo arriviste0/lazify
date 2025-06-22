@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -46,12 +45,11 @@ import {
   Landmark,
   Store,
 } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, animate, useInView } from 'framer-motion';
 import ServiceCard from '@/components/service-card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { PricingTable } from '@/components/pricing-table';
@@ -59,8 +57,9 @@ import { ContactForm } from '@/components/contact-form';
 import HeroBackground from '@/components/hero-background';
 import AiWorkflowVisualization from '@/components/ai-workflow-visualization';
 import type { InteractiveAgentInfo } from '@/types/agent';
-import HorizontalAgentCarousel from '@/components/horizontal-agent-carousel/HorizontalAgentCarousel';
-
+import HorizontalScrollCarousel from '@/components/HorizontalScrollCarousel';
+import { ParticleBackground } from '@/components/ui/particle-background';
+import { interactiveAgentsData } from '@/lib/data';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -79,105 +78,96 @@ const staggerContainer = {
 const ChartDisplay = () => {
   return (
     <Image
-      src="https://placehold.co/400x400.png"
-      alt="Productivity chart visualization"
+      src="/images/lazify_advantage.jpg"
+      alt="Lazify advantage visualization"
       width={400}
       height={400}
-      className="w-full h-full object-contain rounded-lg"
+      className="w-full h-auto object-contain rounded-3xl hidden md:block"
       data-ai-hint="abstract 3d chart purple"
       suppressHydrationWarning
     />
   );
 };
 
+// CountUp component for animated numbers
+function CountUp({ to, duration = 1.2, className = '', start }: { to: number, duration?: number, className?: string, start: boolean }) {
+  const [display, setDisplay] = React.useState(0);
+  React.useEffect(() => {
+    if (!start) return;
+    const controls = animate(0, to, {
+      duration,
+      onUpdate: (latest) => setDisplay(Math.round(latest)),
+    });
+    return () => controls.stop();
+  }, [to, duration, start]);
+  return <span className={className}>{display}+</span>;
+}
 
-export const interactiveAgentsData: InteractiveAgentInfo[] = [
-  {
-    id: 'inboxzero',
-    name: 'InboxZero AI',
-    iconEmoji: '📨',
-    description: 'Cleans your inbox, flags priority emails, archives spam, and drafts replies. Integrates with Gmail & Outlook.',
-    demoType: 'inboxZero',
-    themeColorClass: 'bg-blue-500',
-    longDescription: 'Automatically categorizes emails, drafts replies for common queries, and keeps your inbox clutter-free so you can focus on what matters.',
-    features: ['Gmail/Outlook Integration', 'AI Summarization', 'Auto-Routing', 'Spam Filtering'],
-    slideImageUrl: 'https://placehold.co/600x800.png',
-    slideImageHint: 'email inbox organization tech',
-  },
-  {
-    id: 'leadspark',
-    name: 'LeadSpark AI',
-    iconEmoji: '🧲',
-    description: 'Captures, qualifies leads from LinkedIn, web forms, or email, and syncs to CRM/Sheets.',
-    demoType: 'leadSpark',
-    themeColorClass: 'bg-amber-500',
-    longDescription: 'Gathers lead information from LinkedIn, web forms, or email, qualifies them based on your criteria, and syncs with your CRM or Sheets.',
-    features: ['LinkedIn Scraping (Demo)', 'Web Form Integration', 'Lead Scoring', 'CRM/Sheet Sync'],
-    slideImageUrl: 'https://placehold.co/600x800.png',
-    slideImageHint: 'lead generation magnet business',
-  },
-  {
-    id: 'contentcraft',
-    name: 'ContentCraft AI',
-    iconEmoji: '✍️',
-    description: 'Auto-generates blogs, social posts, product descriptions from a simple prompt. Exports to Notion/CMS.',
-    demoType: 'contentCraft',
-    themeColorClass: 'bg-rose-500',
-    longDescription: 'Provide a prompt and let our AI generate various forms of content, from engaging blog posts to catchy social media captions or detailed product descriptions.',
-    features: ['Blog Posts', 'Social Media Captions', 'Product Descriptions', 'Notion/CMS Export (Demo)'],
-    slideImageUrl: 'https://placehold.co/600x800.png',
-    slideImageHint: 'ai writing content creation creative',
-  },
-  {
-    id: 'schedulesync',
-    name: 'ScheduleSync AI',
-    iconEmoji: '📅',
-    description: 'Syncs Google Calendar, finds optimal meeting slots, auto-blocks time, and sends reminders.',
-    demoType: 'scheduleSync',
-    themeColorClass: 'bg-purple-600',
-    longDescription: 'Connects to your Google Calendar, finds optimal meeting slots based on preferences, blocks time automatically, and sends timely reminders.',
-    features: ['Google Calendar Sync', 'AI Slot Finding', 'Auto Time-Blocking', 'Email/Slack Reminders'],
-    slideImageUrl: 'https://placehold.co/600x800.png',
-    slideImageHint: 'calendar scheduling automation productivity',
-  },
-  {
-    id: 'taskmaster',
-    name: 'TaskMaster AI',
-    iconEmoji: '✅',
-    description: 'Tracks Todoist/Notion tasks, auto-sorts by priority, and nudges for deadlines. Daily summaries included.',
-    demoType: 'taskMaster',
-    themeColorClass: 'bg-green-500',
-    longDescription: 'Integrates with Todoist or Notion to manage your tasks, uses AI to prioritize them, and sends daily summaries or deadline nudges.',
-    features: ['Todoist/Notion Integration', 'AI Prioritization', 'Deadline Nudges', 'Daily Summaries'],
-    slideImageUrl: 'https://placehold.co/600x800.png',
-    slideImageHint: 'task management checklist efficiency',
-  },
-  {
-    id: 'financetracker',
-    name: 'FinanceTracker AI',
-    iconEmoji: '💰',
-    description: 'Tracks expenses via webhook/manual entry, auto-categorizes, and provides savings tips with charts.',
-    demoType: 'financeTracker',
-    themeColorClass: 'bg-teal-500',
-    longDescription: 'Ingests expense data (manually or via webhooks), auto-categorizes transactions (Food, Bills, Travel), and provides visual breakdowns with savings tips.',
-    features: ['Webhook/Manual Entry', 'Auto-Categorization', 'Spend Breakdown Charts', 'Savings Recommendations'],
-    slideImageUrl: 'https://placehold.co/600x800.png',
-    slideImageHint: 'finance budget tracking money',
-  },
-  {
-    id: 'shopsmart',
-    name: 'ShopSmart AI',
-    iconEmoji: '🛍️',
-    description: 'Recommends products from catalog (API/CSV), handles FAQs via GPT, analyzes checkout funnel.',
-    demoType: 'shopSmart',
-    themeColorClass: 'bg-pink-500',
-    longDescription: 'Integrates with your product catalog, offers personalized recommendations, answers customer FAQs using GPT, and analyzes checkout funnel data.',
-    features: ['Product API/CSV Sync', 'GPT-based Q&A', 'Personalized Recommendations', 'Funnel Analytics (Demo)'],
-    slideImageUrl: 'https://placehold.co/600x800.png',
-    slideImageHint: 'ecommerce shopping assistant retail',
-  },
-];
-
+const Footer = ({ navLinks }: { navLinks: { href: string; label: string }[] }) => (
+  <motion.footer
+    className="w-full site-footer bg-secondary/30 border-t border-border/50 text-center py-8"
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    viewport={{ once: true, amount: 0.1 }}
+    transition={{ duration: 0.8 }}
+  >
+    <div className="container mx-auto px-4 md:px-6">
+      <div className="grid gap-8 md:grid-cols-3 items-center md:items-start text-center md:text-left">
+        <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} viewport={{ once: true, amount: 0.1 }}>
+          <Link href="#home" className="flex items-center justify-center md:justify-start gap-2 text-xl font-bold">
+            <BrainCircuit className="h-6 w-6 text-primary" />
+            <span className="gradient-text-animated">Lazify</span>
+          </Link>
+          <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Lazify AI. All rights reserved.</p>
+          <Link
+            href="https://mail.google.com/mail/?view=cm&to=lazify.agency@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-muted-foreground hover:text-primary flex items-center justify-center md:justify-start gap-1 transition-colors"
+          >
+            <Mail className="h-4 w-4" /> lazify.agency@gmail.com
+          </Link>
+        </motion.div>
+        <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }} viewport={{ once: true, amount: 0.1 }}>
+          <h4 className="font-semibold text-foreground">Quick Links</h4>
+          <nav className="flex flex-col gap-1 items-center md:items-start">
+            {navLinks.slice(1, 5).map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-sm text-muted-foreground hover:text-primary transition-colors group flex items-center"
+              >
+                <motion.span
+                  className="inline-block"
+                  initial={{ x: 0 }}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                >
+                  {link.label}
+                </motion.span>
+              </Link>
+            ))}
+          </nav>
+        </motion.div>
+        <motion.div className="space-y-4 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }} viewport={{ once: true, amount: 0.1 }}>
+          <h4 className="font-semibold text-foreground">Connect With Us</h4>
+          <p className="text-sm text-muted-foreground">Follow us on social media for the latest updates and insights on AI automation.</p>
+          <div className="flex justify-center md:justify-start gap-4 pt-2">
+            {[
+              { label: "LinkedIn", icon: Linkedin, href: "#" },
+              { label: "Twitter", icon: Twitter, href: "#" },
+              { label: "YouTube", icon: Youtube, href: "#" },
+            ].map((social) => (
+              <motion.a key={social.label} href={social.href} aria-label={social.label} className="text-muted-foreground hover:text-primary transition-colors" whileHover={{ y: -3, scale: 1.1 }} transition={{ type: "spring", stiffness: 400, damping: 10 }} target="_blank" rel="noopener noreferrer">
+                <social.icon className="h-5 w-5" />
+              </motion.a>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  </motion.footer>
+);
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -196,6 +186,17 @@ export default function Home() {
     contact: useRef(null),
   };
 
+  const navLinks = [
+    { href: '#home', label: 'Home', ref: sectionRefs.home },
+    { href: '#services', label: 'Services', ref: sectionRefs.services },
+    { href: '#agent-carousel', label: 'AI Agents', ref: sectionRefs.agentCarousel },
+    { href: '#why-lazify', label: 'Why Us', ref: sectionRefs.whyLazify },
+    { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
+    { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
+    { href: '#ai-workflow', label: 'AI Workflow', ref: sectionRefs.aiWorkflow },
+    { href: '#contact', label: 'Contact', ref: sectionRefs.contact },
+  ];
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -206,7 +207,6 @@ export default function Home() {
 
   const chartImageParallaxY = useTransform(scrollYProgress, [0.4, 0.55, 0.7], ['30px', '-30px', '30px']);
   const chartImageScale = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0.9, 1.1, 0.9]);
-
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -231,17 +231,6 @@ export default function Home() {
     return () => observers.forEach((observer) => observer.disconnect());
   }, []);
 
-  const navLinks = [
-    { href: '#home', label: 'Home', ref: sectionRefs.home },
-    { href: '#services', label: 'Services', ref: sectionRefs.services },
-    { href: '#agent-carousel', label: 'AI Agents', ref: sectionRefs.agentCarousel },
-    { href: '#why-lazify', label: 'Why Us', ref: sectionRefs.whyLazify },
-    { href: '#pricing', label: 'Pricing', ref: sectionRefs.pricing },
-    { href: '#faq', label: 'FAQ', ref: sectionRefs.faq },
-    { href: '#ai-workflow', label: 'AI Workflow', ref: sectionRefs.aiWorkflow },
-    { href: '#contact', label: 'Contact', ref: sectionRefs.contact },
-  ];
-
   const services = [
     {
       title: 'Automation AI',
@@ -249,6 +238,7 @@ export default function Home() {
       icon: Clock,
       imageHint: 'robot arm organizing calendar icons',
       color: 'from-purple-600 to-indigo-600',
+      imageUrl: '/images/ai_automation.png',
     },
     {
       title: 'AI Content Generation',
@@ -256,6 +246,7 @@ export default function Home() {
       icon: FileText,
       imageHint: 'glowing pen writing on digital paper',
       color: 'from-fuchsia-600 to-pink-600',
+      imageUrl: '/images/ai_content.png',
     },
     {
       title: 'Custom AI Agents',
@@ -263,6 +254,7 @@ export default function Home() {
       icon: Cog,
       imageHint: 'blueprint with glowing circuit lines',
       color: 'from-violet-600 to-purple-600',
+      imageUrl: '/images/ai_agents.jpg',
     },
     {
       title: 'AI-Powered Web Solutions',
@@ -270,14 +262,14 @@ export default function Home() {
       icon: Globe,
       imageHint: 'ai website globe digital marketing',
       color: 'from-sky-600 to-cyan-600',
+      imageUrl: '/images/ai_web.jpg',
     },
   ];
 
-
   const metrics = [
-    { value: '10+', label: 'Hours Saved/Week', icon: Clock },
-    { value: '90%', label: 'Task Accuracy', icon: CheckCircle },
-    { value: '40%', label: 'Productivity Boost', icon: BarChart },
+    { value: '10', label: 'Hours Saved/Week', icon: Clock },
+    { value: '90', label: 'Task Accuracy', icon: CheckCircle },
+    { value: '40', label: 'Productivity Boost', icon: BarChart },
   ];
 
   const faqs = [
@@ -460,23 +452,57 @@ export default function Home() {
         <section
           id="services"
           ref={sectionRefs.services}
-          className="w-full section-padding bg-secondary/20 services-cards-section"
+          className="w-full section-padding bg-secondary/20 services-cards-section relative overflow-hidden"
         >
-          <div className="container mx-auto px-4 md:px-6">
-             <motion.div 
-                className="mb-12 md:mb-16 text-center md:text-left"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: false, amount: 0.3 }}
-             >
+          {/* Particle background for services */}
+          <ParticleBackground 
+            particleCount={60} 
+            particleSize={1.8} 
+            particleSpeed={0.18} 
+            particleOpacity={0.25}
+          />
+          
+          {/* Space elements for services section */}
+          <motion.div
+            className="absolute top-1/4 left-10 w-64 h-64 bg-primary/8 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 right-10 w-48 h-48 bg-primary/6 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 0.8, 1],
+              opacity: [0.4, 0.7, 0.4],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          
+          <div className="container mx-auto px-4 md:px-6 relative z-10">
+            <motion.div
+              className="mb-12 md:mb-16 text-center"
+              variants={fadeInUp}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, amount: 0.2 }}
+            >
               <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
                 Our Services
               </span>
-               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
                 Automate Your World with AI
               </h2>
-               <p className="max-w-3xl mt-4 text-muted-foreground">
+              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
                 Lazify offers a suite of intelligent services designed to handle your repetitive tasks and boost creative output.
               </p>
             </motion.div>
@@ -491,47 +517,112 @@ export default function Home() {
                   gradientColors={service.color}
                   index={index}
                   totalCards={services.length}
+                  fallbackAnimation
+                  imageUrl={service.imageUrl}
                 />
               ))}
             </div>
           </div>
         </section>
 
-
-        <section
-          id="agent-carousel"
-          ref={sectionRefs.agentCarousel}
-          className="w-full agent-carousel-section text-foreground relative"
-        >
-          <div className="container mx-auto px-0 sm:px-4 md:px-6 flex flex-col items-center justify-center h-full relative z-10">
-              <motion.div
-                  className="mb-12 md:mb-16 text-center"
-                  variants={fadeInUp}
-                  initial="initial"
-                  whileInView="animate"
-                  viewport={{ once: false, amount:0.1}}
-              >
-                  <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
-                      Meet Our AI Agent Lineup
-                  </span>
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-                      Your Intelligent Workforce Awaits
-                  </h2>
-                  <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
-                      Explore our diverse range of AI agents, each designed to tackle specific tasks and boost your productivity.
-                  </p>
-              </motion.div>
-              {isClient && <HorizontalAgentCarousel agents={interactiveAgentsData} />}
+        <section id="agent-carousel" ref={sectionRefs.agentCarousel} className="w-full section-padding bg-black relative overflow-hidden">
+          {/* Particle background for agent carousel */}
+          <ParticleBackground 
+            particleCount={80} 
+            particleSize={1.5} 
+            particleSpeed={0.2} 
+            particleOpacity={0.3}
+          />
+          
+          {/* Space elements for agent carousel */}
+          <motion.div
+            className="absolute top-1/3 left-1/4 w-72 h-72 bg-primary/8 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1/3 right-1/4 w-56 h-56 bg-primary/6 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 0.7, 1],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 9,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          
+          <div className="container mx-auto px-4 md:px-6 relative z-10">
+            <motion.div
+              className="mb-12 md:mb-16 text-center"
+              variants={fadeInUp}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, amount: 0.2 }}
+            >
+              <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-2">
+                Meet Our AI Agent Lineup
+              </span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+                Your Intelligent Workforce Awaits
+              </h2>
+              <p className="max-w-3xl mx-auto mt-4 text-muted-foreground">
+                Explore our diverse range of AI agents, each designed to tackle specific tasks and boost your productivity.
+              </p>
+            </motion.div>
+            <HorizontalScrollCarousel />
           </div>
         </section>
-
 
         <motion.section
           id="why-lazify"
           ref={sectionRefs.whyLazify}
-          className="w-full bg-gradient-to-b from-secondary/20 to-background text-center md:text-left pb-16 md:pb-24 lg:pb-28"
+          className="w-full bg-black text-center md:text-left pb-16 md:pb-24 lg:pb-28 lazify-advantage-section relative overflow-hidden"
+          viewport={{ once: false, amount: 0.2 }}
         >
-          <div className="container mx-auto px-4 md:px-6">
+          {/* Particle background for why Lazify */}
+          <ParticleBackground 
+            particleCount={70} 
+            particleSize={1.6} 
+            particleSpeed={0.22} 
+            particleOpacity={0.28}
+          />
+          
+          {/* Space elements for why Lazify section */}
+          <motion.div
+            className="absolute top-1/4 right-1/3 w-80 h-80 bg-primary/8 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-primary/6 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 0.9, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          
+          <div className="container mx-auto px-4 md:px-6 relative z-10">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
               <motion.div 
                 initial={{ opacity: 0, x: -50 }}
@@ -553,19 +644,23 @@ export default function Home() {
                   variants={staggerContainer}
                   initial="initial"
                   whileInView="animate"
-                  viewport={{ once: false, amount: 0.2, staggerChildren: 0.1 }}
+                  viewport={{ once: false, amount: 0.2 }}
                 >
-                  {metrics.map((metric, index) => (
-                    <motion.div key={index} variants={fadeInUp}>
-                      <Card className="p-4 text-center modern-card bg-card/70 backdrop-blur-sm border-primary/10 hover:border-primary/30">
-                        <metric.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
-                        <div className="text-3xl font-bold text-foreground">
-                          {metric.value}
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-1">{metric.label}</p>
-                      </Card>
-                    </motion.div>
-                  ))}
+                  {metrics.map((metric, index) => {
+                    const ref = useRef(null);
+                    const inView = useInView(ref, { once: false, amount: 0.7 });
+                    return (
+                      <motion.div key={index} variants={fadeInUp} ref={ref}>
+                        <Card className="p-4 text-center modern-card bg-card/70 backdrop-blur-sm border-primary/10 hover:border-primary/30">
+                          <metric.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
+                          <div className="text-3xl font-bold text-foreground">
+                            <CountUp to={parseInt(metric.value)} start={inView} />
+                          </div>
+                          <p className="text-sm text-muted-foreground mt-1">{metric.label}</p>
+                        </Card>
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
               </motion.div>
                <motion.div
@@ -597,10 +692,44 @@ export default function Home() {
         <motion.section
           id="pricing"
           ref={sectionRefs.pricing}
-          className="w-full section-padding text-center"
-          initial="initial" whileInView="animate" viewport={{ once: false, amount: 0.2 }} variants={fadeInUp}
+          className="w-full section-padding text-center relative overflow-hidden"
+          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-4 md:px-6">
+          {/* Particle background for pricing */}
+          <ParticleBackground 
+            particleCount={50} 
+            particleSize={1.4} 
+            particleSpeed={0.16} 
+            particleOpacity={0.22}
+          />
+          
+          {/* Space elements for pricing section */}
+          <motion.div
+            className="absolute top-1/3 left-1/4 w-96 h-96 bg-primary/8 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-primary/6 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 0.8, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 11,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          
+          <div className="container mx-auto px-4 md:px-6 relative z-10">
              <motion.div className="text-center mb-12 md:mb-16" variants={fadeInUp}>
                 <span className="inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent mb-2">
                   Pricing Plans
@@ -619,10 +748,44 @@ export default function Home() {
         <motion.section
           id="faq"
           ref={sectionRefs.faq}
-          className="w-full section-padding bg-secondary/10 text-center"
-          initial="initial" whileInView="animate" viewport={{ once: false, amount: 0.2 }} variants={fadeInUp}
+          className="w-full section-padding bg-secondary/10 text-center relative overflow-hidden"
+          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-4 md:px-6 max-w-3xl">
+          {/* Particle background for FAQ */}
+          <ParticleBackground 
+            particleCount={45} 
+            particleSize={1.3} 
+            particleSpeed={0.15} 
+            particleOpacity={0.2}
+          />
+          
+          {/* Space elements for FAQ section */}
+          <motion.div
+            className="absolute top-1/4 right-1/4 w-64 h-64 bg-primary/8 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 9,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-primary/6 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 0.9, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 13,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          
+          <div className="container mx-auto px-4 md:px-6 max-w-3xl relative z-10">
             <motion.div className="mb-12 md:mb-16 text-center" variants={fadeInUp}>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
                 Frequently Asked Questions
@@ -649,12 +812,20 @@ export default function Home() {
         <motion.section
           id="ai-workflow"
           ref={sectionRefs.aiWorkflow}
-          className="w-full section-padding bg-secondary/20"
-          initial="initial" whileInView="animate" viewport={{ once: false, amount: 0.2 }} variants={fadeInUp}
+          className="w-full section-padding bg-secondary/20 relative overflow-hidden"
+          initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.2 }} variants={fadeInUp}
         >
-          <div className="container mx-auto px-4 md:px-6">
+          {/* Particle background for AI workflow */}
+          <ParticleBackground 
+            particleCount={55} 
+            particleSize={1.7} 
+            particleSpeed={0.19} 
+            particleOpacity={0.24}
+          />
+          
+          <div className="container mx-auto px-4 md:px-6 relative z-10">
             <div className="grid lg:grid-cols-2 gap-10 md:gap-12 items-center">
-              <motion.div className="order-2 lg:order-1" variants={fadeInUp} viewport={{ once: false, amount: 0.2 }}>
+              <motion.div className="order-2 lg:order-1" variants={fadeInUp} viewport={{ once: true, amount: 0.2 }}>
                 <span className="inline-block rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary mb-3">
                   Exclusive Offer
                 </span>
@@ -677,7 +848,7 @@ export default function Home() {
                 className="order-1 lg:order-2 flex justify-center items-center min-h-[350px] md:min-h-[450px]"
                 variants={fadeInUp}
                 transition={{ delay: 0.2, ...fadeInUp.transition }}
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
               >
                 <AiWorkflowVisualization />
               </motion.div>
@@ -688,10 +859,18 @@ export default function Home() {
          <motion.section
            id="contact"
            ref={sectionRefs.contact}
-           className="w-full section-padding bg-card"
+           className="w-full section-padding bg-card relative overflow-hidden"
            initial="initial" whileInView="animate" viewport={{ once: false, amount: 0.2 }} variants={fadeInUp}
          >
-           <div className="container mx-auto px-4 md:px-6">
+           {/* Particle background for contact */}
+           <ParticleBackground 
+             particleCount={40} 
+             particleSize={1.2} 
+             particleSpeed={0.14} 
+             particleOpacity={0.18}
+           />
+           
+           <div className="container mx-auto px-4 md:px-6 relative z-10">
              <motion.div
                className="max-w-2xl mx-auto bg-secondary/20 p-8 md:p-12 rounded-xl shadow-2xl border border-border/50"
                variants={fadeInUp}
@@ -709,84 +888,7 @@ export default function Home() {
          </motion.section>
       </main>
 
-      <motion.footer
-         className="w-full py-12 md:py-16 bg-secondary/30 border-t border-border/50 text-center"
-         initial={{ opacity: 0 }}
-         whileInView={{ opacity: 1 }}
-         viewport={{ once: false, amount: 0.1 }}
-         transition={{ duration: 0.8 }}
-       >
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid gap-8 md:grid-cols-3 items-center md:items-start text-center md:text-left">
-            <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} viewport={{ once: false, amount: 0.1 }}>
-              <Link href="#home" className="flex items-center justify-center md:justify-start gap-2 text-xl font-bold">
-                <BrainCircuit className="h-6 w-6 text-primary" />
-                <span className="gradient-text-animated">
-                  Lazify
-                </span>
-              </Link>
-              <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} Lazify AI. All rights reserved.
-              </p>
-              <Link
-                href="mailto:contact@lazify.ai"
-                className="text-sm text-muted-foreground hover:text-primary flex items-center justify-center md:justify-start gap-1 transition-colors"
-              >
-                <Mail className="h-4 w-4" /> contact@lazify.ai
-              </Link>
-            </motion.div>
-
-            <motion.div className="space-y-2 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.1, ...fadeInUp.transition }} viewport={{ once: false, amount: 0.1 }}>
-              <h4 className="font-semibold text-foreground">Quick Links</h4>
-              <nav className="flex flex-col gap-1 items-center md:items-start">
-                {[...navLinks.slice(1, 5), { href: '#', label: 'Privacy Policy' }, { href: '#', label: 'Terms of Service' }].map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors group flex items-center"
-                  >
-                    <motion.span
-                      className="inline-block"
-                      initial={{ x: 0 }}
-                      whileHover={{ x: 5 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    >
-                      {link.label}
-                    </motion.span>
-                  </Link>
-                ))}
-              </nav>
-            </motion.div>
-
-            <motion.div className="space-y-4 md:col-span-1" variants={fadeInUp} transition={{ delay: 0.2, ...fadeInUp.transition }} viewport={{ once: false, amount: 0.1 }}>
-              <h4 className="font-semibold text-foreground">Connect With Us</h4>
-              <p className="text-sm text-muted-foreground">
-                 Follow us on social media for the latest updates and insights on AI automation.
-               </p>
-              <div className="flex justify-center md:justify-start gap-4 pt-2">
-                {[
-                  { label: "LinkedIn", icon: Linkedin, href: "#" },
-                  { label: "Twitter", icon: Twitter, href: "#" },
-                  { label: "YouTube", icon: Youtube, href: "#" },
-                ].map((social) => (
-                  <motion.a
-                    key={social.label}
-                    href={social.href}
-                    aria-label={social.label}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                    whileHover={{ y: -3, scale: 1.1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <social.icon className="h-5 w-5" />
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </motion.footer>
+      <Footer navLinks={navLinks} />
     </div>
   );
 }

@@ -1,5 +1,3 @@
-
-'use server';
 /**
  * @fileOverview Simulates TaskMaster AI for interactive demos.
  */
@@ -8,14 +6,15 @@ import { ai } from '@/ai/ai-instance';
 import { z } from 'genkit';
 
 const TaskMasterInputSchema = z.object({
-  tasks: z.string().min(5).describe('A string containing tasks, potentially one per line.'),
+  tasks: z.string().min(5, { message: "Task list must contain at least 5 characters." }).describe('A string containing a list of tasks, usually newline-separated.'),
 });
 export type TaskMasterInput = z.infer<typeof TaskMasterInputSchema>;
 
-const PrioritizedTaskSchema = z.object({
-  task: z.string(),
-  priority: z.enum(["High", "Medium", "Low"]),
+export const PrioritizedTaskSchema = z.object({
+  task: z.string().describe('The original task description.'),
+  priority: z.enum(["High", "Medium", "Low"]).describe('The AI-assigned priority.'),
 });
+export type PrioritizedTask = z.infer<typeof PrioritizedTaskSchema>;
 
 const TaskMasterOutputSchema = z.object({
   prioritizedTasks: z.array(PrioritizedTaskSchema).describe('List of tasks with assigned priorities.'),

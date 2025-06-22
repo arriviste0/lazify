@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Simulates FinanceTracker AI for interactive demos.
  */

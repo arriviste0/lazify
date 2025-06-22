@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -30,7 +29,7 @@ const HorizontalAgentCarousel: React.FC<HorizontalAgentCarouselProps> = ({ agent
 
   const updateVisibleSlides = useCallback(() => {
     if (!emblaApi) return;
-    const inView = emblaApi.slidesInView(true); // true for partially visible
+    const inView = emblaApi.slidesInView();
     setVisibleSlides(inView);
   }, [emblaApi]);
 

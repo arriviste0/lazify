@@ -31,16 +31,35 @@ export function ContactForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Simulate form submission
-    console.log('Form submitted:', values);
-    // In a real app, you would send this data to your backend or email service
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    toast({
-      title: 'Message Sent!',
-      description: "Thanks for reaching out. We'll get back to you soon.",
-    });
-    form.reset(); // Reset form after successful submission
+    try {
+      const res = await fetch("/api/send-contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: values.email,
+          message: `Name: ${values.name}\n\n${values.message}`,
+        }),
+      });
+      if (res.ok) {
+        toast({
+          title: 'Message Sent!',
+          description: "Thanks for reaching out. We'll get back to you soon.",
+        });
+        form.reset();
+      } else {
+        toast({
+          title: 'Failed to send',
+          description: 'There was a problem sending your message. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    } catch (err) {
+      toast({
+        title: 'Failed to send',
+        description: 'There was a problem sending your message. Please try again.',
+        variant: 'destructive',
+      });
+    }
   }
 
   return (

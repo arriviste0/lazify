@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useTransition } from "react";
 import type { InteractiveAgentInfo } from "@/types/agent";
@@ -7,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertTriangle, PieChart, DollarSign } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { handleFinanceTrackerAction } from "@/app/interactive-agents/actions/financeTrackerActions";
+// import { handleFinanceTrackerAction } from "@/app/interactive-agents/actions/financeTrackerActions";
 import type { FinanceTrackerInput, FinanceTrackerOutput } from "@/ai/flows/interactive-demos/demoFinanceTrackerFlow";
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useToast } from "@/hooks/use-toast";
@@ -45,15 +44,25 @@ Shopping - Clothes ₹2500
     setResult(null);
     startTransition(async () => {
       try {
-        const response = await handleFinanceTrackerAction({ expensesInput: expenses });
-        if (response && 'error' in response) {
-          setError(response.error);
-          toast({ variant: "destructive", title: "Error", description: response.error });
-        } else if (response) {
-          setResult(response);
+        const response = await fetch('/api/interactive-agents/finance-tracker', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'getAnalytics',
+            data: { expensesInput: expenses },
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok || !responseData.success) {
+          const errorMessage = responseData.message || "An error occurred while tracking finances.";
+          setError(errorMessage);
+          toast({ variant: "destructive", title: "Error", description: errorMessage });
         } else {
-          setError("Received an unexpected response from the agent.");
-          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
+          setResult(responseData.analytics);
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while tracking finances.");
@@ -133,7 +142,7 @@ Shopping - Clothes ₹2500
                         itemStyle={{ color: `hsl(var(--${colorName}-500))` }}
                        />
                       <Legend wrapperStyle={{fontSize: '12px', color: 'hsl(var(--muted-foreground))'}}/>
-                      <Bar dataKey="amount" fill={`hsl(var(--${colorName}-500))`} name="Amount (₹)" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="amount" fill="#888888" name="Amount (₹)" radius={[4, 4, 0, 0]} />
                     </RechartsBarChart>
                   </ResponsiveContainer>
                 </div>

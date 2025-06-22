@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useTransition } from "react";
 import type { InteractiveAgentInfo } from "@/types/agent";
@@ -7,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertTriangle, UserCheck, Sparkles, Linkedin } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { handleLeadSparkAction } from "@/app/interactive-agents/actions/leadSparkActions";
 import type { LeadSparkInput, LeadSparkOutput } from "@/ai/flows/interactive-demos/demoLeadSparkFlow";
 import { useToast } from "@/hooks/use-toast";
 
@@ -31,15 +29,25 @@ const LeadSparkDemo: React.FC<LeadSparkDemoProps> = ({ agent }) => {
     setResult(null);
     startTransition(async () => {
       try {
-        const response = await handleLeadSparkAction({ leadQuery });
-         if (response && 'error' in response) {
-          setError(response.error);
-          toast({ variant: "destructive", title: "Error", description: response.error });
-        } else if (response) {
-          setResult(response);
+        const response = await fetch('/api/interactive-agents/lead-spark', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'qualifyLead',
+            data: { leadQuery },
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok || !responseData.success) {
+          const errorMessage = responseData.message || "An error occurred while qualifying the lead.";
+          setError(errorMessage);
+          toast({ variant: "destructive", title: "Error", description: errorMessage });
         } else {
-          setError("Received an unexpected response from the agent.");
-          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
+          setResult(responseData.qualification);
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while qualifying the lead.");

@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Simulates ScheduleSync AI for interactive demos.
  */

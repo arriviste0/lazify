@@ -1,4 +1,3 @@
-
 import type { LucideIcon } from 'lucide-react';
 
 // Existing AgentInfo for coverflow slider (if still used elsewhere or for reference)

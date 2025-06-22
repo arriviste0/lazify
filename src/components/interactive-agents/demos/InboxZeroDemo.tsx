@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useTransition } from "react";
 import type { InteractiveAgentInfo } from "@/types/agent";
@@ -7,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertTriangle, Inbox, Send } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { handleInboxZeroAction } from "@/app/interactive-agents/actions/inboxZeroActions";
+// import { handleInboxZeroAction } from "@/app/interactive-agents/actions/inboxZeroActions";
 import type { InboxZeroInput, InboxZeroOutput } from "@/ai/flows/interactive-demos/demoInboxZeroFlow";
 import { useToast } from "@/hooks/use-toast";
 
@@ -49,15 +48,25 @@ const InboxZeroDemo: React.FC<InboxZeroDemoProps> = ({ agent }) => {
     setResult(null);
     startTransition(async () => {
       try {
-        const response = await handleInboxZeroAction({ emailContent });
-        if (response && 'error' in response) {
-          setError(response.error);
-          toast({ variant: "destructive", title: "Error", description: response.error });
-        } else if (response) {
-          setResult(response);
+        const response = await fetch('/api/interactive-agents/inbox-zero', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'processEmail',
+            data: { emailContent },
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok || !responseData.success) {
+          const errorMessage = responseData.message || "An error occurred while processing the email.";
+          setError(errorMessage);
+          toast({ variant: "destructive", title: "Error", description: errorMessage });
         } else {
-          setError("Received an unexpected response from the agent.");
-          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
+          setResult(responseData.email);
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while processing the email.");

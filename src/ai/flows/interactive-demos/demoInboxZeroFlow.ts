@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Simulates InboxZero AI for interactive demos.
  *

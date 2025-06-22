@@ -1,5 +1,3 @@
-
-'use server';
 /**
  * @fileOverview Simulates ContentCraft AI for interactive demos.
  */

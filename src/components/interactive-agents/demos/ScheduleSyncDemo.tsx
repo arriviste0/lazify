@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useTransition } from "react";
 import type { InteractiveAgentInfo } from "@/types/agent";
@@ -7,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertTriangle, CalendarCheck2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { handleScheduleSyncAction } from "@/app/interactive-agents/actions/scheduleSyncActions";
+// import { handleScheduleSyncAction } from "@/app/interactive-agents/actions/scheduleSyncActions";
 import type { ScheduleSyncInput, ScheduleSyncOutput } from "@/ai/flows/interactive-demos/demoScheduleSyncFlow";
 import { useToast } from "@/hooks/use-toast";
 
@@ -35,15 +34,28 @@ const ScheduleSyncDemo: React.FC<ScheduleSyncDemoProps> = ({ agent }) => {
     setResult(null);
     startTransition(async () => {
       try {
-        const response = await handleScheduleSyncAction({ preferredDays, preferredTime, attendeeEmails, meetingTopic });
-        if (response && 'error' in response) {
-          setError(response.error);
-          toast({ variant: "destructive", title: "Error", description: response.error });
-        } else if (response) {
-          setResult(response);
+        const response = await fetch('/api/interactive-agents/schedule-sync', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'findSlot',
+            data: { preferredDays, preferredTime, attendeeEmails, meetingTopic },
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok || !responseData.success) {
+          const errorMessage = responseData.message || "An error occurred while scheduling.";
+          setError(errorMessage);
+          toast({ variant: "destructive", title: "Error", description: errorMessage });
         } else {
-          setError("Received an unexpected response from the agent.");
-          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
+          setResult({
+            suggestedSlot: responseData.slots[0] ? `${responseData.slots[0].date} at ${responseData.slots[0].time}` : 'No slots available',
+            confirmationMessage: `A meeting invite for "${meetingTopic}" will be sent to attendees.`
+          });
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while scheduling.");

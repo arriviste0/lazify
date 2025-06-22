@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useTransition } from "react";
 import type { InteractiveAgentInfo } from "@/types/agent";
@@ -9,7 +8,6 @@ import { Loader2, AlertTriangle, Edit3, Copy } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { handleContentCraftAction } from "@/app/interactive-agents/actions/contentCraftActions";
 import type { ContentCraftInput, ContentCraftOutput } from "@/ai/flows/interactive-demos/demoContentCraftFlow";
 
 interface ContentCraftDemoProps {
@@ -33,15 +31,28 @@ const ContentCraftDemo: React.FC<ContentCraftDemoProps> = ({ agent }) => {
     setResult(null);
     startTransition(async () => {
       try {
-        const response = await handleContentCraftAction({ prompt, contentType });
-        if (response && 'error' in response) {
-          setError(response.error);
-          toast({ variant: "destructive", title: "Error", description: response.error });
-        } else if (response) {
-          setResult(response);
+        const response = await fetch('/api/interactive-agents/content-craft', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'generateContent',
+            data: { prompt, contentType },
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok || !responseData.success) {
+          const errorMessage = responseData.message || "An error occurred while generating content.";
+          setError(errorMessage);
+          toast({ variant: "destructive", title: "Error", description: errorMessage });
         } else {
-          setError("Received an unexpected response from the agent.");
-          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
+          setResult({
+            generatedContent: responseData.content,
+            contentTypeUsed: contentType,
+          });
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while generating content.");

@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Simulates ShopSmart AI for interactive demos.
  */

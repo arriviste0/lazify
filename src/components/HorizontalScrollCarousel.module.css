@@ -1,0 +1,117 @@
+.external {
+    overflow: hidden;
+    height: 100vh;
+}
+
+.horizontalScrollWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vh;
+    transform: rotate(-90deg) translate3d(0,-100vh,0);
+    transform-origin: right top;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+    height: 100vw;
+    perspective: 1px;
+    transform-style: preserve-3d;
+    padding-bottom: 5rem; /* Reduced scrollable area */
+}
+
+.imgWrapper {
+    transform: rotate(90deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40vh;
+    transform-origin: 50% 50%;
+    transform: rotate(90deg) translateZ(.1px) scale(0.9) translateX(0px) translateY(-3vh);
+    transition: 1s;
+}
+
+.imgWrapper:hover {
+    min-height: 65vh;
+}
+
+.slower {
+    transform: rotate(90deg) translateZ(-.2px) scale(1.1) translateX(0%) translateY(-10vh);
+}
+
+.slowerDown {
+    transform: rotate(90deg) translateZ(-.2px) scale(1.1) translateX(0%) translateY(16vh);
+}
+
+.faster {
+    transform: rotate(90deg) translateZ(.15px) scale(0.8) translateX(0%) translateY(14vh);
+}
+
+.faster1 {
+    transform: rotate(90deg) translateZ(.05px) scale(0.8) translateX(0%) translateY(10vh);
+}
+
+.vertical {
+    transform: rotate(90deg) translateZ(-.15px) scale(1.15) translateX(0%) translateY(0%);
+}
+
+.card {
+    overflow: hidden;
+    display: block;
+    background: #1a1a1a;
+    box-shadow: 0 10px 50px #00000082;
+    color: white;
+    width: 45vh;
+    border-radius: 10px;
+    transition: .5s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.cardImage {
+    width: 100%;
+    height: 25vh;
+    object-fit: cover;
+    transition: .5s;
+    filter: saturate(40%) sepia(30%) hue-rotate(5deg);
+}
+
+.card:hover .cardImage {
+    filter: none;
+}
+
+.cardContent {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.cardContent h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+}
+
+.cardContent p {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    color: #ccc;
+    flex-grow: 1;
+}
+
+.demoButton {
+    margin-top: auto;
+    background-color: #8A2BE2;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.demoButton:hover {
+    background-color: #9932CC;
+} 

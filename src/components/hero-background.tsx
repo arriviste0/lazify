@@ -1,28 +1,97 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
-// Placeholder component for the 3D Hero Background
-// Replace this with your actual Three.js/R3F implementation if the error is resolved later
+const ParticleEffect = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-const HeroBackground = () => {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      opacity: number;
+    }> = [];
+
+    // Create small white particles
+    for (let i = 0; i < 150; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 2 + 0.5,
+        opacity: Math.random() * 0.6 + 0.2,
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle) => {
+        // Update position
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        // Wrap around edges
+        if (particle.x < 0) particle.x = canvas.width;
+        if (particle.x > canvas.width) particle.x = 0;
+        if (particle.y < 0) particle.y = canvas.height;
+        if (particle.y > canvas.height) particle.y = 0;
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <motion.div
-      className="absolute inset-0 -z-10 overflow-hidden bg-background animated-background-subtle" // Use subtle gradient animation
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.5 }}
-    >
-      {/* Example: Animated abstract shapes (CSS only for simplicity) */}
-       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full filter blur-3xl animate-pulse opacity-50"></div>
-       <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-accent/5 rounded-full filter blur-3xl animate-pulse animation-delay-[2s] opacity-50"></div>
-       <div className="absolute top-1/3 right-1/3 w-56 h-56 bg-secondary/5 rounded-full filter blur-2xl animate-pulse animation-delay-[1s] opacity-40"></div>
-
-      {/* Optional overlay */}
-      <div className="absolute inset-0 bg-background/30 backdrop-blur-sm"></div>
-    </motion.div>
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 1 }}
+    />
   );
 };
 
-export default HeroBackground;
+export default function HeroBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {/* Black background */}
+      <div className="absolute inset-0 bg-black" />
+      
+      {/* Particle effect */}
+      <ParticleEffect />
+    </div>
+  );
+}

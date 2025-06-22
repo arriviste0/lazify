@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useTransition } from "react";
 import type { InteractiveAgentInfo } from "@/types/agent";
@@ -9,7 +8,7 @@ import { Loader2, AlertTriangle, ShoppingCart, Search } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Image from "next/image";
-import { handleShopSmartAction } from "@/app/interactive-agents/actions/shopSmartActions";
+// import { handleShopSmartAction } from "@/app/interactive-agents/actions/shopSmartActions";
 import type { ShopSmartInput, ShopSmartOutput, ProductRecommendation } from "@/ai/flows/interactive-demos/demoShopSmartFlow";
 import { useToast } from "@/hooks/use-toast";
 
@@ -36,15 +35,25 @@ const ShopSmartDemo: React.FC<ShopSmartDemoProps> = ({ agent }) => {
     setResult(null);
     startTransition(async () => {
       try {
-        const response = await handleShopSmartAction({ productInterest, ageGroup, gender });
-        if (response && 'error' in response) {
-          setError(response.error);
-          toast({ variant: "destructive", title: "Error", description: response.error });
-        } else if (response) {
-          setResult(response);
+        const response = await fetch('/api/interactive-agents/shop-smart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'findDeals',
+            data: { productInterest, ageGroup, gender },
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok || !responseData.success) {
+          const errorMessage = responseData.message || "An error occurred while finding products.";
+          setError(errorMessage);
+          toast({ variant: "destructive", title: "Error", description: errorMessage });
         } else {
-          setError("Received an unexpected response from the agent.");
-          toast({ variant: "destructive", title: "Error", description: "Received an unexpected response." });
+          setResult({ recommendations: responseData.deals });
         }
       } catch (e: any) {
         setError(e.message || "An error occurred while finding products.");

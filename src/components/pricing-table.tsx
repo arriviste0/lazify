@@ -1,9 +1,8 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -19,27 +18,33 @@ interface PricingPlan {
   };
   features: string[];
   isPopular?: boolean;
+  cta: string;
 }
 
 const plans: PricingPlan[] = [
   {
     title: 'Starter',
-    description: 'For individuals and small teams getting started with automation.',
-    price: { usd: '$49', inr: '₹3,999' },
-    features: ['1 AI Agent', 'Basic Task Automation', 'Email Support', '500 Operations/mo'],
+    description: 'Perfect for individuals and small projects getting started with AI.',
+    price: { usd: '$49', inr: '₹1,999' },
+    features: ['1 AI Agent', 'Basic Automation', 'Email Support'],
+    isPopular: false,
+    cta: 'Choose Starter',
   },
   {
     title: 'Pro',
-    description: 'For growing businesses needing more power and customization.',
-    price: { usd: '$149', inr: '₹11,999' },
-    features: ['3 AI Agents', 'Advanced Automation Flows', 'Priority Support', '2,000 Operations/mo', 'API Access'],
+    description: 'For power users and small teams who need advanced automation.',
+    price: { usd: '$149', inr: '₹4,999' },
+    features: ['All Starter Features', 'Advanced AI Agents', 'API Access', 'Priority Support'],
     isPopular: true,
+    cta: 'Get Started with Pro',
   },
   {
     title: 'Enterprise',
-    description: 'For large organizations requiring dedicated solutions and support.',
+    description: 'Tailored solutions for large organizations with specific needs.',
     price: { usd: 'Custom', inr: 'Custom' },
-    features: ['Unlimited Agents', 'Custom Agent Development', 'Dedicated Account Manager', 'Unlimited Operations', 'Premium SLAs'],
+    features: ['Custom AI Agents', 'Dedicated Account Manager', 'On-Premise Deployment', '24/7 Support'],
+    isPopular: false,
+    cta: 'Contact Sales',
   },
 ];
 
@@ -75,7 +80,10 @@ export function PricingTable() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
-            className="relative flex flex-col"
+            className={cn(
+              "relative flex flex-col h-full",
+              plan.isPopular ? 'popular-plan' : ''
+            )}
           >
             {plan.isPopular && (
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-full shadow-lg">
@@ -83,40 +91,39 @@ export function PricingTable() {
               </div>
             )}
             <Card className={cn(
-                "modern-card flex flex-col flex-grow",
-                plan.isPopular 
-                  ? 'border-2 border-primary shadow-primary/20' 
-                  : 'hover:border-primary/40'
-              )}
-            >
+              "modern-card flex flex-col flex-grow",
+              plan.isPopular 
+                ? 'border-2 border-primary shadow-primary/20' 
+                : 'hover:border-primary/40'
+            )}>
               <CardHeader className="pb-4">
                 <CardTitle className="text-2xl text-center">{plan.title}</CardTitle>
-                <CardDescription className="text-center pt-1">{plan.description}</CardDescription>
+                <CardDescription>{plan.description}</CardDescription>
               </CardHeader>
-              <CardContent className="flex-grow pt-2 pb-6">
-                <div className="text-center mb-6">
+              <CardContent className="flex-grow">
+                <div className="mb-6">
                   <span className="text-4xl font-bold">
                     {plan.price[currency]}
                   </span>
                   {plan.price.usd !== 'Custom' && (
-                     <span className="text-muted-foreground">/ month</span>
+                    <span className="text-muted-foreground">{plan.price.usd !== 'Custom' ? `/ month` : ''}</span>
                   )}
                 </div>
-                <ul className="space-y-3">
+                <ul className="space-y-3 text-left">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center">
-                      <Check className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
-                      <span className="text-muted-foreground">{feature}</span>
+                      <Check className="mr-2 h-5 w-5 text-primary" />
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
-              <CardFooter className="mt-auto">
+              <CardFooter>
                 <Button
-                  className={`w-full ${plan.isPopular ? 'cta-button' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
-                  variant={plan.isPopular ? 'default' : 'secondary'}
+                  className={`w-full ${plan.isPopular ? 'cta-button' : 'outline-button-glow'}`}
+                  variant={plan.isPopular ? 'default' : 'outline'}
                 >
-                  {plan.title === 'Enterprise' ? 'Contact Sales' : 'Choose Plan'}
+                  {plan.cta}
                 </Button>
               </CardFooter>
             </Card>
